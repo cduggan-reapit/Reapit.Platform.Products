@@ -1,0 +1,75 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reapit.Platform.Products.Api", "Reapit.Platform.Products.Api\Reapit.Platform.Products.Api.csproj", "{F257E60A-8AE3-4430-8DF7-A1BFEC40F8DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reapit.Platform.Products.Api.IntegrationTests", "Reapit.Platform.Products.Api.IntegrationTests\Reapit.Platform.Products.Api.IntegrationTests.csproj", "{F87B49BE-5448-4260-88AF-1B32A9ECBC04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reapit.Platform.Products.Api.UnitTests", "Reapit.Platform.Products.Api.UnitTests\Reapit.Platform.Products.Api.UnitTests.csproj", "{2C6097E7-1810-4095-862F-6AF3B6A4927E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reapit.Platform.Products.Core", "Reapit.Platform.Products.Core\Reapit.Platform.Products.Core.csproj", "{957C7DE6-121C-4ACD-A0FC-373A8195F4A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reapit.Platform.Products.Core.UnitTests", "Reapit.Platform.Products.Core.UnitTests\Reapit.Platform.Products.Core.UnitTests.csproj", "{9F8DE565-32B7-420E-BDEB-5034B27E113F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reapit.Platform.Products.Data", "Reapit.Platform.Products.Data\Reapit.Platform.Products.Data.csproj", "{AC3C1536-3733-49C4-BA8A-6C3C89AF869E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reapit.Platform.Products.Data.UnitTests", "Reapit.Platform.Products.Data.UnitTests\Reapit.Platform.Products.Data.UnitTests.csproj", "{EC376092-1EBB-4217-A295-7AD37DA930C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reapit.Platform.Products.Domain", "Reapit.Platform.Products.Domain\Reapit.Platform.Products.Domain.csproj", "{671899D2-0AAF-4AF7-8614-2F8893F2E142}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reapit.Platform.Products.Domain.UnitTests", "Reapit.Platform.Products.Domain.UnitTests\Reapit.Platform.Products.Domain.UnitTests.csproj", "{20A1FD9B-C55B-4962-86BE-4510ABB15F85}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{6879A066-03FB-40A1-A592-C410BAD8F809}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F257E60A-8AE3-4430-8DF7-A1BFEC40F8DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F257E60A-8AE3-4430-8DF7-A1BFEC40F8DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F257E60A-8AE3-4430-8DF7-A1BFEC40F8DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F257E60A-8AE3-4430-8DF7-A1BFEC40F8DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F87B49BE-5448-4260-88AF-1B32A9ECBC04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F87B49BE-5448-4260-88AF-1B32A9ECBC04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F87B49BE-5448-4260-88AF-1B32A9ECBC04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F87B49BE-5448-4260-88AF-1B32A9ECBC04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C6097E7-1810-4095-862F-6AF3B6A4927E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C6097E7-1810-4095-862F-6AF3B6A4927E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C6097E7-1810-4095-862F-6AF3B6A4927E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C6097E7-1810-4095-862F-6AF3B6A4927E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{957C7DE6-121C-4ACD-A0FC-373A8195F4A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{957C7DE6-121C-4ACD-A0FC-373A8195F4A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{957C7DE6-121C-4ACD-A0FC-373A8195F4A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{957C7DE6-121C-4ACD-A0FC-373A8195F4A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F8DE565-32B7-420E-BDEB-5034B27E113F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F8DE565-32B7-420E-BDEB-5034B27E113F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F8DE565-32B7-420E-BDEB-5034B27E113F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F8DE565-32B7-420E-BDEB-5034B27E113F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC3C1536-3733-49C4-BA8A-6C3C89AF869E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC3C1536-3733-49C4-BA8A-6C3C89AF869E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC3C1536-3733-49C4-BA8A-6C3C89AF869E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC3C1536-3733-49C4-BA8A-6C3C89AF869E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC376092-1EBB-4217-A295-7AD37DA930C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC376092-1EBB-4217-A295-7AD37DA930C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC376092-1EBB-4217-A295-7AD37DA930C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC376092-1EBB-4217-A295-7AD37DA930C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{671899D2-0AAF-4AF7-8614-2F8893F2E142}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{671899D2-0AAF-4AF7-8614-2F8893F2E142}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{671899D2-0AAF-4AF7-8614-2F8893F2E142}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{671899D2-0AAF-4AF7-8614-2F8893F2E142}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20A1FD9B-C55B-4962-86BE-4510ABB15F85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20A1FD9B-C55B-4962-86BE-4510ABB15F85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20A1FD9B-C55B-4962-86BE-4510ABB15F85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20A1FD9B-C55B-4962-86BE-4510ABB15F85}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
