@@ -29,4 +29,8 @@
     <ProjectReference Include="..\Reapit.Platform.Products.Domain\Reapit.Platform.Products.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\" />
+  </ItemGroup>
+
 </Project>
