@@ -1,4 +1,4 @@
-# Access Management Service
+# Product Management Service
 
 **Repository:** Reapit.Platform.Products
 
