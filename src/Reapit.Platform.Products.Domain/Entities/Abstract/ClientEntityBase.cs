@@ -19,8 +19,8 @@ public abstract class ClientEntityBase : EntityBase
         string name, 
         string? description,
         ClientType type,
-        IEnumerable<string>? callbackUrls, 
-        IEnumerable<string>? signOutUrls)
+        ICollection<string>? callbackUrls, 
+        ICollection<string>? signOutUrls)
     {
         ClientId = clientId;
         GrantId = grantId;
@@ -39,8 +39,8 @@ public abstract class ClientEntityBase : EntityBase
     public void Update(
         string? name = null, 
         string? description = null, 
-        IEnumerable<string>? callbackUrls = null, 
-        IEnumerable<string>? signOutUrls = null)
+        ICollection<string>? callbackUrls = null, 
+        ICollection<string>? signOutUrls = null)
     {
         Name = GetUpdateValue(Name, name);
         Description = GetUpdateValue(Description, description);
@@ -65,8 +65,8 @@ public abstract class ClientEntityBase : EntityBase
     public ClientType Type { get; init; }
     
     /// <summary>Comma-separated list of URLs whitelisted for use as a callback to the client after authentication.</summary>
-    public IEnumerable<string>? CallbackUrls { get; private set; }
+    public ICollection<string>? CallbackUrls { get; private set; }
     
     /// <summary>Comma-separated list of URLs that are valid to redirect to after logout. Wildcards are allowed for subdomains.</summary>
-    public IEnumerable<string>? SignOutUrls { get; private set; }
+    public ICollection<string>? SignOutUrls { get; private set; }
 }

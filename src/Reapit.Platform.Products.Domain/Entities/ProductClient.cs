@@ -22,15 +22,18 @@ public class ProductClient : ClientEntityBase
         string name, 
         string? description, 
         ClientType type, 
-        IEnumerable<string>? callbackUrls, 
-        IEnumerable<string>? signOutUrls)
+        ICollection<string>? callbackUrls, 
+        ICollection<string>? signOutUrls)
         : base(clientId, grantId, name, description, type, callbackUrls, signOutUrls)
     {
         ProductId = productId;
     }
     
     /// <summary>The unique identifier of the product with which the client is associated.</summary>
-    public string ProductId { get; }
+    public string ProductId { get; init; }
+    
+    /// <summary>The product with which the client is associated.</summary>
+    public Product? Product { get; init; }
     
     /// <inheritdoc />
     public override object AsSerializable()

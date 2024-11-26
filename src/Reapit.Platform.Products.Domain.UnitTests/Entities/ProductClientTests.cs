@@ -146,7 +146,7 @@ public class ProductClientTests
         string name = "name",
         string? description = "description",
         ClientType? type = null,
-        IEnumerable<string>? callbackUrls = null,
-        IEnumerable<string>? signOutUrls = null)
+        ICollection<string>? callbackUrls = null,
+        ICollection<string>? signOutUrls = null)
         => new(productId, clientId, grantId, name, description, type ?? ClientType.None, callbackUrls, signOutUrls);
 }
