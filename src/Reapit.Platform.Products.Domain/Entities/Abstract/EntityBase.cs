@@ -5,24 +5,32 @@ using Reapit.Platform.Products.Domain.Services;
 
 namespace Reapit.Platform.Products.Domain.Entities.Abstract;
 
+/// <summary>Base class for owned entities.</summary>
 public abstract class EntityBase : IHasCursor
 {
+    /// <summary>Initializes a new instance of the <see cref="EntityBase"/> class.</summary>
     protected EntityBase()
     {
         Id = IdentityGenerator.Create();
         SetDateCreated();
     }
     
-    public string Id { get; protected init; }
+    /// <summary>The unique identifier of the entity.</summary>
+    public string Id { get; }
     
+    /// <summary>The cursor of the entity, used when paging results.</summary>
     public long Cursor { get; private set; }
     
+    /// <summary>The creation timestamp of the entity.</summary>
     public DateTime DateCreated { get; private set; }
     
+    /// <summary>The last modification timestamp of the entity.</summary>
     public DateTime DateModified { get; private set; }
     
+    /// <summary>The deletion timestamp of the entity.</summary>
     public DateTime? DateDeleted { get; private set; }
     
+    /// <summary>Flag indicating whether the entity has been changed.</summary>
     public bool IsDirty { get; private set; }
     
     /// <summary>

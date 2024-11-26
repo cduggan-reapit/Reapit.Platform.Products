@@ -5,18 +5,15 @@ namespace Reapit.Platform.Products.Domain.Entities;
 /// <summary>Representation of a product.</summary>
 /// <param name="name">The name of the product.</param>
 /// <param name="description">An optional description of the product.</param>
-/// <param name="reference">An optional, external reference to identify the product.</param>
-public class Product(string name, string? description, string? reference) : EntityBase
+public class Product(string name, string? description) : EntityBase
 {
     /// <summary>Update the properties of the product.</summary>
     /// <param name="name">The name of the product.</param>
     /// <param name="description">An optional description of the product.</param>
-    /// <param name="reference">An optional, external reference to identify the product.</param>
-    public void Update(string? name, string? description, string? reference)
+    public void Update(string? name, string? description)
     {
         Name = GetUpdateValue(Name, name);
         Description = GetUpdateValue(Description, description);
-        Reference = GetUpdateValue(Reference, reference);
     }
     
     /// <summary>The name of the product.</summary>
@@ -24,11 +21,11 @@ public class Product(string name, string? description, string? reference) : Enti
 
     /// <summary>A description of the product.</summary>
     public string? Description { get; private set; } = description;
-
-    /// <summary>An external reference to identify the product (e.g. agencyCloud).</summary>
-    public string? Reference { get; private set; } = reference;
-
+    
+    /// <summary>The clients associated with this product.</summary>
+    public IEnumerable<ProductClient> Clients { get; init; } = new List<ProductClient>();
+    
     /// <inheritdoc/>
     public override object AsSerializable()
-        => new { Id, Name, Reference, DateCreated, DateModified };
+        => new { Id = Id, Name, DateCreated, DateModified };
 }
