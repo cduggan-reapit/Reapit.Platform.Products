@@ -53,7 +53,7 @@ public class MessageEnvelopeTests
         var time = DateTimeOffset.UnixEpoch;
         using var timeProvider = new DateTimeOffsetProviderContext(time);
         
-        var product = new Product("name", "description", "reference");
+        var product = GetProduct();
         var expected = new MessageEnvelope("product", "created", 1, product.AsSerializable());
         
         var actual = MessageEnvelope.ProductCreated(product);
@@ -70,7 +70,7 @@ public class MessageEnvelopeTests
         var time = DateTimeOffset.UnixEpoch;
         using var timeProvider = new DateTimeOffsetProviderContext(time);
         
-        var product = new Product("name", "description", "reference");
+        var product = GetProduct();
         var expected = new MessageEnvelope("product", "modified", 1, product.AsSerializable());
         
         var actual = MessageEnvelope.ProductModified(product);
@@ -87,10 +87,17 @@ public class MessageEnvelopeTests
         var time = DateTimeOffset.UnixEpoch;
         using var timeProvider = new DateTimeOffsetProviderContext(time);
         
-        var product = new Product("name", "description", "reference");
+        var product = GetProduct();
         var expected = new MessageEnvelope("product", "deleted", 1, product.AsSerializable());
         
         var actual = MessageEnvelope.ProductDeleted(product);
         actual.Should().BeEquivalentTo(expected);
     }
+    
+    /*
+     * Private methods
+     */
+    
+    private static Product GetProduct(string name = "name", string? description = "description")
+        => new(name, description);
 }

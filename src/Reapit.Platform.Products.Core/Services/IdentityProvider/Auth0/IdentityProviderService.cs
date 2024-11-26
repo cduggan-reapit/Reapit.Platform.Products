@@ -31,7 +31,7 @@ public class IdentityProviderService : IIdentityProviderService
     }
 
     public async Task<CreateClientResult> AddClientAsync(
-        AccessClient clientEntity,
+        ProductClient clientEntity,
         CancellationToken cancellationToken)
     {
         using var api = await _clientFactory.GetClientAsync(cancellationToken);

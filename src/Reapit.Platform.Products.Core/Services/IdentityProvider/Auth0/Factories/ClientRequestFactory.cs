@@ -8,10 +8,10 @@ namespace Reapit.Platform.Products.Core.Services.IdentityProvider.Auth0.Factorie
 public static class ClientRequestFactory
 {
 
-    /// <summary>Get a <see cref="ClientCreateRequest"/> representing an <see cref="AccessClient"/> entity.</summary>
+    /// <summary>Get a <see cref="ClientCreateRequest"/> representing an <see cref="ProductClient"/> entity.</summary>
     /// <param name="client">The access client</param>
     /// <exception cref="ArgumentException">when the access client type is not supported.</exception>
-    public static ClientCreateRequest GetClientCreateRequest(AccessClient client)
+    public static ClientCreateRequest GetClientCreateRequest(ProductClient client)
     {
         if (client.Type == ClientType.AuthorizationCode)
             return GetUserClientCreateRequest(client);
@@ -27,7 +27,7 @@ public static class ClientRequestFactory
 
     /// <summary>Get the <see cref="ClientCreateRequest"/> for a code flow client.</summary>
     /// <param name="client">The access client.</param>
-    private static ClientCreateRequest GetUserClientCreateRequest(AccessClient client) 
+    private static ClientCreateRequest GetUserClientCreateRequest(ProductClient client) 
         => new()
         {
             IsFirstParty = true, 
@@ -49,7 +49,7 @@ public static class ClientRequestFactory
 
     /// <summary>Get the <see cref="ClientCreateRequest"/> for a client credentials client.</summary>
     /// <param name="client">The access client.</param>
-    private static ClientCreateRequest GetMachineClientCreateRequest(AccessClient client) 
+    private static ClientCreateRequest GetMachineClientCreateRequest(ProductClient client) 
         => new()
         {
             IsFirstParty = true, 

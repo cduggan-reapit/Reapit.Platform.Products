@@ -24,6 +24,22 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{6879A066-03FB-40A1-A592-C410BAD8F809}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
+		..\.commitlintrc.yml = ..\.commitlintrc.yml
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
+		..\package.json = ..\package.json
+		..\readme.md = ..\readme.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Github", "Github", "{509A67C2-626F-41AB-B887-AD0123372600}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\CODEOWNERS = ..\.github\CODEOWNERS
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{374A1731-1DA3-4A5B-ABE5-CADB8A044F10}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\build-and-test.yml = ..\.github\workflows\build-and-test.yml
+		..\.github\workflows\commit-linting.yml = ..\.github\workflows\commit-linting.yml
 	EndProjectSection
 EndProject
 Global
@@ -71,5 +87,9 @@ Global
 		{20A1FD9B-C55B-4962-86BE-4510ABB15F85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20A1FD9B-C55B-4962-86BE-4510ABB15F85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20A1FD9B-C55B-4962-86BE-4510ABB15F85}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{509A67C2-626F-41AB-B887-AD0123372600} = {6879A066-03FB-40A1-A592-C410BAD8F809}
+		{374A1731-1DA3-4A5B-ABE5-CADB8A044F10} = {509A67C2-626F-41AB-B887-AD0123372600}
 	EndGlobalSection
 EndGlobal
