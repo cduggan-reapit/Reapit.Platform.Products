@@ -50,6 +50,6 @@ public class Client : EntityBase
     public Product? Product { get; private set; }
     
     /// <inheritdoc />
-    protected override object AsSerializable()
+    public override object AsSerializable()
         => new { ProductId, Id, Type = Type.Name, Name, DateCreated, DateModified };
 }

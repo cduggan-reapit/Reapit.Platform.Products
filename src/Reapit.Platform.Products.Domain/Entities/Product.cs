@@ -29,6 +29,6 @@ public class Product(string name, string? description, string? reference) : Enti
     public string? Reference { get; private set; } = reference;
 
     /// <inheritdoc/>
-    protected override object AsSerializable()
+    public override object AsSerializable()
         => new { Id, Name, Reference, DateCreated, DateModified };
 }

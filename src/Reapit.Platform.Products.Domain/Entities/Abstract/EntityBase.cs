@@ -71,7 +71,7 @@ public abstract class EntityBase : IHasCursor
         => DateDeleted = DateTimeOffsetProvider.Now.UtcDateTime;
     
     /// <summary>Gets an anonymous, serializable object representing this entity.</summary>
-    protected abstract object AsSerializable();
+    public abstract object AsSerializable();
 
     /// <inheritdoc />
     public override string ToString() 
