@@ -25,7 +25,7 @@ public abstract class EntityBase : IHasCursor
     public DateTime DateCreated { get; private set; }
     
     /// <summary>The last modification timestamp of the entity.</summary>
-    public DateTime DateModified { get; private set; }
+    public DateTime DateModified { get; set; }
     
     /// <summary>The deletion timestamp of the entity.</summary>
     public DateTime? DateDeleted { get; private set; }

@@ -18,7 +18,7 @@ public class ProductClient : ClientEntityBase
     public ProductClient(
         string productId, 
         string clientId, 
-        string grantId, 
+        string? grantId, 
         string name, 
         string? description, 
         ClientType type, 
