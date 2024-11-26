@@ -13,7 +13,7 @@ public class TestApiFactory : WebApplicationFactory<Program>
         // Replace services
         builder.ConfigureServices(services =>
         {
-            RemoveServiceForType(services, typeof(DbContextOptions<DemoDbContext>));
+            RemoveServiceForType(services, typeof(DbContextOptions<ProductDbContext>));
             
             services.AddSingleton<DbConnection>(container =>
             {
@@ -22,7 +22,7 @@ public class TestApiFactory : WebApplicationFactory<Program>
                 return connection;
             });
 
-            services.AddDbContext<DemoDbContext>((serviceProvider, options) =>
+            services.AddDbContext<ProductDbContext>((serviceProvider, options) =>
             {
                 var connection = serviceProvider.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);

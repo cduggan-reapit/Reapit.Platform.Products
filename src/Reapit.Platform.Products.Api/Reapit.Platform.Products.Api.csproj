@@ -28,10 +28,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Reapit.Platform.Products.Core\Reapit.Platform.Products.Core.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\Products\V1\Examples\" />
-    <Folder Include="Controllers\Products\V1\Models\" />
-  </ItemGroup>
   
 </Project>
