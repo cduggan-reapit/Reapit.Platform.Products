@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Reapit.Platform.Common;
+using Reapit.Platform.Products.Core.Configuration;
 
 namespace Reapit.Platform.Products.Core;
 
@@ -16,6 +15,8 @@ public static class Startup
         //     cfg.RegisterServicesFromAssemblyContaining<UseCases.Dummies.CreateDummy.CreateDummyCommandHandler>());
         //
         // builder.Services.AddValidatorsFromAssemblyContaining(typeof(UseCases.Dummies.CreateDummy.CreateDummyCommandValidator));
+        
+        builder.Services.Configure<NotificationTopicConfiguration>(builder.Configuration.GetSection("Service:NotificationTopic"));
         
         return builder;
     }
