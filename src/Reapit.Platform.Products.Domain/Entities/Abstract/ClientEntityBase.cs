@@ -11,8 +11,8 @@ public abstract class ClientEntityBase : EntityBase
     /// <param name="name">The name of the client. Does not support <c>&lt;</c> or <c>&gt;</c>.</param>
     /// <param name="description">A description of the client. Maximum 140 characters.</param>
     /// <param name="type">The type of client.</param>
-    /// <param name="callbackUrls">Comma-separated list of URLs whitelisted for use as a callback to the client after authentication.</param>
-    /// <param name="signOutUrls">Comma-separated list of URLs that are valid to redirect to after logout. Wildcards are allowed for subdomains.</param>
+    /// <param name="callbackUrls">Collection of URLs whitelisted for use as a callback to the client after authentication.</param>
+    /// <param name="signOutUrls">Collection of URLs that are valid to redirect to after logout. Wildcards are allowed for subdomains.</param>
     protected ClientEntityBase(
         string clientId,
         string? grantId,
@@ -34,8 +34,8 @@ public abstract class ClientEntityBase : EntityBase
     /// <summary>Update an instance of the <see cref="ProductClient"/> class.</summary>
     /// <param name="name">The name of the client. Does not support <c>&lt;</c> or <c>&gt;</c>.</param>
     /// <param name="description">A description of the client. Maximum 140 characters.</param>
-    /// <param name="callbackUrls">Comma-separated list of URLs whitelisted for use as a callback to the client after authentication.</param>
-    /// <param name="signOutUrls">Comma-separated list of URLs that are valid to redirect to after logout. Wildcards are allowed for subdomains.</param>
+    /// <param name="callbackUrls">Collection of URLs whitelisted for use as a callback to the client after authentication.</param>
+    /// <param name="signOutUrls">Collection of URLs that are valid to redirect to after logout. Wildcards are allowed for subdomains.</param>
     public void Update(
         string? name = null, 
         string? description = null, 
@@ -64,9 +64,9 @@ public abstract class ClientEntityBase : EntityBase
     /// <summary>The type of client.</summary>
     public ClientType Type { get; init; }
     
-    /// <summary>Comma-separated list of URLs whitelisted for use as a callback to the client after authentication.</summary>
+    /// <summary>Collection of URLs whitelisted for use as a callback to the client after authentication.</summary>
     public ICollection<string>? CallbackUrls { get; private set; }
     
-    /// <summary>Comma-separated list of URLs that are valid to redirect to after logout. Wildcards are allowed for subdomains.</summary>
+    /// <summary>Collection of URLs that are valid to redirect to after logout. Wildcards are allowed for subdomains.</summary>
     public ICollection<string>? SignOutUrls { get; private set; }
 }

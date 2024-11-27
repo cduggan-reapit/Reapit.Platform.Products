@@ -148,5 +148,5 @@ public class ProductClientTests
         ClientType? type = null,
         ICollection<string>? callbackUrls = null,
         ICollection<string>? signOutUrls = null)
-        => new(productId, clientId, grantId, name, description, type ?? ClientType.None, callbackUrls, signOutUrls);
+        => new(productId, clientId, grantId, name, description, type ?? ClientType.ClientCredentials, callbackUrls, signOutUrls);
 }

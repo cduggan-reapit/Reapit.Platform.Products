@@ -42,6 +42,7 @@ builder.AddCoreServices()
 // Add services for the Api project
 builder.Services.AddAutoMapper(typeof(Reapit.Platform.Products.Api.Program).Assembly);
 
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 builder.Services.AddControllers();
 
 /*

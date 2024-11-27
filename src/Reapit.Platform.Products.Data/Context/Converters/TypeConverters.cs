@@ -14,7 +14,7 @@ public static class TypeConverters
     // <summary>Convert a ClientType to an integer and back for data persistence.</summary>
     public static readonly ValueConverter<ClientType, int> ClientTypeConverter = new(
         convertToProviderExpression: clientType => clientType.Value,
-        convertFromProviderExpression: integer => ClientType.GetByValue(integer) ?? ClientType.None);
+        convertFromProviderExpression: integer => ClientType.GetByValue(integer)!);
     
     /// <summary>Convert a collection of strings to a single string and back for data persistence.</summary>
     public static readonly ValueConverter<ICollection<string>?, string?> StringArrayConverter = new(
