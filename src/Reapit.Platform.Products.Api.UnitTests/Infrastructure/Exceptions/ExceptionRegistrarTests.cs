@@ -2,9 +2,9 @@ using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Reapit.Platform.Common.Interfaces;
-using Reapit.Platform.Products.Api.Exceptions;
+using Reapit.Platform.Products.Api.Infrastructure.Exceptions;
 
-namespace Reapit.Platform.Products.Api.UnitTests.Exceptions;
+namespace Reapit.Platform.Products.Api.UnitTests.Infrastructure.Exceptions;
 
 public class ExceptionRegistrarTests
 {

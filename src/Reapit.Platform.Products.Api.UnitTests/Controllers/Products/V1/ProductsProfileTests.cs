@@ -4,6 +4,7 @@ using Reapit.Platform.Products.Api.Controllers.Products.V1;
 using Reapit.Platform.Products.Api.Controllers.Products.V1.Models;
 using Reapit.Platform.Products.Api.Controllers.Shared;
 using Reapit.Platform.Products.Api.Extensions;
+using Reapit.Platform.Products.Core.UseCases.Products.GetProducts;
 using Reapit.Platform.Products.Domain.Entities;
 using Reapit.Platform.Products.Domain.Entities.Enums;
 
@@ -66,8 +67,43 @@ public class ProductsProfileTests
     }
     
     /*
+     * GetProductsRequestModel => GetProductsQuery
+     */
+
+    [Fact]
+    public void ProductsProfile_PopulatesGetProductsQuery_FromGetProductsRequestModel()
+    {
+        var request = new GetProductsRequestModel(
+            1234,
+            72,
+            "name",
+            "description",
+            BaseDate.AddHours(1),
+            BaseDate.AddHours(2),
+            BaseDate.AddHours(3),
+            BaseDate.AddHours(4)
+        );
+
+        var expected = new GetProductsQuery(
+            request.Cursor, 
+            request.PageSize, 
+            request.Name, 
+            request.Description,
+            request.CreatedFrom, 
+            request.CreatedTo, 
+            request.ModifiedFrom,
+            request.ModifiedTo);
+
+        var sut = CreateSut();
+        var actual = sut.Map<GetProductsQuery>(request);
+        actual.Should().BeEquivalentTo(expected);
+    }
+    
+    /*
      * Private methods
      */
+    
+    private static readonly DateTime BaseDate = new(2020, 1, 1, 12, 30, 15, DateTimeKind.Utc); 
 
     private static IMapper CreateSut()
         => new MapperConfiguration(cfg => cfg.AddProfile<ProductsProfile>())

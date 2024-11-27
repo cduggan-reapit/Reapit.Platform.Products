@@ -1,3 +1,6 @@
 global using Xunit;
 global using FluentAssertions;
 global using NSubstitute;
+global using FluentValidation;
+global using Microsoft.Extensions.Logging.Testing;
+global using Reapit.Platform.Products.Core.UnitTests.TestHelpers;

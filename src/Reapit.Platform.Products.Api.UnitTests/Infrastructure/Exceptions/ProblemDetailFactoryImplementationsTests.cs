@@ -1,7 +1,7 @@
 using FluentValidation;
 using FluentValidation.Results;
 using Reapit.Platform.Common.Exceptions;
-using Reapit.Platform.Products.Api.Exceptions;
+using Reapit.Platform.Products.Api.Infrastructure.Exceptions;
 
 namespace Reapit.Platform.Products.Api.UnitTests.Exceptions;
 

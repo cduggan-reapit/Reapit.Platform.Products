@@ -107,8 +107,6 @@ public class ProductTests
     [Fact]
     public void AsSerializable_ReturnsAnonymousObject_ForGroup()
     {
-        const string name = "name", description = "description", organisationId = "organisation-id";
-        
         var entity = GetProduct();
         var expected = new { Id = entity.Id, entity.Name, entity.DateCreated, entity.DateModified };
         

@@ -3,13 +3,13 @@ using Reapit.Platform.ApiVersioning.Options;
 using Reapit.Platform.Cloud;
 using Reapit.Platform.Common;
 using Reapit.Platform.ErrorHandling;
-using Reapit.Platform.Swagger;
-using Reapit.Platform.Swagger.Configuration;
-using Reapit.Platform.Products.Api.Exceptions;
 using Reapit.Platform.Products.Api.Infrastructure.Configuration;
+using Reapit.Platform.Products.Api.Infrastructure.Exceptions;
 using Reapit.Platform.Products.Api.Infrastructure.Logging;
 using Reapit.Platform.Products.Core;
 using Reapit.Platform.Products.Data;
+using Reapit.Platform.Swagger;
+using Reapit.Platform.Swagger.Configuration;
 using Serilog;
 
 const string apiVersionHeader = "x-api-version";
@@ -32,7 +32,7 @@ builder.InjectRemoteConfiguration();
 // Register reapit services
 builder.Services.AddCommonServices()
     .AddErrorHandlingServices()
-    .AddRangedApiVersioning(typeof(Program).Assembly, new VersionedApiOptions { ApiVersionHeader = apiVersionHeader })
+    .AddRangedApiVersioning(typeof(Reapit.Platform.Products.Api.Program).Assembly, new VersionedApiOptions { ApiVersionHeader = apiVersionHeader })
     .AddReapitSwagger(new ReapitSwaggerOptions { ApiVersionHeader = apiVersionHeader, DocumentTitle = $"Product Management API ({builder.Environment.EnvironmentName})" });
 
 // Add services from other projects in this solution
@@ -40,7 +40,7 @@ builder.AddCoreServices()
     .AddDataServices();
 
 // Add services for the Api project
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddAutoMapper(typeof(Reapit.Platform.Products.Api.Program).Assembly);
 
 builder.Services.AddControllers();
 
@@ -58,9 +58,12 @@ app.UseReapitSwagger()
 
 app.UseRangedApiVersioning();
 app.UseRouting();
-app.UseEndpoints(endpoint => endpoint.MapControllers());
+app.MapControllers();
 
 app.Run();
 
-/// <summary>Class description allowing test service injection.</summary>
-public partial class Program { }
+namespace Reapit.Platform.Products.Api
+{
+    /// <summary>Class description allowing test service injection.</summary>
+    public partial class Program { }
+}

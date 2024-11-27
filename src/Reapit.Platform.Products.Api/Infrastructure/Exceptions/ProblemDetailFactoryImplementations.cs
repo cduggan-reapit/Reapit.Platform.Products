@@ -4,7 +4,7 @@ using Reapit.Platform.Common.Exceptions;
 using Reapit.Platform.Common.Interfaces;
 using static System.Text.Json.JsonNamingPolicy;
 
-namespace Reapit.Platform.Products.Api.Exceptions;
+namespace Reapit.Platform.Products.Api.Infrastructure.Exceptions;
 
 /// <summary>Problem detail factory methods for use with <see cref="IProblemDetailsFactory"/>.</summary>
 public static class ProblemDetailFactoryImplementations
