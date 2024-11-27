@@ -8,7 +8,7 @@ namespace Reapit.Platform.Products.Api.Controllers.ProductClients.V1.Models;
 /// <param name="CallbackUrls">Collection of URLs whitelisted for use as a callback to the client after authentication.</param>
 /// <param name="SignOutUrls">Collection of URLs that are valid to redirect to after logout. Wildcards are allowed for subdomains.</param>
 public record PatchProductClientRequestModel(
-    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("name")] string? Name,
     [property: JsonPropertyName("description")] string? Description,
     [property: JsonPropertyName("callbackUrls")] IEnumerable<string>? CallbackUrls,
     [property: JsonPropertyName("signOutUrls")] IEnumerable<string>? SignOutUrls);

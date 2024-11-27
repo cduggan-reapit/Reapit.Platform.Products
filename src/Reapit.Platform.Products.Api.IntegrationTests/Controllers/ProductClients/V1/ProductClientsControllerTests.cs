@@ -1,23 +1,30 @@
 ﻿using System.Net;
 using AutoMapper;
-using Reapit.Platform.Products.Api.Controllers.Products.V1;
+using Reapit.Platform.Products.Api.Controllers.ProductClients.V1;
+using Reapit.Platform.Products.Api.Controllers.ProductClients.V1.Models;
 using Reapit.Platform.Products.Api.Controllers.Products.V1.Models;
 using Reapit.Platform.Products.Api.Controllers.Shared;
 using Reapit.Platform.Products.Data.Context;
 using Reapit.Platform.Products.Domain.Entities;
 
-namespace Reapit.Platform.Products.Api.IntegrationTests.Controllers.Products.V1;
+namespace Reapit.Platform.Products.Api.IntegrationTests.Controllers.ProductClients.V1;
 
-public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegrationTestBase(apiFactory)
+public class ProductClientsControllerTests(TestApiFactory apiFactory) : ApiIntegrationTestBase(apiFactory)
 {
     // Services
     private readonly IMapper _mapper = new MapperConfiguration(cfg 
-            => cfg.AddProfile<ProductsProfile>())
+            => cfg.AddProfile<ProductClientsProfile>())
         .CreateMapper();
     
     // Setup
-    private const string BaseUrl = "/api/products";
-    private static readonly ICollection<Product> SeedData = SeedHelpers.GetProductSeedData(200, 2);
+    private const string BaseUrl = "/api/product-clients";
+    
+    private static readonly ICollection<Product> SeedProducts = SeedHelpers.GetProductSeedData(200, 2);
+    
+    private static readonly ICollection<ProductClient> SeedClients = SeedProducts
+        .SelectMany(product => product.Clients)
+        .OrderBy(product => product.Cursor)
+        .ToList();
     
     /*
      * GET /
@@ -51,7 +58,7 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     public async Task Get_ReturnsOk_WhenRequestSuccessful()
     {
         await InitializeDatabaseAsync();
-        var expected = _mapper.Map<ResultPage<ProductModel>>(SeedData.Take(3));
+        var expected = _mapper.Map<ResultPage<ProductDetailsModel>>(SeedClients.Take(3));
         var response = await SendRequestAsync(HttpMethod.Get, $"{BaseUrl}?pageSize=3");
         await response.Should().HaveStatusCode(HttpStatusCode.OK)
             .And.HavePayloadAsync(expected);;
@@ -80,7 +87,7 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     }
     
     [Fact]
-    public async Task GetById_ReturnsNotFound_WhenProductDoesNotExist()
+    public async Task GetById_ReturnsNotFound_WhenProductClientDoesNotExist()
     {
         await InitializeDatabaseAsync();
         const string url = $"{BaseUrl}/missing";
@@ -93,8 +100,10 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     public async Task GetById_ReturnsOk_WhenRequestSuccessful()
     {
         await InitializeDatabaseAsync();
-        var id = 97.AsIdentity();
-        var expected = _mapper.Map<ProductDetailsModel>(SeedData.Single(item => item.Id == id));
+
+        // Each product has two clients (0 & 1)
+        var id = GetProductClientId(97, 1);
+        var expected = _mapper.Map<ProductClientDetailsModel>(SeedClients.Single(item => item.Id == id));
         
         var url = $"{BaseUrl}/{id}";
         var response = await SendRequestAsync(HttpMethod.Get, url);
@@ -105,11 +114,20 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     /*
      * POST /
      */
-    
+
+    private static CreateProductClientRequestModel GetCreateModel(
+        string productId, 
+        string name = "name", 
+        string description = "description", 
+        string type = "client_credentials", 
+        IEnumerable<string>? callbackUrls = null, 
+        IEnumerable<string>? signOutUrls = null)
+        => new(productId, name, description, type, callbackUrls, signOutUrls);
+
     [Fact]
     public async Task Post_ReturnsBadRequest_WhenNoApiVersionProvided()
     {
-        var content = new CreateProductRequestModel("name", "description");
+        var content = GetCreateModel(0.AsIdentity());
         var response = await SendRequestAsync(HttpMethod.Post, BaseUrl, null, content);
         await response.Should().HaveStatusCode(HttpStatusCode.BadRequest)
             .And.BeProblemDescriptionAsync(ProblemDetailsTypes.UnspecifiedApiVersion);
@@ -118,7 +136,7 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     [Fact]
     public async Task Post_ReturnsBadRequest_WhenApiVersionUnsupported()
     {
-        var content = new CreateProductRequestModel("name", "description");
+        var content = GetCreateModel(0.AsIdentity());
         var response = await SendRequestAsync(HttpMethod.Post, BaseUrl, "0.9", content);
         await response.Should().HaveStatusCode(HttpStatusCode.BadRequest)
             .And.BeProblemDescriptionAsync(ProblemDetailsTypes.UnsupportedApiVersion);
@@ -127,7 +145,7 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     [Fact]
     public async Task Post_ReturnsUnprocessable_WhenValidationFails()
     {
-        var content = new CreateProductRequestModel(new string('a', 101), "description");
+        var content = GetCreateModel(0.AsIdentity(), name: new string('a', 101));
         var response = await SendRequestAsync(HttpMethod.Post, BaseUrl, content: content);
         await response.Should().HaveStatusCode(HttpStatusCode.UnprocessableContent)
             .And.BeProblemDescriptionAsync(ProblemDetailsTypes.ValidationFailed);
@@ -137,7 +155,7 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     public async Task Post_ReturnsCreated_WhenRequestSuccessful()
     {
         await InitializeDatabaseAsync();
-        var content = new CreateProductRequestModel("new product name", "new product description");
+        var content = GetCreateModel(0.AsIdentity());
         var response = await SendRequestAsync(HttpMethod.Post, BaseUrl, content: content);
         await response.Should().HaveStatusCode(HttpStatusCode.Created)
             .And.MatchPayloadAsync<ProductModel>(actual => actual.Name == content.Name);
@@ -147,11 +165,18 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
      * PATCH /{id}
      */
     
+    private static PatchProductClientRequestModel GetPatchModel(
+        string? name = "name", 
+        string? description = "description", 
+        IEnumerable<string>? callbackUrls = null, 
+        IEnumerable<string>? signOutUrls = null)
+        => new(name, description, callbackUrls, signOutUrls);
+    
     [Fact]
     public async Task Patch_ReturnsBadRequest_WhenNoApiVersionProvided()
     {
         const string url = $"{BaseUrl}/any";
-        var content = new PatchProductRequestModel("name", "description");
+        var content = GetPatchModel();
         var response = await SendRequestAsync(HttpMethod.Patch, url, null, content);
         await response.Should().HaveStatusCode(HttpStatusCode.BadRequest)
             .And.BeProblemDescriptionAsync(ProblemDetailsTypes.UnspecifiedApiVersion);
@@ -161,7 +186,7 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     public async Task Patch_ReturnsBadRequest_WhenApiVersionUnsupported()
     {
         const string url = $"{BaseUrl}/any";
-        var content = new PatchProductRequestModel("name", "description");
+        var content = GetPatchModel();
         var response = await SendRequestAsync(HttpMethod.Patch, url, "0.9", content);
         await response.Should().HaveStatusCode(HttpStatusCode.BadRequest)
             .And.BeProblemDescriptionAsync(ProblemDetailsTypes.UnsupportedApiVersion);
@@ -171,18 +196,18 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     public async Task Patch_ReturnsUnprocessable_WhenValidationFails()
     {
         const string url = $"{BaseUrl}/any";
-        var content = new PatchProductRequestModel(new string('a', 101), "description");
+        var content = GetPatchModel(name: new string('a', 101));
         var response = await SendRequestAsync(HttpMethod.Patch, url, content: content);
         await response.Should().HaveStatusCode(HttpStatusCode.UnprocessableContent)
             .And.BeProblemDescriptionAsync(ProblemDetailsTypes.ValidationFailed);
     }
 
     [Fact]
-    public async Task Patch_ReturnsNotFound_WhenProductDoesNotExist()
+    public async Task Patch_ReturnsNotFound_WhenProductClientDoesNotExist()
     {
         await InitializeDatabaseAsync();
         const string url = $"{BaseUrl}/missing";
-        var content = new PatchProductRequestModel("name", "description");
+        var content = GetPatchModel();
         var response = await SendRequestAsync(HttpMethod.Patch, url, content: content);
         await response.Should().HaveStatusCode(HttpStatusCode.NotFound)
             .And.BeProblemDescriptionAsync(ProblemDetailsTypes.ResourceNotFound);
@@ -192,9 +217,9 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     public async Task Patch_ReturnsNoContent_WhenRequestSuccessful()
     {
         await InitializeDatabaseAsync();
-        var id = 62.AsIdentity();
+        var id = GetProductClientId(97, 1);
         var url = $"{BaseUrl}/{id}";
-        var content = new PatchProductRequestModel("modified product name", "modified product description");
+        var content = GetPatchModel(name: "updated name");
         var response = await SendRequestAsync(HttpMethod.Patch, url, content: content);
         response.Should().HaveStatusCode(HttpStatusCode.NoContent);
     }
@@ -222,7 +247,7 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     }
 
     [Fact]
-    public async Task Delete_ReturnsNotFound_WhenProductDoesNotExist()
+    public async Task Delete_ReturnsNotFound_WhenProductClientDoesNotExist()
     {
         await InitializeDatabaseAsync();
         const string url = $"{BaseUrl}/missing";
@@ -235,7 +260,7 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     public async Task Delete_ReturnsNoContent_WhenRequestSuccessful()
     {
         await InitializeDatabaseAsync();
-        var id = 62.AsIdentity();
+        var id = GetProductClientId(62, 0);
         var url = $"{BaseUrl}/{id}";
         var response = await SendRequestAsync(HttpMethod.Delete, url);
         response.Should().HaveStatusCode(HttpStatusCode.NoContent);
@@ -258,8 +283,11 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
         _ = await dbContext.Database.EnsureCreatedAsync();
         
         // Add seed data
-        await dbContext.Products.AddRangeAsync(SeedData);
+        await dbContext.Products.AddRangeAsync(SeedProducts);
         
         _ = await dbContext.SaveChangesAsync();
     }
+    
+    private static string GetProductClientId(int productSeed, int clientSeed) 
+        => new Guid($"{productSeed:D8}-0000-0000-0000-{clientSeed:D12}").ToString("N");
 }
