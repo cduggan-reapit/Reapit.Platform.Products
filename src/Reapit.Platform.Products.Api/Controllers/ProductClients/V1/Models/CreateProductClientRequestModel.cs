@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Reapit.Platform.Products.Core.UseCases.ProductClients.CreateProductClient;
 using Reapit.Platform.Products.Domain.Entities.Enums;
 using Reapit.Platform.Swagger.Attributes;
 

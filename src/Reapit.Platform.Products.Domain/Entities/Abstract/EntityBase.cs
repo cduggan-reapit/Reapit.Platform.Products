@@ -16,7 +16,7 @@ public abstract class EntityBase : IHasCursor
     }
     
     /// <summary>The unique identifier of the entity.</summary>
-    public string Id { get; }
+    public string Id { get; init; }
     
     /// <summary>The cursor of the entity, used when paging results.</summary>
     public long Cursor { get; private set; }

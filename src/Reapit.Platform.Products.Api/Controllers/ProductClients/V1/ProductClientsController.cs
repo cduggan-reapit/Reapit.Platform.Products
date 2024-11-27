@@ -7,6 +7,11 @@ using Reapit.Platform.Products.Api.Controllers.ProductClients.V1.Examples;
 using Reapit.Platform.Products.Api.Controllers.ProductClients.V1.Models;
 using Reapit.Platform.Products.Api.Controllers.Shared;
 using Reapit.Platform.Products.Api.Controllers.Shared.Examples;
+using Reapit.Platform.Products.Core.UseCases.ProductClients.CreateProductClient;
+using Reapit.Platform.Products.Core.UseCases.ProductClients.DeleteProductClient;
+using Reapit.Platform.Products.Core.UseCases.ProductClients.GetProductClientById;
+using Reapit.Platform.Products.Core.UseCases.ProductClients.GetProductClients;
+using Reapit.Platform.Products.Core.UseCases.ProductClients.PatchProductClient;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace Reapit.Platform.Products.Api.Controllers.ProductClients.V1;
@@ -27,7 +32,9 @@ public class ProductClientsController(ISender mediator, IMapper mapper) : Reapit
     [SwaggerResponseExample(400, typeof(QueryStringProblemDetailsExample))]
     public async Task<IActionResult> GetProductClients([FromQuery] GetProductClientsRequestModel model)
     {
-        throw new NotImplementedException();
+        var request = mapper.Map<GetProductClientsQuery>(model);
+        var entities = await mediator.Send(request);
+        return Ok(mapper.Map<ResultPage<ProductClientModel>>(entities));
     }
 
     /// <summary>Get a single product.</summary>
@@ -39,7 +46,9 @@ public class ProductClientsController(ISender mediator, IMapper mapper) : Reapit
     [SwaggerResponseExample(404, typeof(NotFoundProblemDetailsExample))]
     public async Task<IActionResult> GetProductClientById([FromRoute] string id)
     {
-        throw new NotImplementedException();
+        var request = new GetProductClientByIdQuery(id);
+        var entity = await mediator.Send(request);
+        return Ok(mapper.Map<ProductClientDetailsModel>(entity));
     }
 
     /// <summary>Create a new product.</summary>
@@ -52,7 +61,9 @@ public class ProductClientsController(ISender mediator, IMapper mapper) : Reapit
     [SwaggerResponseExample(422, typeof(ValidationProblemDetailsExample))]
     public async Task<IActionResult> CreateProductClient([FromBody] CreateProductClientRequestModel model)
     {
-        throw new NotImplementedException();
+        var request = new CreateProductClientCommand(model.ProductId, model.Name, model.Description, model.Type, model.CallbackUrls, model.SignOutUrls);
+        var entity = await mediator.Send(request);
+        return CreatedAtAction(nameof(GetProductClientById), new { id = entity.Id }, mapper.Map<ProductClientModel>(entity));
     }
 
     /// <summary>Update a product.</summary>
@@ -67,7 +78,9 @@ public class ProductClientsController(ISender mediator, IMapper mapper) : Reapit
     [SwaggerResponseExample(422, typeof(ValidationProblemDetailsExample))]
     public async Task<IActionResult> PatchProductClient([FromRoute] string id, [FromBody] PatchProductClientRequestModel model)
     {
-        throw new NotImplementedException();
+        var request = new PatchProductClientCommand(id, model.Name, model.Description, model.CallbackUrls, model.SignOutUrls);
+        _ = await mediator.Send(request);
+        return NoContent();
     }
 
     /// <summary>Delete a product.</summary>
@@ -78,6 +91,8 @@ public class ProductClientsController(ISender mediator, IMapper mapper) : Reapit
     [SwaggerResponseExample(404, typeof(NotFoundProblemDetailsExample))]
     public async Task<IActionResult> DeleteProductClient([FromRoute] string id)
     {
-        throw new NotImplementedException();
+        var request = new SoftDeleteProductClientCommand(id);
+        _ = await mediator.Send(request);
+        return NoContent();
     }
 }
