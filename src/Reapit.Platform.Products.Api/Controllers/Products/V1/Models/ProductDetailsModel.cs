@@ -10,7 +10,7 @@ namespace Reapit.Platform.Products.Api.Controllers.Products.V1.Models;
 public record ProductDetailsModel(
     [property: JsonPropertyName("id")] string Id, 
     [property: JsonPropertyName("name")] string Name,
-    [property: JsonPropertyName("description")] string Description,
+    [property: JsonPropertyName("description")] string? Description,
     [property: JsonPropertyName("created")] DateTime DateCreated, 
     [property: JsonPropertyName("modified")] DateTime DateModified,
     [property: JsonPropertyName("clients")] IEnumerable<ProductDetailsClientModel> Clients);

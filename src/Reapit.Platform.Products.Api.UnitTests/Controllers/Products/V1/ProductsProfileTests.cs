@@ -1,0 +1,93 @@
+﻿using Reapit.Platform.Common.Providers.Identifiers;
+using Reapit.Platform.Common.Providers.Temporal;
+using Reapit.Platform.Products.Api.Controllers.Products.V1;
+using Reapit.Platform.Products.Api.Controllers.Products.V1.Models;
+using Reapit.Platform.Products.Api.Controllers.Shared;
+using Reapit.Platform.Products.Api.Extensions;
+using Reapit.Platform.Products.Domain.Entities;
+using Reapit.Platform.Products.Domain.Entities.Enums;
+
+namespace Reapit.Platform.Products.Api.UnitTests.Controllers.Products.V1;
+
+public class ProductsProfileTests
+{
+    /*
+     * Product => ProductModel
+     */
+    
+    [Fact]
+    public void ProductsProfile_CreatesProductModel_FromProduct()
+    {
+        var product = GetProduct();
+        var expected = new ProductModel(product.Id, product.Name, product.DateCreated, product.DateModified);
+        
+        var sut = CreateSut();
+        var actual = sut.Map<ProductModel>(product);
+        actual.Should().BeEquivalentTo(expected);
+    } 
+    
+    /*
+     * Product => ProductDetailsModel & [ ProductDetailsClientModel ]
+     */
+    
+    [Fact]
+    public void ProductsProfile_CreatesProductDetailsModel_FromProduct()
+    {
+        var productId = Guid.NewGuid();
+        var client = new ProductClient($"{productId:N}", "client-id", "grant-id", "name", "description", ClientType.AuthorizationCode, null, null);
+        var product = GetProduct(id: productId, clients: [client]);
+
+        var expectedClients = new ProductDetailsClientModel(client.Id, client.Name, client.Type.Name);
+        var expected = new ProductDetailsModel(product.Id, product.Name, product.Description, product.DateCreated, product.DateModified, [expectedClients]);
+        
+        var sut = CreateSut();
+        var actual = sut.Map<ProductDetailsModel>(product);
+        actual.Should().BeEquivalentTo(expected);
+    } 
+    
+    /*
+     * IEnumerable<Product> => PagedResult<ProductModel>
+     */
+    
+    [Fact]
+    public void ProductsProfile_CreatesPagedResult_FromProductCollection()
+    {
+        const int expectedPageSize = 5;
+        var products = Enumerable.Range(0, expectedPageSize).Select(_ => GetProduct()).ToList();
+
+        var sut = CreateSut();
+        var expected = new ResultPage<ProductModel>(
+            Data: sut.Map<IEnumerable<ProductModel>>(products),
+            Cursor: products.GetMaximumCursor(),
+            Count: expectedPageSize);
+
+        var actual = sut.Map<ResultPage<ProductModel>>(products);
+        actual.Should().BeEquivalentTo(expected);
+    }
+    
+    /*
+     * Private methods
+     */
+
+    private static IMapper CreateSut()
+        => new MapperConfiguration(cfg => cfg.AddProfile<ProductsProfile>())
+            .CreateMapper();
+
+    private static Product GetProduct(Guid? id = null, string name = "name", string description = "description", DateTime? dateCreated = null, DateTime? dateModified = null, ICollection<ProductClient>? clients = null)
+    {
+        // Set values to default if nothing is provided
+        id ??= Guid.NewGuid();
+        dateCreated ??= DateTime.UtcNow;
+        dateModified ??= dateCreated;
+        clients ??= new List<ProductClient>();
+        
+        using var guidContext = new GuidProviderContext(id.Value);
+        using var timeContext = new DateTimeOffsetProviderContext(new DateTimeOffset(dateCreated.Value, TimeSpan.Zero));
+        
+        return new Product(name, description)
+        {
+            DateModified = dateModified.Value,
+            Clients = clients
+        };
+    }
+}
