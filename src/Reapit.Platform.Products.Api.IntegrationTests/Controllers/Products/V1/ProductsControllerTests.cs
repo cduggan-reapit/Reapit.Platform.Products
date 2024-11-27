@@ -239,6 +239,9 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
         var url = $"{BaseUrl}/{id}";
         var response = await SendRequestAsync(HttpMethod.Delete, url);
         response.Should().HaveStatusCode(HttpStatusCode.NoContent);
+        
+        var checkResponse = await SendRequestAsync(HttpMethod.Get, url);
+        checkResponse.Should().HaveStatusCode(HttpStatusCode.NotFound);
     }
     
     /*

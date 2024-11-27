@@ -8,6 +8,7 @@ using Reapit.Platform.Products.Api.Controllers.Products.V1.Models;
 using Reapit.Platform.Products.Api.Controllers.Shared;
 using Reapit.Platform.Products.Api.Controllers.Shared.Examples;
 using Reapit.Platform.Products.Core.UseCases.Products.CreateProduct;
+using Reapit.Platform.Products.Core.UseCases.Products.DeleteProduct;
 using Reapit.Platform.Products.Core.UseCases.Products.GetProductById;
 using Reapit.Platform.Products.Core.UseCases.Products.GetProducts;
 using Swashbuckle.AspNetCore.Filters;
@@ -75,7 +76,7 @@ public class ProductsController(ISender mediator, IMapper mapper) : ReapitApiCon
     [SwaggerResponseExample(422, typeof(ValidationProblemDetailsExample))]
     public async Task<IActionResult> PatchProduct([FromRoute] string id, [FromBody] PatchProductRequestModel model)
         => throw new NotImplementedException();
-    
+
     /// <summary>Delete a product.</summary>
     /// <param name="id">The unique identifier of the product.</param>
     [HttpDelete("{id}")]
@@ -83,5 +84,9 @@ public class ProductsController(ISender mediator, IMapper mapper) : ReapitApiCon
     [ProducesResponseType<ProblemDetails>(404)]
     [SwaggerResponseExample(404, typeof(NotFoundProblemDetailsExample))]
     public async Task<IActionResult> DeleteProduct([FromRoute] string id)
-        => throw new NotImplementedException();
+    {
+        var command = new SoftDeleteProductCommand(id);
+        _ = await mediator.Send(command);
+        return NoContent();
+    }
 }
