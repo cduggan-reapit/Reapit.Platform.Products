@@ -8,6 +8,7 @@ using Reapit.Platform.Products.Api.Controllers.Products.V1.Models;
 using Reapit.Platform.Products.Api.Controllers.Shared;
 using Reapit.Platform.Products.Api.Controllers.Shared.Examples;
 using Reapit.Platform.Products.Core.UseCases.Products.CreateProduct;
+using Reapit.Platform.Products.Core.UseCases.Products.GetProductById;
 using Reapit.Platform.Products.Core.UseCases.Products.GetProducts;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -32,16 +33,20 @@ public class ProductsController(ISender mediator, IMapper mapper) : ReapitApiCon
         var entities = await mediator.Send(query);
         return Ok(mapper.Map<ResultPage<ProductModel>>(entities));
     }
-    
+
     /// <summary>Get a single product.</summary>
     /// <param name="id">The unique identifier of the product.</param>
-    [HttpGet("id")]
+    [HttpGet("{id}")]
     [ProducesResponseType<ProductDetailsModel>(200)]
     [ProducesResponseType<ProblemDetails>(404)]
     [SwaggerResponseExample(200, typeof(ProductDetailsModelExampleProvider))]
     [SwaggerResponseExample(404, typeof(NotFoundProblemDetailsExample))]
     public async Task<IActionResult> GetProductById([FromRoute] string id)
-        => throw new NotImplementedException();
+    {
+        var request = new GetProductByIdQuery(id);
+        var entity = await mediator.Send(request);
+        return Ok(mapper.Map<ProductDetailsModel>(entity));
+    }
 
     /// <summary>Create a new product.</summary>
     /// <param name="model">Definition of the product to create.</param>

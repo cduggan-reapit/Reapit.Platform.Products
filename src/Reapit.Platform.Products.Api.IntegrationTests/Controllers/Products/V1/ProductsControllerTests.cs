@@ -82,6 +82,7 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     [Fact]
     public async Task GetById_ReturnsNotFound_WhenPropertyDoesNotExist()
     {
+        await InitializeDatabaseAsync();
         const string url = $"{BaseUrl}/missing";
         var response = await SendRequestAsync(HttpMethod.Get, url);
         await response.Should().HaveStatusCode(HttpStatusCode.NotFound)
@@ -179,6 +180,7 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     [Fact]
     public async Task Patch_ReturnsNotFound_WhenProductDoesNotExist()
     {
+        await InitializeDatabaseAsync();
         const string url = $"{BaseUrl}/missing";
         var content = new PatchProductRequestModel("name", "description");
         var response = await SendRequestAsync(HttpMethod.Patch, url, content: content);
@@ -222,6 +224,7 @@ public class ProductsControllerTests(TestApiFactory apiFactory) : ApiIntegration
     [Fact]
     public async Task Delete_ReturnsNotFound_WhenProductDoesNotExist()
     {
+        await InitializeDatabaseAsync();
         const string url = $"{BaseUrl}/missing";
         var response = await SendRequestAsync(HttpMethod.Delete, url);
         await response.Should().HaveStatusCode(HttpStatusCode.NotFound)

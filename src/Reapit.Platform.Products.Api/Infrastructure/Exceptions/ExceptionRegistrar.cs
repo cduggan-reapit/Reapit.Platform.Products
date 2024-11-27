@@ -1,6 +1,8 @@
 using FluentValidation;
+using Reapit.Platform.Common.Exceptions;
 using Reapit.Platform.Common.Interfaces;
 using Reapit.Platform.Products.Core.Exceptions;
+using ConflictException = Reapit.Platform.Products.Core.Exceptions.ConflictException;
 
 namespace Reapit.Platform.Products.Api.Infrastructure.Exceptions;
 
@@ -21,6 +23,7 @@ public static class ExceptionRegistrar
         factory.RegisterFactoryMethod<ValidationException>(ProblemDetailFactoryImplementations.GetValidationExceptionProblemDetails);
         
         // App exceptions
+        factory.RegisterFactoryMethod<NotFoundException>(NotFoundException.CreateProblemDetails);
         factory.RegisterFactoryMethod<ConflictException>(ConflictException.CreateProblemDetails);
         factory.RegisterFactoryMethod<QueryValidationException>(QueryValidationException.CreateProblemDetails);
 

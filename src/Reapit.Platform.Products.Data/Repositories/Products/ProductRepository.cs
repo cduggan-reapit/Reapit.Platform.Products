@@ -28,5 +28,7 @@ public class ProductRepository(ProductDbContext context) : BaseRepository<Produc
 
     /// <inheritdoc/>
     public async Task<Product?> GetProductByIdAsync(string id, CancellationToken cancellationToken)
-        => await context.Products.SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
+        => await context.Products
+            .Include(product => product.Clients)
+            .SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
 }
