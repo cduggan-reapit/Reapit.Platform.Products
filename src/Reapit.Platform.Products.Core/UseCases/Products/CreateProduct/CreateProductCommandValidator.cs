@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Reapit.Platform.Products.Data.Repositories;
+﻿using Reapit.Platform.Products.Data.Repositories;
 using Reapit.Platform.Products.Data.Services;
 
 namespace Reapit.Platform.Products.Core.UseCases.Products.CreateProduct;
@@ -20,6 +19,8 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
         
         RuleFor(command => command.Name)
             .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .WithMessage(CommonValidationMessages.Required)
             .MaximumLength(100)
             .WithMessage(ProductValidationMessages.NameTooLong)
             .MustAsync(IsNameUnique)

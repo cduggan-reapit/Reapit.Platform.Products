@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace Reapit.Platform.Products.Core.UseCases.Products.GetProducts;
+﻿namespace Reapit.Platform.Products.Core.UseCases.Products.GetProducts;
 
 /// <summary>Validator for the <see cref="GetProductsQuery"/> request.</summary>
 public class GetProductsQueryValidator : AbstractValidator<GetProductsQuery>

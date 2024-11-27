@@ -6,5 +6,5 @@ namespace Reapit.Platform.Products.Api.Controllers.Products.V1.Models;
 /// <param name="Name">The name of the product.</param>
 /// <param name="Description">A description of the product.</param>
 public record PatchProductRequestModel(
-    [property: JsonPropertyName("name")] string Name, 
+    [property: JsonPropertyName("name")] string? Name, 
     [property: JsonPropertyName("description")] string? Description);

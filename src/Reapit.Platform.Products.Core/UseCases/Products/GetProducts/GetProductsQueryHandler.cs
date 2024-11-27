@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-using MediatR;
-using Reapit.Platform.Products.Core.Exceptions;
+﻿using Reapit.Platform.Products.Core.Exceptions;
 using Reapit.Platform.Products.Data.Repositories;
 using Reapit.Platform.Products.Data.Services;
 using Reapit.Platform.Products.Domain.Entities;

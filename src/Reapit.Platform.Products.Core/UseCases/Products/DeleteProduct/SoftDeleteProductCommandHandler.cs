@@ -1,6 +1,4 @@
-﻿using MediatR;
-using Microsoft.Extensions.Logging;
-using Reapit.Platform.Common.Exceptions;
+﻿using Microsoft.Extensions.Logging;
 using Reapit.Platform.Products.Data.Services;
 using Reapit.Platform.Products.Domain.Entities;
 

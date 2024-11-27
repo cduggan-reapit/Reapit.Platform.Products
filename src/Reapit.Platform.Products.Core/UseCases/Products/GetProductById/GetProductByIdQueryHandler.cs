@@ -1,6 +1,4 @@
-﻿using MediatR;
-using Reapit.Platform.Common.Exceptions;
-using Reapit.Platform.Products.Data.Services;
+﻿using Reapit.Platform.Products.Data.Services;
 using Reapit.Platform.Products.Domain.Entities;
 
 namespace Reapit.Platform.Products.Core.UseCases.Products.GetProductById;

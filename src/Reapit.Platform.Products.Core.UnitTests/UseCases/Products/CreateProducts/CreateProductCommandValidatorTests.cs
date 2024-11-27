@@ -23,6 +23,18 @@ public class CreateProductCommandValidatorTests
     }
     
     [Fact]
+    public async Task Validate_ReturnsFailure_WhenNameEmpty()
+    {
+        var command = GetCommand(name: string.Empty);
+        var sut = CreateSut();
+        var actual = await sut.ValidateAsync(command);
+        actual.Should().Fail(nameof(CreateProductCommand.Name), CommonValidationMessages.Required);
+        
+        // If it fails on this, we don't want to hit the database...
+        await _productRepository.DidNotReceiveWithAnyArgs().GetProductsAsync();
+    }
+    
+    [Fact]
     public async Task Validate_ReturnsFailure_WhenNameTooLong()
     {
         var command = GetCommand(name: new string('a', 101));

@@ -11,6 +11,7 @@ using Reapit.Platform.Products.Core.UseCases.Products.CreateProduct;
 using Reapit.Platform.Products.Core.UseCases.Products.DeleteProduct;
 using Reapit.Platform.Products.Core.UseCases.Products.GetProductById;
 using Reapit.Platform.Products.Core.UseCases.Products.GetProducts;
+using Reapit.Platform.Products.Core.UseCases.Products.PatchProduct;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace Reapit.Platform.Products.Api.Controllers.Products.V1;
@@ -75,7 +76,11 @@ public class ProductsController(ISender mediator, IMapper mapper) : ReapitApiCon
     [SwaggerResponseExample(404, typeof(NotFoundProblemDetailsExample))]
     [SwaggerResponseExample(422, typeof(ValidationProblemDetailsExample))]
     public async Task<IActionResult> PatchProduct([FromRoute] string id, [FromBody] PatchProductRequestModel model)
-        => throw new NotImplementedException();
+    {
+        var command = new PatchProductCommand(id, model.Name, model.Description);
+        _ = await mediator.Send(command);
+        return NoContent();
+    }
 
     /// <summary>Delete a product.</summary>
     /// <param name="id">The unique identifier of the product.</param>

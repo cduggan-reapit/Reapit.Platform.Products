@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Reapit.Platform.Products.Domain.Entities;
+﻿using Reapit.Platform.Products.Domain.Entities;
 
 namespace Reapit.Platform.Products.Core.UseCases.Products.PatchProduct;
 
