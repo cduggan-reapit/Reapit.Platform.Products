@@ -14,8 +14,6 @@ public class ProductClientRepository(ProductDbContext context)
         string? name = null, 
         string? description = null, 
         string? productId = null,
-        string? clientId = null, 
-        string? grantId = null,
         ClientType? type = null,
         PaginationFilter? pagination = null,
         TimestampFilter? dateFilter = null, 
@@ -25,8 +23,6 @@ public class ProductClientRepository(ProductDbContext context)
             .ApplyNameFilter(name)
             .ApplyDescriptionFilter(description)
             .ApplyProductIdFilter(productId)
-            .ApplyClientIdFilter(clientId)
-            .ApplyGrantIdFilter(grantId)
             .ApplyTypeFilter(type)
             .ApplyCreatedFromFilter(dateFilter?.CreatedFrom)
             .ApplyCreatedToFilter(dateFilter?.CreatedTo)

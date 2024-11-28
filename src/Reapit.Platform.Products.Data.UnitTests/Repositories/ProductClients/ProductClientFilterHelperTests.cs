@@ -85,44 +85,6 @@ public class ProductClientClientFilterHelperTests
     }
     
     /*
-     * ApplyClientIdFilter
-     */
-    
-    [Fact]
-    public void ApplyClientIdFilter_DoesNotApplyFilter_WhenNullProvided()
-    {
-        var filtered = ProductClients.ApplyClientIdFilter(null);
-        filtered.Should().HaveCount(200);
-    }
-    
-    [Fact]
-    public void ApplyClientIdFilter_AppliesFilter_WhenFilterProvided()
-    {
-        const string filter = "client-id-067";
-        var filtered = ProductClients.ApplyClientIdFilter(filter);
-        filtered.Should().HaveCount(1).And.AllSatisfy(record => record.ClientId.Should().Be(filter));
-    }
-    
-    /*
-     * ApplyGrantIdFilter
-     */
-    
-    [Fact]
-    public void ApplyGrantIdFilter_DoesNotApplyFilter_WhenNullProvided()
-    {
-        var filtered = ProductClients.ApplyGrantIdFilter(null);
-        filtered.Should().HaveCount(200);
-    }
-    
-    [Fact]
-    public void ApplyGrantIdFilter_AppliesFilter_WhenFilterProvided()
-    {
-        const string filter = "grant-id-187";
-        var filtered = ProductClients.ApplyGrantIdFilter(filter);
-        filtered.Should().HaveCount(1).And.AllSatisfy(record => record.GrantId.Should().Be(filter));
-    }
-    
-    /*
      * ApplyTypeFilter
      */
     

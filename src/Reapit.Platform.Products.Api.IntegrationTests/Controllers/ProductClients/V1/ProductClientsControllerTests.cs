@@ -58,7 +58,7 @@ public class ProductClientsControllerTests(TestApiFactory apiFactory) : ApiInteg
     public async Task Get_ReturnsOk_WhenRequestSuccessful()
     {
         await InitializeDatabaseAsync();
-        var expected = _mapper.Map<ResultPage<ProductDetailsModel>>(SeedClients.Take(3));
+        var expected = _mapper.Map<ResultPage<ProductClientModel>>(SeedClients.Take(3));
         var response = await SendRequestAsync(HttpMethod.Get, $"{BaseUrl}?pageSize=3");
         await response.Should().HaveStatusCode(HttpStatusCode.OK)
             .And.HavePayloadAsync(expected);

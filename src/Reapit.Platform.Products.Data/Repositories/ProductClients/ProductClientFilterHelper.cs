@@ -44,24 +44,6 @@ public static class ProductClientFilterHelper
             ? queryable
             : queryable.Where(entity => entity.ProductId == value);
     
-    /// <summary>Filters a collection of <see cref="ProductClient"/> objects by IdP client identifier.</summary>
-    /// <param name="queryable">The collection to filter.</param>
-    /// <param name="value">The value to filter by.</param>
-    /// <returns>A reference to the queryable after the filter operation.</returns>
-    public static IQueryable<ProductClient> ApplyClientIdFilter(this IQueryable<ProductClient> queryable, string? value)
-        => value == null
-            ? queryable
-            : queryable.Where(entity => entity.ClientId == value);
-    
-    /// <summary>Filters a collection of <see cref="ProductClient"/> objects by IdP client grant identifier.</summary>
-    /// <param name="queryable">The collection to filter.</param>
-    /// <param name="value">The value to filter by.</param>
-    /// <returns>A reference to the queryable after the filter operation.</returns>
-    public static IQueryable<ProductClient> ApplyGrantIdFilter(this IQueryable<ProductClient> queryable, string? value)
-        => value == null
-            ? queryable
-            : queryable.Where(entity => entity.GrantId == value);
-    
     /// <summary>Filters a collection of <see cref="ProductClient"/> objects by client type.</summary>
     /// <param name="queryable">The collection to filter.</param>
     /// <param name="value">The value to filter by.</param>

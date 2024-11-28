@@ -22,8 +22,6 @@ public interface IProductClientRepository : IBaseRepository<ProductClient>
         string? name = null,
         string? description = null,
         string? productId = null,
-        string? clientId = null, 
-        string? grantId = null,
         ClientType? type = null,
         PaginationFilter? pagination = null,
         TimestampFilter? dateFilter = null,

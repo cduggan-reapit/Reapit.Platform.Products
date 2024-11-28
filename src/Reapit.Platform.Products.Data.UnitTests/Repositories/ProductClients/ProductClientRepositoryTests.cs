@@ -83,34 +83,6 @@ public class ProductClientRepositoryTests : DatabaseAwareTestBase
     }
     
     [Fact]
-    public async Task GetProductClientsAsync_ReturnsFilteredResult_WhenClientIdProvided()
-    {
-        await using var context = await GetContextAsync();
-        await PlantSeedDataAsync(context);
-        
-        const string filter = "client-id-099";
-        var expected = ProductClients.Where(pc => pc.ClientId == filter);
-        
-        var sut = CreateSut(context);
-        var actual = await sut.GetProductClientsAsync(clientId: filter);
-        actual.Should().HaveCount(1).And.BeEquivalentTo(expected);
-    }
-    
-    [Fact]
-    public async Task GetProductClientsAsync_ReturnsFilteredResult_WhenGrantIdProvided()
-    {
-        await using var context = await GetContextAsync();
-        await PlantSeedDataAsync(context);
-        
-        const string filter = "grant-id-099";
-        var expected = ProductClients.Where(pc => pc.GrantId == filter);
-        
-        var sut = CreateSut(context);
-        var actual = await sut.GetProductClientsAsync(grantId: filter);
-        actual.Should().HaveCount(1).And.BeEquivalentTo(expected);
-    }
-    
-    [Fact]
     public async Task GetProductClientsAsync_ReturnsFilteredResult_WhenTypeProvided()
     {
         await using var context = await GetContextAsync();

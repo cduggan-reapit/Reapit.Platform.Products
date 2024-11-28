@@ -7,6 +7,7 @@ using Reapit.Platform.Products.Data.Repositories.Products;
 using Reapit.Platform.Products.Data.Services;
 using Reapit.Platform.Products.Domain.Entities;
 using Reapit.Platform.Products.Domain.Entities.Enums;
+using static Reapit.Platform.Products.Core.UnitTests.UseCases.ProductClients.TestProductClientFactory;
 
 namespace Reapit.Platform.Products.Core.UnitTests.UseCases.ProductClients.CreateProductClient;
 
@@ -315,16 +316,4 @@ public class CreateProductClientCommandValidatorTests
                 pagination: new PaginationFilter(PageSize: 1),
                 cancellationToken: Arg.Any<CancellationToken>())
             .Returns(isUnique ? Array.Empty<ProductClient>() : [GetProductClient()]);
-    
-    private static ProductClient GetProductClient(
-        string productId = "productId",
-        string clientId = "clientId",
-        string grantId = "grantId",
-        string name = "name",
-        string description = "description",
-        ClientType? type = null,
-        string? audience = null, 
-        ICollection<string>? callbackUrls = null, 
-        ICollection<string>? signOutUrls = null)
-        => new(productId, clientId, grantId, name, description, type ?? ClientType.ClientCredentials, audience, callbackUrls, signOutUrls);
 }

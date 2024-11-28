@@ -77,16 +77,4 @@ public class CreateProductClientCommandHandlerTests
         ICollection<string>? callbackUrls = null,
         ICollection<string>? signOutUrls = null)
         => new(productId, name, description, type, audience, callbackUrls, signOutUrls);
-    
-    private static ProductClient GetProductClient(
-        string productId = "productId",
-        string clientId = "clientId",
-        string grantId = "grantId",
-        string name = "name",
-        string description = "description",
-        ClientType? type = null,
-        string? audience = null, 
-        ICollection<string>? callbackUrls = null, 
-        ICollection<string>? signOutUrls = null)
-        => new(productId, clientId, grantId, name, description, type ?? ClientType.ClientCredentials, audience, callbackUrls, signOutUrls);
 }
