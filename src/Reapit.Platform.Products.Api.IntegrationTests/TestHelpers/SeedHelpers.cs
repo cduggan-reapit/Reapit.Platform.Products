@@ -1,4 +1,5 @@
-﻿using Reapit.Platform.Common.Providers.Identifiers;
+﻿using Auth0.ManagementApi.Models;
+using Reapit.Platform.Common.Providers.Identifiers;
 using Reapit.Platform.Common.Providers.Temporal;
 using Reapit.Platform.Products.Domain.Entities;
 using Reapit.Platform.Products.Domain.Entities.Enums;
@@ -59,6 +60,7 @@ public static class SeedHelpers
                     $"ProductClient {clientSeed:D3}",
                     $"Description of Product Client {clientSeed:D3}",
                     type,
+                    type == ClientType.ClientCredentials ? "https://example.net/audience" : null,
                     [$"https://example.net/callback/{clientSeed:D3}"],
                     [$"https://example.net/sign-out/{clientSeed:D3}"])
                 {

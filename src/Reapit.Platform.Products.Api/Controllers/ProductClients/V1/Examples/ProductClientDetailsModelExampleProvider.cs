@@ -8,7 +8,7 @@ namespace Reapit.Platform.Products.Api.Controllers.ProductClients.V1.Examples;
 public class ProductClientDetailsModelExampleProvider : IExamplesProvider<ProductClientDetailsModel>
 {
     private static readonly DateTime BaseDate = new(2024, 11, 27, 13, 30, 52, DateTimeKind.Utc);
-    
+
     /// <inheritdoc />
     public ProductClientDetailsModel GetExamples()
         => new(
@@ -16,6 +16,7 @@ public class ProductClientDetailsModelExampleProvider : IExamplesProvider<Produc
             Name: "My Product M2M Client",
             Description: "Machine to machine client for the My Product product",
             Type: ClientType.ClientCredentials.Name,
+            Audience: "https://www.example.net/",
             DateCreated: BaseDate,
             DateModified: BaseDate.AddDays(2),
             CallbackUrls: null,

@@ -28,6 +28,7 @@ public class ProductClientsProfile : Profile
             .ForCtorParam(nameof(ProductClientDetailsModel.Name), ops => ops.MapFrom(entity => entity.Name))
             .ForCtorParam(nameof(ProductClientDetailsModel.Description), ops => ops.MapFrom(entity => entity.Description))
             .ForCtorParam(nameof(ProductClientDetailsModel.Type), ops => ops.MapFrom(entity => entity.Type.Name))
+            .ForCtorParam(nameof(ProductClientDetailsModel.Audience), ops => ops.MapFrom(entity => entity.Audience))
             .ForCtorParam(nameof(ProductClientDetailsModel.DateCreated), ops => ops.MapFrom(entity => entity.DateCreated))
             .ForCtorParam(nameof(ProductClientDetailsModel.DateModified), ops => ops.MapFrom(entity => entity.DateModified))
             .ForCtorParam(nameof(ProductClientDetailsModel.CallbackUrls), ops => ops.MapFrom(entity => entity.CallbackUrls))

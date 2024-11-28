@@ -7,6 +7,7 @@ namespace Reapit.Platform.Products.Api.Controllers.ProductClients.V1.Models;
 /// <param name="Name">The name of the product client.</param>
 /// <param name="Description">A description of the product client.</param>
 /// <param name="Type">The type of the product client.</param>
+/// <param name="Audience">The audience of client grant (client_credentials clients only).</param>
 /// <param name="DateCreated">The timestamp of the creation of the product client (UTC).</param>
 /// <param name="DateModified">The timestamp of the last modification to the product client (UTC).</param>
 /// <param name="CallbackUrls">Collection of URLs whitelisted for use as a callback to the client after authentication.</param>
@@ -17,6 +18,7 @@ public record ProductClientDetailsModel(
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("description")] string? Description,
     [property: JsonPropertyName("type")] string Type,
+    [property: JsonPropertyName("audience")] string? Audience,
     [property: JsonPropertyName("created")] DateTime DateCreated, 
     [property: JsonPropertyName("modified")] DateTime DateModified,
     [property: JsonPropertyName("callbackUrls")] IEnumerable<string>? CallbackUrls,

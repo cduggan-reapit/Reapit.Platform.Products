@@ -26,12 +26,13 @@ public class ProductClientTests
             clientId = "clientId",
             grantId = "grantId",
             name = "name",
-            description = "description";
+            description = "description",
+            audience = "audience";
         var type = ClientType.ClientCredentials;
         var callbackUrls = new[] { "callbackUrl" };
         var signOutUrls = new[] { "signOutUrl" };
         
-        var entity = new ProductClient(productId, clientId, grantId, name, description, type, callbackUrls, signOutUrls);
+        var entity = new ProductClient(productId, clientId, grantId, name, description, type, audience, callbackUrls, signOutUrls);
         
         // Explicit
         entity.ProductId.Should().Be(productId);
@@ -40,6 +41,7 @@ public class ProductClientTests
         entity.Name.Should().Be(name);
         entity.Description.Should().Be(description);
         entity.Type.Should().Be(type);
+        entity.Audience.Should().Be(audience);
         entity.CallbackUrls.Should().BeEquivalentTo(callbackUrls);
         entity.SignOutUrls.Should().BeEquivalentTo(signOutUrls);
         
@@ -146,7 +148,8 @@ public class ProductClientTests
         string name = "name",
         string? description = "description",
         ClientType? type = null,
+        string? audience = null,
         ICollection<string>? callbackUrls = null,
         ICollection<string>? signOutUrls = null)
-        => new(productId, clientId, grantId, name, description, type ?? ClientType.ClientCredentials, callbackUrls, signOutUrls);
+        => new(productId, clientId, grantId, name, description, type ?? ClientType.ClientCredentials, audience, callbackUrls, signOutUrls);
 }

@@ -14,6 +14,7 @@ public class CreateProductClientRequestModelExampleProvider : IExamplesProvider<
             Name: "My Product AuthCode Client",
             Description: "AuthCode client for the My Product product.",
             Type: ClientType.AuthorizationCode.Name,
+            Audience: null,
             CallbackUrls: ["https://example.net/callback"],
             SignOutUrls: ["https://example.net/sign-out"]);
 }

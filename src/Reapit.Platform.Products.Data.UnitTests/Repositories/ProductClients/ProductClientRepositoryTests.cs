@@ -217,7 +217,7 @@ public class ProductClientRepositoryTests : DatabaseAwareTestBase
         await using var context = await GetContextAsync();
         await PlantSeedDataAsync(context);
         
-        var entity = new ProductClient(Guid .Empty.ToString("N"),"client-id", null, "name", "description", ClientType.ClientCredentials, null, null);
+        var entity = new ProductClient(Guid .Empty.ToString("N"),"client-id", null, "name", "description", ClientType.ClientCredentials, null, null, null);
         var sut = CreateSut(context);
         _ = await sut.CreateAsync(entity, default);
 
@@ -318,6 +318,7 @@ public class ProductClientRepositoryTests : DatabaseAwareTestBase
                     name: $"ProductClient {i:D3}", 
                     description: $"Description of ProductClient {i:D3}",
                     type: type,
+                    audience: null,
                     callbackUrls: null,
                     signOutUrls: null)
                 {

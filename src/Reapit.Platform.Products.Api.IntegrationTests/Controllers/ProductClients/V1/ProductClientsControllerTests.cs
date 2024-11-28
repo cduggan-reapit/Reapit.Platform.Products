@@ -61,7 +61,7 @@ public class ProductClientsControllerTests(TestApiFactory apiFactory) : ApiInteg
         var expected = _mapper.Map<ResultPage<ProductDetailsModel>>(SeedClients.Take(3));
         var response = await SendRequestAsync(HttpMethod.Get, $"{BaseUrl}?pageSize=3");
         await response.Should().HaveStatusCode(HttpStatusCode.OK)
-            .And.HavePayloadAsync(expected);;
+            .And.HavePayloadAsync(expected);
     }
     
     /*
@@ -120,9 +120,10 @@ public class ProductClientsControllerTests(TestApiFactory apiFactory) : ApiInteg
         string name = "name", 
         string description = "description", 
         string type = "client_credentials", 
+        string? audience = null,
         IEnumerable<string>? callbackUrls = null, 
         IEnumerable<string>? signOutUrls = null)
-        => new(productId, name, description, type, callbackUrls, signOutUrls);
+        => new(productId, name, description, type, audience, callbackUrls, signOutUrls);
 
     [Fact]
     public async Task Post_ReturnsBadRequest_WhenNoApiVersionProvided()

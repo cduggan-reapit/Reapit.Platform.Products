@@ -35,7 +35,7 @@ public class ProductsProfileTests
     public void ProductsProfile_CreatesProductDetailsModel_FromProduct()
     {
         var productId = Guid.NewGuid();
-        var client = new ProductClient($"{productId:N}", "client-id", "grant-id", "name", "description", ClientType.AuthorizationCode, null, null);
+        var client = new ProductClient($"{productId:N}", "client-id", "grant-id", "name", "description", ClientType.AuthorizationCode, null, null, null);
         var product = GetProduct(id: productId, clients: [client]);
 
         var expectedClients = new ProductDetailsClientModel(client.Id, client.Name, client.Type.Name);

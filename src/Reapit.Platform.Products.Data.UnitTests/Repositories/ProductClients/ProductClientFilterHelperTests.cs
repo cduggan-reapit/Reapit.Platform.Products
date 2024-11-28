@@ -239,6 +239,7 @@ public class ProductClientClientFilterHelperTests
                     name: $"ProductClient {i:D3}",
                     description: $"Description of ProductClient {i:D3}",
                     type: type,
+                    audience: null,
                     callbackUrls: ArraySegment<string>.Empty, 
                     signOutUrls: ArraySegment<string>.Empty)
                 {

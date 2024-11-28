@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Reapit.Platform.Products.Api.Controllers.ProductClients.V1;
 using Reapit.Platform.Products.Api.Controllers.ProductClients.V1.Models;
 using Reapit.Platform.Products.Api.Controllers.Shared;
@@ -71,8 +72,8 @@ public class ProductClientsControllerTests
     [Fact]
     public async Task CreateProductClient_ReturnsCreated_WithProductClientModel()
     {
-        var request = new CreateProductClientRequestModel("product-id", "name", "description", ClientType.ClientCredentials.Name, null, null);
-        var command = new CreateProductClientCommand(request.ProductId, request.Name, request.Description, request.Type, request.CallbackUrls, request.SignOutUrls);
+        var request = new CreateProductClientRequestModel("product-id", "name", "description", ClientType.ClientCredentials.Name, null, null, null);
+        var command = new CreateProductClientCommand(request.ProductId, request.Name, request.Description, request.Type, request.Audience, request.CallbackUrls, request.SignOutUrls);
 
         var entity = GetProductClient();
         var expected = _mapper.Map<ProductClientModel>(entity);
@@ -139,6 +140,7 @@ public class ProductClientsControllerTests
         string name = "name", 
         string description = "description",
         ClientType? type = null,
+        string? audience = null,
         ICollection<string>? callbackUrls = null,
         ICollection<string>? signOutUrls = null)
         => new(
@@ -148,6 +150,7 @@ public class ProductClientsControllerTests
             name: name, 
             description: description, 
             type: type ?? ClientType.ClientCredentials, 
+            audience: audience,
             callbackUrls: callbackUrls,
             signOutUrls: signOutUrls)
         {

@@ -12,7 +12,7 @@ using Reapit.Platform.Products.Data.Context;
 namespace Reapit.Platform.Products.Data.Context.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    [Migration("20241126164231_InitialCreate")]
+    [Migration("20241128090851_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -82,6 +82,11 @@ namespace Reapit.Platform.Products.Data.Context.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)")
                         .HasColumnName("id");
+
+                    b.Property<string>("Audience")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)")
+                        .HasColumnName("audience");
 
                     b.Property<string>("CallbackUrls")
                         .HasColumnType("longtext")

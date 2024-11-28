@@ -80,6 +80,11 @@ namespace Reapit.Platform.Products.Data.Context.Migrations
                         .HasColumnType("varchar(36)")
                         .HasColumnName("id");
 
+                    b.Property<string>("Audience")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)")
+                        .HasColumnName("audience");
+
                     b.Property<string>("CallbackUrls")
                         .HasColumnType("longtext")
                         .HasColumnName("callbackUrls");

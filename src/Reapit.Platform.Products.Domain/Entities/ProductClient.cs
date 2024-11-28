@@ -13,6 +13,7 @@ public class ProductClient : ClientEntityBase
     /// <param name="name">The name of the client. Does not support <c>&lt;</c> or <c>&gt;</c>.</param>
     /// <param name="description">A description of the client. Maximum 140 characters.</param>
     /// <param name="type">The type of client.</param>
+    /// <param name="audience">The audience of client grant (client_credentials clients only).</param>
     /// <param name="callbackUrls">Comma-separated list of URLs whitelisted for use as a callback to the client after authentication.</param>
     /// <param name="signOutUrls">Comma-separated list of URLs that are valid to redirect to after logout. Wildcards are allowed for subdomains.</param>
     public ProductClient(
@@ -22,9 +23,10 @@ public class ProductClient : ClientEntityBase
         string name, 
         string? description, 
         ClientType type, 
+        string? audience,
         ICollection<string>? callbackUrls, 
         ICollection<string>? signOutUrls)
-        : base(clientId, grantId, name, description, type, callbackUrls, signOutUrls)
+        : base(clientId, grantId, name, description, type, audience, callbackUrls, signOutUrls)
     {
         ProductId = productId;
     }

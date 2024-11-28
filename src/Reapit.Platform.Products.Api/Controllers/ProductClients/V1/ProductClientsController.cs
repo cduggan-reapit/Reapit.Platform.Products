@@ -61,7 +61,7 @@ public class ProductClientsController(ISender mediator, IMapper mapper) : Reapit
     [SwaggerResponseExample(422, typeof(ValidationProblemDetailsExample))]
     public async Task<IActionResult> CreateProductClient([FromBody] CreateProductClientRequestModel model)
     {
-        var request = new CreateProductClientCommand(model.ProductId, model.Name, model.Description, model.Type, model.CallbackUrls, model.SignOutUrls);
+        var request = new CreateProductClientCommand(model.ProductId, model.Name, model.Description, model.Type, model.Audience, model.CallbackUrls, model.SignOutUrls);
         var entity = await mediator.Send(request);
         return CreatedAtAction(nameof(GetProductClientById), new { id = entity.Id }, mapper.Map<ProductClientModel>(entity));
     }

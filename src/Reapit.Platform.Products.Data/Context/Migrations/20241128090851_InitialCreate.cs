@@ -56,6 +56,8 @@ namespace Reapit.Platform.Products.Data.Context.Migrations
                     description = table.Column<string>(type: "varchar(140)", maxLength: 140, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     type = table.Column<int>(type: "int", nullable: false),
+                    audience = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     callbackUrls = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     signOutUrls = table.Column<string>(type: "longtext", nullable: true)

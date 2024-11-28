@@ -42,6 +42,10 @@ public static class ClientEntityBaseConfigurationHelper
             .HasColumnName("type")
             .HasConversion(TypeConverters.ClientTypeConverter);
         
+        builder.Property(entity => entity.Audience)
+            .HasColumnName("audience")
+            .HasMaxLength(1000);
+        
         builder.Property(entity => entity.CallbackUrls)
             .HasColumnName("callbackUrls")
             .HasConversion(converter: TypeConverters.StringArrayConverter, valueComparer: TypeComparers.StringArrayComparer);

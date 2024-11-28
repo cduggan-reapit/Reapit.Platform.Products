@@ -11,6 +11,7 @@ public abstract class ClientEntityBase : EntityBase
     /// <param name="name">The name of the client. Does not support <c>&lt;</c> or <c>&gt;</c>.</param>
     /// <param name="description">A description of the client. Maximum 140 characters.</param>
     /// <param name="type">The type of client.</param>
+    /// <param name="audience">The audience of client grant (client_credentials clients only).</param>
     /// <param name="callbackUrls">Collection of URLs whitelisted for use as a callback to the client after authentication.</param>
     /// <param name="signOutUrls">Collection of URLs that are valid to redirect to after logout. Wildcards are allowed for subdomains.</param>
     protected ClientEntityBase(
@@ -19,6 +20,7 @@ public abstract class ClientEntityBase : EntityBase
         string name, 
         string? description,
         ClientType type,
+        string? audience,
         ICollection<string>? callbackUrls, 
         ICollection<string>? signOutUrls)
     {
@@ -27,6 +29,7 @@ public abstract class ClientEntityBase : EntityBase
         Name = name;
         Description = description;
         Type = type;
+        Audience = audience;
         CallbackUrls = callbackUrls;
         SignOutUrls = signOutUrls;
     }
@@ -64,9 +67,15 @@ public abstract class ClientEntityBase : EntityBase
     /// <summary>The type of client.</summary>
     public ClientType Type { get; init; }
     
+    /// <summary>The audience of client grant.</summary>
+    /// <remarks>Only applicable to client_credentials clients.</remarks>
+    public string? Audience { get; init; }
+    
     /// <summary>Collection of URLs whitelisted for use as a callback to the client after authentication.</summary>
+    /// <remarks>Only applicable to authorization_code clients.</remarks>
     public ICollection<string>? CallbackUrls { get; private set; }
     
     /// <summary>Collection of URLs that are valid to redirect to after logout. Wildcards are allowed for subdomains.</summary>
+    /// <remarks>Only applicable to authorization_code clients.</remarks>
     public ICollection<string>? SignOutUrls { get; private set; }
 }
