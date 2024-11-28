@@ -1,5 +1,4 @@
 ﻿using Reapit.Platform.Products.Api.Controllers.ProductClients.V1.Models;
-using Reapit.Platform.Products.Domain.Entities.Enums;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace Reapit.Platform.Products.Api.Controllers.ProductClients.V1.Examples;

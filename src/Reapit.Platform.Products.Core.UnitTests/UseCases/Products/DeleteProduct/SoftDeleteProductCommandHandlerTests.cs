@@ -1,5 +1,4 @@
-﻿using Reapit.Platform.Common.Exceptions;
-using Reapit.Platform.Products.Core.UseCases.Products.DeleteProduct;
+﻿using Reapit.Platform.Products.Core.UseCases.Products.DeleteProduct;
 using Reapit.Platform.Products.Data.Repositories.Products;
 using Reapit.Platform.Products.Data.Services;
 using Reapit.Platform.Products.Domain.Entities;

@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Reapit.Platform.Products.Data.Context.Converters;
 using Reapit.Platform.Products.Domain.Entities.Abstract;
-using Reapit.Platform.Products.Domain.Entities.Enums;
 
 namespace Reapit.Platform.Products.Data.Context.Configuration.Helpers;
 

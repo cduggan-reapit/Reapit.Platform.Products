@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using Reapit.Platform.Products.Core.UseCases.ProductClients.CreateProductClient;
 using Reapit.Platform.Products.Domain.Entities.Enums;
 using Reapit.Platform.Swagger.Attributes;
 
@@ -19,5 +18,5 @@ public record CreateProductClientRequestModel(
     [property: JsonPropertyName("description")] string? Description,
     [property: JsonPropertyName("type"), SwaggerSelect(typeof(ClientType), false)] string Type,
     [property: JsonPropertyName("audience")] string? Audience,
-    [property: JsonPropertyName("callbackUrls")] IEnumerable<string>? CallbackUrls,
-    [property: JsonPropertyName("signOutUrls")] IEnumerable<string>? SignOutUrls);
+    [property: JsonPropertyName("callbackUrls")] ICollection<string>? CallbackUrls,
+    [property: JsonPropertyName("signOutUrls")] ICollection<string>? SignOutUrls);

@@ -120,9 +120,9 @@ public class ProductClientsControllerTests(TestApiFactory apiFactory) : ApiInteg
         string name = "name", 
         string description = "description", 
         string type = "client_credentials", 
-        string? audience = null,
-        IEnumerable<string>? callbackUrls = null, 
-        IEnumerable<string>? signOutUrls = null)
+        string? audience = "https://www.example.audience",
+        ICollection<string>? callbackUrls = null, 
+        ICollection<string>? signOutUrls = null)
         => new(productId, name, description, type, audience, callbackUrls, signOutUrls);
 
     [Fact]
@@ -146,6 +146,7 @@ public class ProductClientsControllerTests(TestApiFactory apiFactory) : ApiInteg
     [Fact]
     public async Task Post_ReturnsUnprocessable_WhenValidationFails()
     {
+        await InitializeDatabaseAsync();
         var content = GetCreateModel(0.AsIdentity(), name: new string('a', 101));
         var response = await SendRequestAsync(HttpMethod.Post, BaseUrl, content: content);
         await response.Should().HaveStatusCode(HttpStatusCode.UnprocessableContent)

@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Reapit.Platform.ApiVersioning;
 using Reapit.Platform.ApiVersioning.Options;
 using Reapit.Platform.Cloud;
@@ -42,8 +44,17 @@ builder.AddCoreServices()
 // Add services for the Api project
 builder.Services.AddAutoMapper(typeof(Reapit.Platform.Products.Api.Program).Assembly);
 
+// Finally configure the controller routing and json serialization options
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // make sure null values are included in the response models 
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+        
+        // this is probably less "required" than "preferred" but still:
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 
 /*
  * Configure the application

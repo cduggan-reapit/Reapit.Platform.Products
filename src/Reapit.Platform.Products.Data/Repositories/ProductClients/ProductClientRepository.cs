@@ -38,5 +38,7 @@ public class ProductClientRepository(ProductDbContext context)
 
     /// <inheritdoc/>
     public async Task<ProductClient?> GetProductClientByIdAsync(string id, CancellationToken cancellationToken)
-        => await context.ProductClients.SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
+        => await context.ProductClients
+            .Include(client => client.Product)
+            .SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
 }

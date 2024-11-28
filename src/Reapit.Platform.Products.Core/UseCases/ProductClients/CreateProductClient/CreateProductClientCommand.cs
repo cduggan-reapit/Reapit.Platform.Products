@@ -7,6 +7,7 @@ namespace Reapit.Platform.Products.Core.UseCases.ProductClients.CreateProductCli
 /// <param name="Name">The name of the product client.</param>
 /// <param name="Description">A description of the product client.</param>
 /// <param name="Type">The type of client.</param>
+/// <param name="Audience">The audience of client grant.</param>
 /// <param name="CallbackUrls">Collection of URLs whitelisted for use as a callback to the client after authentication.</param>
 /// <param name="SignOutUrls">Collection of URLs that are valid to redirect to after logout.</param>
 public record CreateProductClientCommand(
@@ -14,6 +15,7 @@ public record CreateProductClientCommand(
     string Name, 
     string? Description, 
     string Type,
-    IEnumerable<string>? CallbackUrls,
-    IEnumerable<string>? SignOutUrls)
+    string? Audience,
+    ICollection<string>? CallbackUrls,
+    ICollection<string>? SignOutUrls)
     : IRequest<ProductClient>;

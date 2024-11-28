@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using Reapit.Platform.Products.Api.Controllers.ProductClients.V1;
 using Reapit.Platform.Products.Api.Controllers.ProductClients.V1.Models;
 using Reapit.Platform.Products.Api.Controllers.Shared;

@@ -1,5 +1,4 @@
-﻿using Auth0.ManagementApi.Models;
-using Reapit.Platform.Common.Providers.Identifiers;
+﻿using Reapit.Platform.Common.Providers.Identifiers;
 using Reapit.Platform.Common.Providers.Temporal;
 using Reapit.Platform.Products.Domain.Entities;
 using Reapit.Platform.Products.Domain.Entities.Enums;
