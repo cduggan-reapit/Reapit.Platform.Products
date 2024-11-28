@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Reapit.Platform.Products.Core.Configuration;
+using Reapit.Platform.Products.Core.Services.Notifications;
 
 namespace Reapit.Platform.Products.Core;
 
@@ -15,7 +16,8 @@ public static class Startup
             cfg.RegisterServicesFromAssemblyContaining<UseCases.Products.CreateProduct.CreateProductCommandHandler>());
         
         builder.Services.AddValidatorsFromAssemblyContaining(typeof(UseCases.Products.CreateProduct.CreateProductCommandValidator));
-        
+
+        builder.Services.AddScoped<INotificationsService, NotificationsService>();
         builder.Services.Configure<NotificationTopicConfiguration>(builder.Configuration.GetSection("Service:NotificationTopic"));
         
         return builder;

@@ -1,6 +1,8 @@
 ﻿using FluentValidation.Results;
 using Reapit.Platform.Common.Providers.Identifiers;
 using Reapit.Platform.Common.Providers.Temporal;
+using Reapit.Platform.Products.Core.Services.Notifications.Models;
+using Reapit.Platform.Products.Core.UnitTests.TestServices;
 using Reapit.Platform.Products.Core.UseCases.Products.CreateProduct;
 using Reapit.Platform.Products.Data.Repositories.Products;
 using Reapit.Platform.Products.Data.Services;
@@ -12,6 +14,7 @@ public class CreateProductCommandHandlerTests
 {
     private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
     private readonly IProductRepository _productRepository = Substitute.For<IProductRepository>();
+    private readonly MockNotificationsService _notifications = new();
     private readonly IValidator<CreateProductCommand> _validator = Substitute.For<IValidator<CreateProductCommand>>();
     private readonly FakeLogger<CreateProductCommandHandler> _logger = new ();
     
@@ -49,6 +52,9 @@ public class CreateProductCommandHandlerTests
         var sut = CreateSut();
         var actual = await sut.Handle(command, default);
         actual.Should().BeEquivalentTo(product);
+        
+        var expectedNotification = MessageEnvelope.ProductCreated(actual);
+        _notifications.LastMessage.Should().BeEquivalentTo(expectedNotification); 
     }
     
     /*
@@ -58,7 +64,7 @@ public class CreateProductCommandHandlerTests
     private CreateProductCommandHandler CreateSut()
     {
         _unitOfWork.Products.Returns(_productRepository);
-        return new CreateProductCommandHandler(_unitOfWork, _validator, _logger);
+        return new CreateProductCommandHandler(_unitOfWork, _notifications, _validator, _logger);
     }
     
     private static CreateProductCommand GetCommand(string name = "name", string? description = "description")
