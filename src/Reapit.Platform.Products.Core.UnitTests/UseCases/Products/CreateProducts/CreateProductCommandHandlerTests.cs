@@ -49,6 +49,9 @@ public class CreateProductCommandHandlerTests
         _productRepository.CreateAsync(Arg.Is<Product>(p => p.Name == command.Name && p.Description == command.Name), Arg.Any<CancellationToken>())
             .Returns(product);
 
+        // Fix the time so that the generated notification timestamp is static.
+        using var _ = new DateTimeOffsetProviderContext(DateTimeOffset.UnixEpoch);
+        
         var sut = CreateSut();
         var actual = await sut.Handle(command, default);
         actual.Should().BeEquivalentTo(product);

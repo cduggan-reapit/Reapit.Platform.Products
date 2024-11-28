@@ -17,7 +17,7 @@ public class MessageEnvelope
     [JsonPropertyName("version")]
     public int Version { get; }
     
-    /// <summary>The timestamp of the messages creation.</summary>
+    /// <summary>The timestamp of the message creation.</summary>
     [JsonPropertyName("timestamp")]
     public DateTimeOffset Timestamp { get; } = DateTimeOffsetProvider.Now;
 

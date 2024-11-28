@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using Reapit.Platform.Products.Core.Services.Notifications;
+using Reapit.Platform.Products.Core.Services.Notifications.Models;
 using Reapit.Platform.Products.Data.Services;
 using Reapit.Platform.Products.Domain.Entities;
 
@@ -7,6 +9,7 @@ namespace Reapit.Platform.Products.Core.UseCases.Products.PatchProduct;
 /// <summary>Handler for the <see cref="PatchProductCommand"/> request.</summary>
 public class PatchProductCommandHandler(
     IUnitOfWork unitOfWork,
+    INotificationsService notifications,
     IValidator<PatchProductCommand> validator,
     ILogger<PatchProductCommandHandler> logger) 
     : IRequestHandler<PatchProductCommand, Product>
@@ -29,6 +32,8 @@ public class PatchProductCommandHandler(
         await unitOfWork.SaveChangesAsync(cancellationToken);
         
         logger.LogInformation("Product updated: {id} ({blob})", entity.Id, entity.ToString());
+        _ = await notifications.PublishNotificationAsync(MessageEnvelope.ProductModified(entity), cancellationToken);
+        
         return entity;
     }
 }

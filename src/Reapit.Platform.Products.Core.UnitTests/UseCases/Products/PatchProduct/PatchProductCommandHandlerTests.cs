@@ -1,4 +1,7 @@
 ﻿using FluentValidation.Results;
+using Reapit.Platform.Common.Providers.Temporal;
+using Reapit.Platform.Products.Core.Services.Notifications.Models;
+using Reapit.Platform.Products.Core.UnitTests.TestServices;
 using Reapit.Platform.Products.Core.UseCases.Products.PatchProduct;
 using Reapit.Platform.Products.Data.Repositories.Products;
 using Reapit.Platform.Products.Data.Services;
@@ -10,6 +13,7 @@ public class PatchProductCommandHandlerTests
 {
     private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
     private readonly IProductRepository _productRepository = Substitute.For<IProductRepository>();
+    private readonly MockNotificationsService _notifications = new();
     private readonly IValidator<PatchProductCommand> _validator = Substitute.For<IValidator<PatchProductCommand>>();
     private readonly FakeLogger<PatchProductCommandHandler> _logger = new();
     
@@ -73,6 +77,9 @@ public class PatchProductCommandHandlerTests
         _productRepository.GetProductByIdAsync(product.Id, Arg.Any<CancellationToken>())
             .Returns(product);
 
+        // Fix the time so that the generated notification timestamp is static.
+        using var _ = new DateTimeOffsetProviderContext(DateTimeOffset.UnixEpoch);
+        
         var request = GetRequest(id: product.Id, name: "new name", description: null);
         var sut = CreateSut();
         var actual = await sut.Handle(request, default);
@@ -80,6 +87,9 @@ public class PatchProductCommandHandlerTests
 
         await _productRepository.Received(1).UpdateAsync(Arg.Is<Product>(productParam => productParam.Name == request.Name), Arg.Any<CancellationToken>());
         await _unitOfWork.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
+
+        var expectedNotification = MessageEnvelope.ProductModified(actual);
+        _notifications.LastMessage.Should().BeEquivalentTo(expectedNotification);
     }
     
     /*
@@ -89,7 +99,7 @@ public class PatchProductCommandHandlerTests
     private PatchProductCommandHandler CreateSut()
     {
         _unitOfWork.Products.Returns(_productRepository);
-        return new PatchProductCommandHandler(_unitOfWork, _validator, _logger);
+        return new PatchProductCommandHandler(_unitOfWork, _notifications, _validator, _logger);
     }
 
     private static PatchProductCommand GetRequest(string id = "id", string? name = "name", string? description = "description")
