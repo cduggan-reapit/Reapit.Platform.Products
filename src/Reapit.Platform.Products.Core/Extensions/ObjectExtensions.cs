@@ -1,4 +1,6 @@
-﻿using JsonSerializer = System.Text.Json.JsonSerializer;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Reapit.Platform.Products.Core.Extensions;
 
@@ -9,5 +11,16 @@ public static class ObjectExtensions
     /// <param name="input">The object to serialize.</param>
     /// <returns>The serialized input, or a representation of an empty object (<c>{}</c>) if the input is null.</returns>
     public static string ToJson(this object? input)
-        => JsonSerializer.Serialize(input ?? new { });
+        => input.ToJson(new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = JsonIgnoreCondition.Never
+        });
+    
+    /// <summary>Serializes the object to a JSON string using configured settings.</summary>
+    /// <param name="input">The object to serialize.</param>
+    /// <param name="options">The serializer options to apply.</param>
+    /// <returns>The serialized input, or a representation of an empty object (<c>{}</c>) if the input is null.</returns>
+    public static string ToJson(this object? input, JsonSerializerOptions options)
+        => JsonSerializer.Serialize(input ?? new { }, options);
 }

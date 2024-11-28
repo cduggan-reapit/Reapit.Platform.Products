@@ -1,4 +1,5 @@
-﻿using Reapit.Platform.Products.Core.Extensions;
+﻿using System.Text.Json;
+using Reapit.Platform.Products.Core.Extensions;
 
 namespace Reapit.Platform.Products.Core.UnitTests.Extensions;
 
@@ -12,11 +13,20 @@ public class ObjectExtensionTests
     public void ToJson_SerializesObject_WithDefaultSettings()
     {
         var input = new { Property = "Value" };
-        const string expected = "{\"Property\":\"Value\"}";
+        const string expected = "{\"property\":\"Value\"}";
         var actual = input.ToJson();
         actual.Should().Be(expected);
     }
     
+    [Fact]
+    public void ToJson_SerializesObject_WithProvidedSettings()
+    {
+        var input = new { Property = "Value" };
+        const string expected = "{\"Property\":\"Value\"}";
+        var actual = input.ToJson(new JsonSerializerOptions());
+        actual.Should().Be(expected);
+    }
+
     [Fact]
     public void ToJson_SerializesEmptyObject_WhenNullProvided()
     {
