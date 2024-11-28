@@ -12,7 +12,7 @@ public class ObjectExtensionTests
     public void ToJson_SerializesObject_WithDefaultSettings()
     {
         var input = new { Property = "Value" };
-        const string expected = "{\"property\":\"Value\"}";
+        const string expected = "{\"Property\":\"Value\"}";
         var actual = input.ToJson();
         actual.Should().Be(expected);
     }

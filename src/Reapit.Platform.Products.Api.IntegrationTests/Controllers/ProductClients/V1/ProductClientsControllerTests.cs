@@ -170,8 +170,8 @@ public class ProductClientsControllerTests(TestApiFactory apiFactory) : ApiInteg
     private static PatchProductClientRequestModel GetPatchModel(
         string? name = "name", 
         string? description = "description", 
-        IEnumerable<string>? callbackUrls = null, 
-        IEnumerable<string>? signOutUrls = null)
+        ICollection<string>? callbackUrls = null, 
+        ICollection<string>? signOutUrls = null)
         => new(name, description, callbackUrls, signOutUrls);
     
     [Fact]

@@ -10,5 +10,5 @@ namespace Reapit.Platform.Products.Api.Controllers.ProductClients.V1.Models;
 public record PatchProductClientRequestModel(
     [property: JsonPropertyName("name")] string? Name,
     [property: JsonPropertyName("description")] string? Description,
-    [property: JsonPropertyName("callbackUrls")] IEnumerable<string>? CallbackUrls,
-    [property: JsonPropertyName("signOutUrls")] IEnumerable<string>? SignOutUrls);
+    [property: JsonPropertyName("callbackUrls")] ICollection<string>? CallbackUrls,
+    [property: JsonPropertyName("signOutUrls")] ICollection<string>? SignOutUrls);

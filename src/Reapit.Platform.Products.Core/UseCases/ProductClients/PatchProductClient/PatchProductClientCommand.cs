@@ -12,6 +12,6 @@ public record PatchProductClientCommand(
     string Id, 
     string? Name, 
     string? Description, 
-    IEnumerable<string>? CallbackUrls,
-    IEnumerable<string>? SignOutUrls)
+    ICollection<string>? CallbackUrls,
+    ICollection<string>? SignOutUrls)
     : IRequest<ProductClient>;
