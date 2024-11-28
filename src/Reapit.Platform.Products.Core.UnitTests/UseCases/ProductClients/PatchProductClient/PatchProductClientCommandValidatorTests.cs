@@ -128,6 +128,25 @@ public class PatchProductClientCommandValidatorTests
         await _productClientRepository.ReceivedWithAnyArgs(1).GetProductClientByIdAsync(command.Id, Arg.Any<CancellationToken>());
     }
     
+    [Fact]
+    public async Task Validate_ReturnsSuccess_WhenNameUnchanged()
+    {
+        // client_credentials client
+        var command = GetCommand(name: "name");
+        var client = GetProductClient(name: "name");
+        
+        SetupGetById(command.Id, client);
+        SetupIsUnique(command.Name, false);
+
+        var sut = CreateSut();
+        var result = await sut.ValidateAsync(command);
+        result.Should().Pass();
+        
+        // Should get the entity, but not query the rest of the table
+        await _productClientRepository.ReceivedWithAnyArgs(1).GetProductClientByIdAsync(command.Id, Arg.Any<CancellationToken>());
+        await _productClientRepository.DidNotReceiveWithAnyArgs().GetProductClientsAsync();
+    }
+    
     /*
      * Description
      */
@@ -199,6 +218,21 @@ public class PatchProductClientCommandValidatorTests
         await _productClientRepository.ReceivedWithAnyArgs(1).GetProductClientByIdAsync(command.Id, Arg.Any<CancellationToken>());
     }
     
+    [Fact]
+    public async Task Validate_ReturnsSuccess_WhenCallbackUrlsProvided_ButClientNotFound()
+    {
+        var command = GetCommand(callbackUrls: ["https://www.example.com/callback"]);
+        
+        SetupGetById(command.Id, null);
+
+        var sut = CreateSut();
+        var result = await sut.ValidateAsync(command);
+        result.Should().Pass();
+        
+        // Unfortunately this will call twice as the entity will remain null after a failed get. 
+        await _productClientRepository.ReceivedWithAnyArgs(2).GetProductClientByIdAsync(command.Id, Arg.Any<CancellationToken>());
+    }
+    
     /*
      * SignOutUrls
      */
@@ -255,6 +289,21 @@ public class PatchProductClientCommandValidatorTests
         
         // We should fetch the entity once to check it's type
         await _productClientRepository.ReceivedWithAnyArgs(1).GetProductClientByIdAsync(command.Id, Arg.Any<CancellationToken>());
+    }
+    
+    [Fact]
+    public async Task Validate_ReturnsSuccess_WhenSignOutUrlsProvided_ButClientNotFound()
+    {
+        var command = GetCommand(signOutUrls: ["https://www.example.com/sign-out"]);
+        
+        SetupGetById(command.Id, null);
+
+        var sut = CreateSut();
+        var result = await sut.ValidateAsync(command);
+        result.Should().Pass();
+        
+        // Unfortunately this will call twice as the entity will remain null after a failed get. 
+        await _productClientRepository.ReceivedWithAnyArgs(2).GetProductClientByIdAsync(command.Id, Arg.Any<CancellationToken>());
     }
     
     /*

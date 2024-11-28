@@ -91,17 +91,13 @@ public class PatchProductClientCommandValidator : AbstractValidator<PatchProduct
 
     private async Task<bool> IsUniqueName(PatchProductClientCommand command, CancellationToken cancellationToken)
     {
-        // If the name is null, then we don't flag a conflict
-        if(command.Name == null)
-            return true;
-        
         // If the entity doesn't exist, don't report a conflict and allow the handler to throw a 404
         var entity = _entity ??= await _unitOfWork.ProductClients.GetProductClientByIdAsync(command.Id, cancellationToken);
         if (entity == null)
             return true;
         
         // If the name hasn't changed, we don't flag a conflict
-        if (command.Name == entity.Name)
+        if (entity.Name.Equals(command.Name, StringComparison.OrdinalIgnoreCase))
             return true;
         
         // At this point we know the user intends to change the name so we look for any other entities with the same name:
