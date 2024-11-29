@@ -1,8 +1,8 @@
-﻿using System.Text.Json;
-using Reapit.Platform.Common.Providers.Identifiers;
+﻿using Reapit.Platform.Common.Providers.Identifiers;
 using Reapit.Platform.Common.Providers.Temporal;
 using Reapit.Platform.Products.Domain.Entities;
 using Reapit.Platform.Products.Domain.Entities.Enums;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Reapit.Platform.Products.Domain.UnitTests.Entities;
 
@@ -59,6 +59,85 @@ public class GrantTests
     }
     
     /*
+     * Update
+     */
+
+    [Fact]
+    public void Update_DoesNotModifyEntity_WhenScopesUnchanged()
+    {
+        var initialScopes = new[]
+        {
+            new Scope("grants can", "scope.one", null),
+            new Scope("only reference", "scope.two", null),
+            new Scope("one api", "scope.three", null)
+        };
+        
+        var updatedScopes = new[]
+        {
+            new Scope("so the only", "scope.ONE", null),
+            new Scope("thing we need to look at", "SCOPE.two", null),
+            new Scope("are the names", "SCOPE.THREE", null)
+        };
+        
+        var entity = GetEntity(scopes: initialScopes);
+        entity.Update(updatedScopes);
+
+        entity.IsDirty.Should().BeFalse();
+        entity.DateModified.Should().Be(DateTime.UnixEpoch);
+        entity.Scopes.Should().BeEquivalentTo(initialScopes);
+    }
+    
+    [Fact]
+    public void Update_ModifiesEntity_WhenScopesAdded()
+    {
+        var initialScopes = new[]
+        {
+            new Scope("grants can", "scope.one", null)
+        };
+        
+        var updatedScopes = new[]
+        {
+            new Scope("so the only", "scope.ONE", null),
+            new Scope("thing we need to look at", "SCOPE.two", null),
+            new Scope("are the names", "SCOPE.THREE", null)
+        };
+
+        var expectedScopes = initialScopes.Concat(updatedScopes.Skip(1));
+        
+        var entity = GetEntity(scopes: initialScopes);
+        entity.Update(updatedScopes);
+
+        entity.IsDirty.Should().BeTrue();
+        entity.DateModified.Should().NotBe(DateTime.UnixEpoch);
+        entity.Scopes.Should().BeEquivalentTo(expectedScopes);
+    }
+    
+    [Fact]
+    public void Update_ModifiesEntity_WhenScopesRemoved()
+    {
+        var initialScopes = new[]
+        {
+            new Scope("grants can", "scope.one", null),
+            new Scope("only reference", "scope.two", null),
+            new Scope("one api", "scope.three", null)
+        };
+        
+        var updatedScopes = new[]
+        {
+            new Scope("so the only", "scope.ONE", null)
+        };
+
+        var expectedScopes = initialScopes.Take(1);
+        
+        var entity = GetEntity(scopes: initialScopes);
+        entity.Update(updatedScopes);
+
+        entity.IsDirty.Should().BeTrue();
+        entity.DateModified.Should().NotBe(DateTime.UnixEpoch);
+        entity.Scopes.Should().BeEquivalentTo(expectedScopes);
+    }
+    
+    /*
      * AsSerializable
      */
 
@@ -104,7 +183,8 @@ public class GrantTests
         {
             entity = new Grant(externalId, GetClient(clientNumber).Id, GetResourceServer(resourceServerNumber).Id)
             {
-                Scopes = scopes ?? []
+                Scopes = (scopes ?? []).ToList(),
+                DateModified = DateTime.UnixEpoch
             };
         }
         return entity;

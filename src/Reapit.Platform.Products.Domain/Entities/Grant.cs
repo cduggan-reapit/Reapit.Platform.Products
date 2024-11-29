@@ -39,6 +39,7 @@ public class Grant : EntityBase
         
         // Otherwise we're dirty...
         SetDateModified();
+        IsDirty = true;
 
         // ... so we append the scopes collection (we do a loop to operate on the collection rather than writing a new one)
         var newScopes = scopes.Where(scope => scopeNamesToAdd.Contains(scope.Value))

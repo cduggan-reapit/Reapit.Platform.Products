@@ -31,7 +31,7 @@ public abstract class EntityBase : IHasCursor
     public DateTime? DateDeleted { get; private set; }
     
     /// <summary>Flag indicating whether the entity has been changed.</summary>
-    public bool IsDirty { get; private set; }
+    public bool IsDirty { get; protected set; }
     
     /// <summary>
     /// Method to determine the value of a field in an update operation, setting the last modified date and dirty flag
