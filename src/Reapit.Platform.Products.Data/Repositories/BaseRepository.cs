@@ -29,4 +29,7 @@ public abstract class BaseRepository<T>(DbContext context) : IBaseRepository<T>
         context.Set<T>().Remove(entity);
         return Task.FromResult(entity);
     }
+
+    /// <inheritdoc/>
+    public abstract Task<T?> GetByIdAsync(string id, CancellationToken cancellationToken);
 }

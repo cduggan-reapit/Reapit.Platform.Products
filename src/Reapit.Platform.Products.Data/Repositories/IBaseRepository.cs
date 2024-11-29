@@ -19,4 +19,9 @@ public interface IBaseRepository<T>
     /// <param name="entity">The entity.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     public Task<T> DeleteAsync(T entity, CancellationToken cancellationToken);
+
+    /// <summary>Get an instance of <typeparamref name="T"/> by its unique identifier.</summary>
+    /// <param name="id">The unique identifier of the entity.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    public Task<T?> GetByIdAsync(string id, CancellationToken cancellationToken);
 }

@@ -31,8 +31,4 @@
     <ProjectReference Include="..\Reapit.Platform.Products.Data\Reapit.Platform.Products.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
 </Project>

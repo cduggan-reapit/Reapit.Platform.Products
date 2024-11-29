@@ -54,7 +54,7 @@ public class ProductClientConfiguration : IEntityTypeConfiguration<Client>
 
         // Client 1-N App
         builder.HasOne(client => client.App)
-            .WithMany()
+            .WithMany(app => app.Clients)
             .HasForeignKey(client => client.AppId);
     }
 }

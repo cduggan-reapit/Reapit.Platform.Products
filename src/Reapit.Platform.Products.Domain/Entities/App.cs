@@ -25,6 +25,9 @@ public class App(string name, string? description, bool skipConsent) : EntityBas
         Description = GetUpdateValue(Description, description);
     }
     
+    /// <summary>The clients associated with this application.</summary>
+    public ICollection<Client> Clients { get; } = new List<Client>();
+    
     /// <inheritdoc/>
     public override object AsSerializable()
         => new { Id, Name, DateCreated, DateModified };
