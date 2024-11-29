@@ -1,33 +1,36 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Reapit.Platform.Products.Data.Context.Configuration.Helpers;
 using Reapit.Platform.Products.Data.Context.Converters;
-using Reapit.Platform.Products.Domain.Entities.Abstract;
+using Reapit.Platform.Products.Domain.Entities;
 
-namespace Reapit.Platform.Products.Data.Context.Configuration.Helpers;
+namespace Reapit.Platform.Products.Data.Context.Configuration;
 
-/// <summary>Base configuration methods for entities inheriting <see cref="EntityBase"/>.</summary>
+/// <summary>Entity framework configuration for the <see cref="Client"/> type.</summary>
 [ExcludeFromCodeCoverage]
-public static class ClientEntityBaseConfigurationHelper
+public class ProductClientConfiguration : IEntityTypeConfiguration<Client>
 {
-    /// <summary>Configures the entity of type <typeparamref name="T"/>.</summary>
-    /// <param name="builder">The entity type builder.</param>
-    /// <typeparam name="T">The type of EntityBase.</typeparam>
-    public static EntityTypeBuilder<T> ConfigureClientEntityBase<T>(this EntityTypeBuilder<T> builder)
-        where T: ClientEntityBase
+    /// <inheritdoc/>
+    public void Configure(EntityTypeBuilder<Client> builder)
     {
-        builder.ConfigureEntityBase();
+        builder.ConfigureEntityBase()
+            .ToTable("clients");
         
-        // Make names unique - this should be a bit easier for us to manage in auth0
+        // Make names unique - makes it a bit easier for us to manage in auth0
         builder.HasIndex(entity => new { entity.Name, entity.DateDeleted }).IsUnique();
+        
+        builder.Property(entity => entity.AppId)
+            .HasColumnName("appId")
+            .HasMaxLength(36);
         
         builder.Property(entity => entity.ClientId)
             .HasColumnName("clientId")
             .HasMaxLength(100);
         
-        builder.Property(entity => entity.GrantId)
-            .HasColumnName("grantId")
-            .HasMaxLength(100);
+        builder.Property(entity => entity.Type)
+            .HasColumnName("type")
+            .HasConversion(TypeConverters.ClientTypeConverter);
         
         builder.Property(entity => entity.Name)
             .HasColumnName("name")
@@ -37,12 +40,8 @@ public static class ClientEntityBaseConfigurationHelper
             .HasColumnName("description")
             .HasMaxLength(140);
 
-        builder.Property(entity => entity.Type)
-            .HasColumnName("type")
-            .HasConversion(TypeConverters.ClientTypeConverter);
-        
-        builder.Property(entity => entity.Audience)
-            .HasColumnName("audience")
+        builder.Property(entity => entity.LoginUrl)
+            .HasColumnName("loginUrl")
             .HasMaxLength(1000);
         
         builder.Property(entity => entity.CallbackUrls)
@@ -52,7 +51,10 @@ public static class ClientEntityBaseConfigurationHelper
         builder.Property(entity => entity.SignOutUrls)
             .HasColumnName("signOutUrls")
             .HasConversion(converter: TypeConverters.StringArrayConverter, valueComparer: TypeComparers.StringArrayComparer);
-        
-        return builder;
+
+        // Client 1-N App
+        builder.HasOne(client => client.App)
+            .WithMany(app => app.Clients)
+            .HasForeignKey(client => client.AppId);
     }
 }

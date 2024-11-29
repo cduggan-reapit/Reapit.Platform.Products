@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Reapit.Platform.Products.Api.Controllers.Products.V1.Models;
-using Reapit.Platform.Products.Domain.Entities.Enums;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace Reapit.Platform.Products.Api.Controllers.Products.V1.Examples;
@@ -18,6 +17,5 @@ public class ProductDetailsModelExampleProvider : IExamplesProvider<ProductDetai
             Name: "My Product", 
             Description: "An example product with a bit of a silly name.",
             DateCreated: BaseDate, 
-            DateModified: BaseDate.AddHours(3), 
-            Clients: [new ProductDetailsClientModel("5a106b8ea3ef4faaa21870805f06c88c", "My Product M2M Client", ClientType.ClientCredentials.Name)]);
+            DateModified: BaseDate.AddHours(3));
 }

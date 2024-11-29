@@ -26,15 +26,7 @@ public class ProductsProfile : Profile
             .ForCtorParam(nameof(ProductDetailsModel.Name), ops => ops.MapFrom(entity => entity.Name))
             .ForCtorParam(nameof(ProductDetailsModel.Description), ops => ops.MapFrom(entity => entity.Description))
             .ForCtorParam(nameof(ProductDetailsModel.DateCreated), ops => ops.MapFrom(entity => entity.DateCreated))
-            .ForCtorParam(nameof(ProductDetailsModel.DateModified), ops => ops.MapFrom(entity => entity.DateModified))
-            .ForCtorParam(nameof(ProductDetailsModel.Clients), ops => ops.MapFrom(entity => entity.Clients));
-        
-        // ProductClient => ProductDetailsClientModel
-        CreateMap<ProductClient, ProductDetailsClientModel>()
-            .ForCtorParam(nameof(ProductDetailsClientModel.Id), ops => ops.MapFrom(entity => entity.Id))
-            .ForCtorParam(nameof(ProductDetailsClientModel.Name), ops => ops.MapFrom(entity => entity.Name))
-            .ForCtorParam(nameof(ProductDetailsClientModel.Type), ops => ops.MapFrom(entity => entity.Type.Name));
-        
+            .ForCtorParam(nameof(ProductDetailsModel.DateModified), ops => ops.MapFrom(entity => entity.DateModified));
         // IEnumerable<Product> => PagedResult<ProductModel>
         CreateMap<IEnumerable<Product>, ResultPage<ProductModel>>()
             .ForCtorParam(nameof(ResultPage<ProductModel>.Data), ops => ops.MapFrom(collection => collection))

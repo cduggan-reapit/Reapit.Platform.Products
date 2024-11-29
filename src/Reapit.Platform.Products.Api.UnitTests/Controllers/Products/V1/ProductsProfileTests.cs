@@ -6,7 +6,6 @@ using Reapit.Platform.Products.Api.Controllers.Shared;
 using Reapit.Platform.Products.Api.Extensions;
 using Reapit.Platform.Products.Core.UseCases.Products.GetProducts;
 using Reapit.Platform.Products.Domain.Entities;
-using Reapit.Platform.Products.Domain.Entities.Enums;
 
 namespace Reapit.Platform.Products.Api.UnitTests.Controllers.Products.V1;
 
@@ -35,11 +34,9 @@ public class ProductsProfileTests
     public void ProductsProfile_CreatesProductDetailsModel_FromProduct()
     {
         var productId = Guid.NewGuid();
-        var client = new ProductClient($"{productId:N}", "client-id", "grant-id", "name", "description", ClientType.AuthorizationCode, null, null, null);
-        var product = GetProduct(id: productId, clients: [client]);
-
-        var expectedClients = new ProductDetailsClientModel(client.Id, client.Name, client.Type.Name);
-        var expected = new ProductDetailsModel(product.Id, product.Name, product.Description, product.DateCreated, product.DateModified, [expectedClients]);
+        var product = GetProduct(id: productId);
+        
+        var expected = new ProductDetailsModel(product.Id, product.Name, product.Description, product.DateCreated, product.DateModified);
         
         var sut = CreateSut();
         var actual = sut.Map<ProductDetailsModel>(product);
@@ -109,13 +106,13 @@ public class ProductsProfileTests
         => new MapperConfiguration(cfg => cfg.AddProfile<ProductsProfile>())
             .CreateMapper();
 
-    private static Product GetProduct(Guid? id = null, string name = "name", string description = "description", DateTime? dateCreated = null, DateTime? dateModified = null, ICollection<ProductClient>? clients = null)
+    private static Product GetProduct(Guid? id = null, string name = "name", string description = "description", DateTime? dateCreated = null, DateTime? dateModified = null)
     {
         // Set values to default if nothing is provided
         id ??= Guid.NewGuid();
         dateCreated ??= DateTime.UtcNow;
         dateModified ??= dateCreated;
-        clients ??= new List<ProductClient>();
+        //clients ??= new List<ProductClient>();
         
         using var guidContext = new GuidProviderContext(id.Value);
         using var timeContext = new DateTimeOffsetProviderContext(new DateTimeOffset(dateCreated.Value, TimeSpan.Zero));
@@ -123,7 +120,7 @@ public class ProductsProfileTests
         return new Product(name, description)
         {
             DateModified = dateModified.Value,
-            Clients = clients
+            //Clients = clients
         };
     }
 }

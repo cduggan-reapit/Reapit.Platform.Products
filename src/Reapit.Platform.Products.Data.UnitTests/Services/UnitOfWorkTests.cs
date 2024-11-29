@@ -32,29 +32,6 @@ public class UnitOfWorkTests : DatabaseAwareTestBase
     }
     
     /*
-     * ProductClients
-     */
-
-    [Fact]
-    public async Task ProductClients_ReturnsRepository_WhenCalledForTheFirstTime()
-    {
-        await using var dbContext = await GetContextAsync();
-        var sut = CreateSut(dbContext);
-        var actual = sut.ProductClients;
-        actual.Should().NotBeNull();
-    }
-    
-    [Fact]
-    public async Task ProductClients_ReusesRepository_ForSubsequentCalls()
-    {
-        await using var dbContext = await GetContextAsync();
-        var sut = CreateSut(dbContext);
-        var initial = sut.ProductClients;
-        var subsequent = sut.ProductClients;
-        subsequent.Should().BeSameAs(initial);
-    }
-    
-    /*
      * SaveChangesAsync
      */
 

@@ -14,7 +14,7 @@ public abstract class EntityBase : IHasCursor
         Id = IdentityGenerator.Create();
         SetDateCreated();
     }
-    
+
     /// <summary>The unique identifier of the entity.</summary>
     public string Id { get; init; }
     

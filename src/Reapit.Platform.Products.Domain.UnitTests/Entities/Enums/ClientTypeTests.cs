@@ -3,16 +3,7 @@
 namespace Reapit.Platform.Products.Domain.UnitTests.Entities.Enums;
 
 public class ClientTypeTests
-{
-    /*public static implicit operator ClientType(string name) 
-        => GetByName(name) ?? throw new ArgumentException($"Invalid client name: {name}");
-    
-    public static implicit operator ClientType(int value) 
-        => GetByValue(value) ?? throw new ArgumentException($"Invalid client type value: {value}");
-    
-    public static implicit operator string(ClientType clientType) => clientType.Name;
-    public static implicit operator int(ClientType clientType) => clientType.Value;*/
-    
+{ 
     /*
      * Implicit Operators
      */
@@ -20,7 +11,7 @@ public class ClientTypeTests
     [Fact]
     public void ClientType_ReturnsName_WhenCastToString()
     {
-        var clientType = ClientType.ClientCredentials;
+        var clientType = ClientType.Machine;
         string actual = clientType;
         actual.Should().Be(clientType.Name);
     }
@@ -28,7 +19,7 @@ public class ClientTypeTests
     [Fact]
     public void ClientType_ReturnsValue_WhenCastToInt()
     {
-        var clientType = ClientType.ClientCredentials;
+        var clientType = ClientType.Machine;
         int actual = clientType;
         actual.Should().Be(clientType.Value);
     }
@@ -36,7 +27,7 @@ public class ClientTypeTests
     [Fact]
     public void ClientType_ReturnsClientType_WhenCastFromString()
     {
-        var clientType = ClientType.AuthorizationCode;
+        var clientType = ClientType.AuthCode;
         ClientType? actual = clientType.Name;
         actual.Should().Be(clientType);
     }
@@ -44,7 +35,7 @@ public class ClientTypeTests
     [Fact]
     public void ClientType_ReturnsClientType_WhenCastFromInt()
     {
-        var clientType = ClientType.AuthorizationCode;
+        var clientType = ClientType.AuthCode;
         ClientType? actual = clientType.Value;
         actual.Should().Be(clientType);
     }

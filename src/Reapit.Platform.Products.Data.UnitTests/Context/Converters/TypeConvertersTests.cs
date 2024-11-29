@@ -39,7 +39,7 @@ public class TypeConvertersTests
     [Fact]
     public void ClientTypeConverter_ConvertsClientType_ToInteger()
     {
-        var clientType = ClientType.ClientCredentials;
+        var clientType = ClientType.AuthCode;
         var expected = clientType.Value;
         
         var sut = TypeConverters.ClientTypeConverter;
@@ -50,7 +50,7 @@ public class TypeConvertersTests
     [Fact]
     public void ClientTypeConverter_ConvertsInteger_ToClientType()
     {
-        var expected = ClientType.AuthorizationCode;
+        var expected = ClientType.AuthCode;
         var integer = expected.Value;
         
         var sut = TypeConverters.ClientTypeConverter;

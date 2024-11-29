@@ -23,7 +23,7 @@ public class Product(string name, string? description) : EntityBase
     public string? Description { get; private set; } = description;
     
     /// <summary>The clients associated with this product.</summary>
-    public ICollection<ProductClient> Clients { get; init; } = new List<ProductClient>();
+    public ICollection<Client> Clients { get; init; } = new List<Client>();
     
     /// <inheritdoc/>
     public override object AsSerializable()
