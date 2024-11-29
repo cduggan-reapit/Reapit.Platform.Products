@@ -19,24 +19,24 @@ public static class SeedHelpers
     internal static string AsIdentity(this int input)
         => $"{input:D32}";
 
-    /// <summary>Get a collection of products.</summary>
-    /// <param name="count">The number of products to create.</param>
-    /// <param name="numberOfClients">The number of clients to create for each product.</param>
-    internal static ICollection<Product> GetProductSeedData(int count, int numberOfClients)
-        => Enumerable.Range(0, count)
-            .Select(seed =>
-            {
-                // Get clients
-                var fixedTime = BaseDate.AddDays(seed);
-                using var guidProvider = new GuidProviderContext(seed.AsGuid());
-                using var timeProvider = new DateTimeOffsetProviderContext(fixedTime);
-                return new Product($"Product {seed:D3}", $"Description of Product {seed:D3}")
-                {
-                    DateModified = fixedTime.UtcDateTime.AddYears(1),
-                    //Clients = GetProductClientSeedData(seed, numberOfClients)
-                };
-            })
-            .ToList();
+    // /// <summary>Get a collection of products.</summary>
+    // /// <param name="count">The number of products to create.</param>
+    // /// <param name="numberOfClients">The number of clients to create for each product.</param>
+    // internal static ICollection<ResourceServer> GetProductSeedData(int count, int numberOfClients)
+    //     => Enumerable.Range(0, count)
+    //         .Select(seed =>
+    //         {
+    //             // Get clients
+    //             var fixedTime = BaseDate.AddDays(seed);
+    //             using var guidProvider = new GuidProviderContext(seed.AsGuid());
+    //             using var timeProvider = new DateTimeOffsetProviderContext(fixedTime);
+    //             return new ResourceServer($"Product {seed:D3}", $"Description of Product {seed:D3}")
+    //             {
+    //                 DateModified = fixedTime.UtcDateTime.AddYears(1),
+    //                 //Clients = GetProductClientSeedData(seed, numberOfClients)
+    //             };
+    //         })
+    //         .ToList();
 
     // /// <summary>Get a collection of product clients.</summary>
     // /// <param name="productSeed">The seed number of the parent product.</param>

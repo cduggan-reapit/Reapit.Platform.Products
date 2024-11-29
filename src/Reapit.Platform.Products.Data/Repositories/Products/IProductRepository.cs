@@ -2,9 +2,9 @@
 
 namespace Reapit.Platform.Products.Data.Repositories.Products;
 
-/// <summary>Repository for <see cref="Product"/> entities.</summary>
+/// <summary>Repository for <see cref="ResourceServer"/> entities.</summary>
 
-public interface IProductRepository : IBaseRepository<Product>
+public interface IProductRepository : IBaseRepository<ResourceServer>
 {
     /// <summary>Get a collection of records with optional filters applied.</summary>
     /// <param name="name">Limit results to records with this name.</param>
@@ -12,8 +12,8 @@ public interface IProductRepository : IBaseRepository<Product>
     /// <param name="pagination">Limit results to a page of records matching this pagination filter.</param>
     /// <param name="dateFilter">Limit results to records matching this date filter.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A collection of <see cref="Product"/> objects.</returns>
-    public Task<IEnumerable<Product>> GetProductsAsync(
+    /// <returns>A collection of <see cref="ResourceServer"/> objects.</returns>
+    public Task<IEnumerable<ResourceServer>> GetProductsAsync(
         string? name = null,
         string? description = null,
         PaginationFilter? pagination = null,
@@ -24,5 +24,5 @@ public interface IProductRepository : IBaseRepository<Product>
     /// <param name="id">The unique identifier of the record.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The record matching `id` if located, otherwise null.</returns>
-    public Task<Product?> GetProductByIdAsync(string id, CancellationToken cancellationToken);
+    public Task<ResourceServer?> GetProductByIdAsync(string id, CancellationToken cancellationToken);
 }

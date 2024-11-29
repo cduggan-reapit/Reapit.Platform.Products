@@ -13,7 +13,7 @@ public class EntityCollectionExtensionsTests
     [Fact]
     public void GetMaximumCursor_ReturnsZero_WhenProvidedAnEmptyCollection()
     {
-        var collection = Array.Empty<Product>();
+        var collection = Array.Empty<ResourceServer>();
         var actual = collection.GetMaximumCursor();
         actual.Should().Be(0);
     }
@@ -26,7 +26,7 @@ public class EntityCollectionExtensionsTests
         // cursor should be X for unix epoch, +500 for the test
         const long expected = 500;
 
-        var collection = new[] { new Product("name", "description") };
+        var collection = new[] { new App("name") };
         var actual = collection.GetMaximumCursor();
         actual.Should().Be(expected);
     }

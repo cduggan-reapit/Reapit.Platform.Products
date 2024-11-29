@@ -55,25 +55,25 @@ public class MessageEnvelope
     #region Products
     
     /// <summary>Gets a <see cref="MessageEnvelope"/> object representing a product creation event.</summary>
-    /// <param name="product">The created product.</param>
-    public static MessageEnvelope ProductCreated(Product product)
-        => ProductMessageEnvelope("created", product);
+    /// <param name="resourceServer">The created product.</param>
+    public static MessageEnvelope ProductCreated(ResourceServer resourceServer)
+        => ProductMessageEnvelope("created", resourceServer);
     
     /// <summary>Gets a <see cref="MessageEnvelope"/> object representing a product update event.</summary>
-    /// <param name="product">The created product.</param>
-    public static MessageEnvelope ProductModified(Product product)
-        => ProductMessageEnvelope("modified", product);
+    /// <param name="resourceServer">The created product.</param>
+    public static MessageEnvelope ProductModified(ResourceServer resourceServer)
+        => ProductMessageEnvelope("modified", resourceServer);
     
     /// <summary>Gets a <see cref="MessageEnvelope"/> object representing a product deletion event.</summary>
-    /// <param name="product">The created product.</param>
-    public static MessageEnvelope ProductDeleted(Product product)
-        => ProductMessageEnvelope("deleted", product);
+    /// <param name="resourceServer">The created product.</param>
+    public static MessageEnvelope ProductDeleted(ResourceServer resourceServer)
+        => ProductMessageEnvelope("deleted", resourceServer);
     
     /// <summary>Gets a <see cref="MessageEnvelope"/> object representing a product event.</summary>
-    /// <param name="product">The product.</param>
+    /// <param name="resourceServer">The product.</param>
     /// <param name="eventType">The type of event.</param>
-    private static MessageEnvelope ProductMessageEnvelope(string eventType, Product product)
-        => new("product", eventType, content: product.AsSerializable());
+    private static MessageEnvelope ProductMessageEnvelope(string eventType, ResourceServer resourceServer)
+        => new("product", eventType, content: resourceServer.AsSerializable());
     
     #endregion
 }

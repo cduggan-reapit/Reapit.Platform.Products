@@ -16,7 +16,7 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
     
     
     /// <summary>The collection of products.</summary>
-    public DbSet<Product> Products { get; init; }
+    public DbSet<ResourceServer> Products { get; init; }
     
     /// <inheritdoc /> 
     protected override void OnModelCreating(ModelBuilder builder)

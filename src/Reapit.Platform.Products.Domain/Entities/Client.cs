@@ -6,7 +6,7 @@ namespace Reapit.Platform.Products.Domain.Entities;
 /// <summary>Represents a client.</summary>
 /// <remarks>Also known as an "application" in auth0 parlance.</remarks>
 /// <param name="appId">The unique identifier of the application with which this client is associated.</param>
-/// <param name="clientId">The unique identifier of the client in the IdP service.</param>
+/// <param name="externalId">The unique identifier of the client in the IdP service.</param>
 /// <param name="type">The type of the client.</param>
 /// <param name="name">The name of the client.</param>
 /// <param name="description">An optional description of the client/</param>
@@ -15,7 +15,7 @@ namespace Reapit.Platform.Products.Domain.Entities;
 /// <param name="signOutUrls">The URLs that can be redirected to after logout. Only applicable where type = `ClientType.AuthCode`.</param>
 public class Client(
     string appId,
-    string clientId,
+    string externalId,
     ClientType type,
     string name,
     string? description,
@@ -28,7 +28,7 @@ public class Client(
     public string AppId { get; init; } = appId;
     
     /// <summary>The unique identifier of the client in the IdP service.</summary>
-    public string ClientId { get; init; } = clientId;
+    public string ExternalId { get; init; } = externalId;
     
     /// <summary>The type of the client.</summary>
     public ClientType Type { get; init; } = type;
@@ -54,5 +54,5 @@ public class Client(
     
     /// <inheritdoc />
     public override object AsSerializable()
-        => new { Id, ClientId, Name, DateCreated, DateModified };
+        => new { Id, ClientId = ExternalId, Name, DateCreated, DateModified };
 }
