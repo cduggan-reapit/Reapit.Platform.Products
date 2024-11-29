@@ -7,19 +7,6 @@ public class Grant : EntityBase
 {
     /// <summary>Initializes a new instance of the <see cref="Grant"/> class.</summary>
     /// <param name="externalId">The unique identifier of the grant within the IdP service.</param>
-    /// <param name="client">The client with which this grant is associated.</param>
-    /// <param name="resourceServer">The resource server to which this grant gives access.</param>
-    /// <param name="scopes">The scopes associated with this grants access.</param>
-    public Grant(string externalId, Client client, ResourceServer resourceServer, ICollection<Scope> scopes)
-        : this(externalId, client.Id, resourceServer.Id)
-    {
-        Client = client;
-        ResourceServer = resourceServer;
-        Scopes = scopes;
-    }
-
-    /// <summary>Initializes a new instance of the <see cref="Grant"/> class.</summary>
-    /// <param name="externalId">The unique identifier of the grant within the IdP service.</param>
     /// <param name="clientId">The unique identifier of the client with which this grant is associated.</param>
     /// <param name="resourceServerId">The unique identifier of the resource server to which this grant gives access.</param>
     public Grant(string externalId, string clientId, string resourceServerId)
@@ -27,6 +14,46 @@ public class Grant : EntityBase
         ExternalId = externalId;
         ClientId = clientId;
         ResourceServerId = resourceServerId;
+    }
+
+    /// <summary>Update the scopes associated with this grant.</summary>
+    /// <param name="scopes">The desired scopes collection.</param>
+    public void Update(ICollection<Scope> scopes)
+    {
+        // Get the collections as a collection of names - that's what matters to this service:
+        var proposedScopeNames = scopes.Select(scope => scope.Value).ToList();
+        var currentScopeNames = Scopes.Select(scope => scope.Value).ToList();
+        
+        // Find the scopes we need to add 
+        var scopeNamesToAdd = proposedScopeNames.Where(proposed 
+                => !currentScopeNames.Contains(proposed, StringComparer.OrdinalIgnoreCase))
+            .ToList();
+
+        var scopeNamesToRemove = currentScopeNames.Where(current
+                => !proposedScopeNames.Contains(current, StringComparer.OrdinalIgnoreCase))
+            .ToList();
+
+        // If there are no changes to make, return without making any
+        if (!scopeNamesToAdd.Any() && !scopeNamesToRemove.Any())
+            return;
+        
+        // Otherwise we're dirty...
+        SetDateModified();
+
+        // ... so we append the scopes collection (we do a loop to operate on the collection rather than writing a new one)
+        var newScopes = scopes.Where(scope => scopeNamesToAdd.Contains(scope.Value))
+            .DistinctBy(scope => scope.Value)
+            .ToList();
+        
+        foreach(var scope in newScopes)
+            Scopes.Add(scope);
+        
+        // ... and we remove the scopes that we no longer want
+        var oldScopes = Scopes.Where(scope => scopeNamesToRemove.Contains(scope.Value))
+            .ToList();
+
+        foreach (var scope in oldScopes)
+            Scopes.Remove(scope);
     }
     
     /// <summary>The unique identifier of the grant within the IdP service.</summary>

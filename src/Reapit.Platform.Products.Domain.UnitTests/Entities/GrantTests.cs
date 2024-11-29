@@ -11,35 +11,6 @@ public class GrantTests
     /*
      * Ctor
      */
-
-    [Fact]
-    public void Ctor_SetsProperties_FromIdentifiers()
-    {
-        // Fix the guid
-        var guid = Guid.NewGuid();
-        using var guidProvider = new GuidProviderContext(guid);
-        
-        // Fix the time (it doesn't matter what it's fixed to, we'll refer back to this variable to confirm)
-        using var timeProvider = new DateTimeOffsetProviderContext(BaseDate);
-        var cursor = (long)(BaseDate - DateTimeOffset.UnixEpoch).TotalMicroseconds;
-        
-        const string externalId = "external-id", 
-            clientId = "client-id", 
-            resourceServerId = "resource-server-id";
-        
-        var entity = new Grant(externalId, clientId, resourceServerId);
-        
-        // Explicit
-        entity.ExternalId.Should().Be(externalId);
-        entity.ClientId.Should().Be(clientId);
-        entity.ResourceServerId.Should().Be(resourceServerId);
-        
-        // Implicit
-        entity.Id.Should().Be($"{guid:N}");
-        entity.Cursor.Should().Be(cursor); 
-        entity.DateCreated.Should().Be(BaseDate.UtcDateTime);
-        entity.DateModified.Should().Be(BaseDate.UtcDateTime);
-    }
     
     [Fact]
     public void Ctor_SetsProperties_FromEntities()
@@ -57,14 +28,15 @@ public class GrantTests
         var resourceServer = new ResourceServer("", "", "", 3600);
         var scopes = new[] { new Scope(resourceServer.Id, "thing.action", null) };
         
-        var entity = new Grant(externalId, client, resourceServer, scopes);
+        var entity = new Grant(externalId, client.Id, resourceServer.Id)
+        {
+            Scopes = scopes
+        };
         
         // Explicit
         entity.ExternalId.Should().Be(externalId);
         entity.ClientId.Should().Be(client.Id);
-        entity.Client.Should().Be(client);
         entity.ResourceServerId.Should().Be(resourceServer.Id);
-        entity.ResourceServer.Should().Be(resourceServer);
         entity.Scopes.Should().BeEquivalentTo(scopes);
         
         // Implicit
@@ -123,15 +95,30 @@ public class GrantTests
 
     private static Grant GetEntity(
         string externalId = "external-id",
-        string clientId = "app-id",
-        string resourceServerId = "external-id",
+        int clientNumber = 1,
+        int resourceServerNumber = 2,
         params Scope[]? scopes)
     {
         Grant entity;
         using (new DateTimeOffsetProviderContext(BaseDate))
         {
-            entity = new Grant(externalId, clientId, resourceServerId) { Scopes = scopes ?? [] };
+            entity = new Grant(externalId, GetClient(clientNumber).Id, GetResourceServer(resourceServerNumber).Id)
+            {
+                Scopes = scopes ?? []
+            };
         }
         return entity;
+    }
+
+    private static Client GetClient(int seed)
+    {
+        using var _ = new GuidProviderContext(new Guid($"{seed:D32}"));
+        return new Client("", "", ClientType.Machine, "", "", null, null, null);
+    }
+
+    private static ResourceServer GetResourceServer(int seed)
+    {
+        using var _ = new GuidProviderContext(new Guid($"{seed:D32}"));
+        return new ResourceServer("", "", "", 3600);
     }
 }

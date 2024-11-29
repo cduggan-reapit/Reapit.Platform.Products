@@ -71,7 +71,7 @@ public abstract class EntityBase : IHasCursor
     }
 
     /// <summary>Set the modified date to the current timestamp.</summary>
-    private void SetDateModified() 
+    protected void SetDateModified() 
         => DateModified = DateTimeOffsetProvider.Now.UtcDateTime;
 
     /// <summary>Marks the entity as deleted.</summary>

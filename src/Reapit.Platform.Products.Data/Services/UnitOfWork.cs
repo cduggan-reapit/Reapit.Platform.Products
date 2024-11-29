@@ -1,6 +1,7 @@
 ﻿using Reapit.Platform.Products.Data.Context;
 using Reapit.Platform.Products.Data.Repositories.Apps;
 using Reapit.Platform.Products.Data.Repositories.Clients;
+using Reapit.Platform.Products.Data.Repositories.Grants;
 using Reapit.Platform.Products.Data.Repositories.ResourceServers;
 
 namespace Reapit.Platform.Products.Data.Services;
@@ -12,6 +13,7 @@ public class UnitOfWork : IUnitOfWork
     private IAppRepository? _apps;
     private IClientRepository? _clients;
     private IResourceServerRepository? _resourceServers;
+    private IGrantRepository? _grants;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
@@ -31,6 +33,10 @@ public class UnitOfWork : IUnitOfWork
     /// <inheritdoc />
     public IResourceServerRepository ResourceServers 
         => _resourceServers ??= new ResourceServerRepository(_context);
+
+    /// <inheritdoc />
+    public IGrantRepository Grants
+        => _grants ??= new GrantRepository(_context);
 
     /// <inheritdoc />
     public async Task SaveChangesAsync(CancellationToken cancellationToken)

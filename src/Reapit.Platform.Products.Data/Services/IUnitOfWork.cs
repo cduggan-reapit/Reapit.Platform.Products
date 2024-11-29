@@ -1,5 +1,6 @@
 ﻿using Reapit.Platform.Products.Data.Repositories.Apps;
 using Reapit.Platform.Products.Data.Repositories.Clients;
+using Reapit.Platform.Products.Data.Repositories.Grants;
 using Reapit.Platform.Products.Data.Repositories.ResourceServers;
 
 namespace Reapit.Platform.Products.Data.Services;
@@ -15,6 +16,9 @@ public interface IUnitOfWork
     
     /// <inheritdoc cref="IResourceServerRepository" />
     public IResourceServerRepository ResourceServers { get; }
+    
+    /// <inheritdoc cref="IGrantRepository" />
+    public IGrantRepository Grants { get; }
     
     /// <summary>Saves all changes made in this context to the database.</summary>
     /// <param name="cancellationToken">The cancellation token.</param>

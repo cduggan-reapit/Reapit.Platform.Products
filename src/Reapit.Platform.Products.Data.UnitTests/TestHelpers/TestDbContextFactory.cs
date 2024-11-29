@@ -8,19 +8,6 @@ public class TestDbContextFactory : IDisposable, IAsyncDisposable
 {
     private readonly SqliteConnection _connection = new("Filename=:memory:");
     
-    public ProductDbContext CreateContext(bool ensureCreated = true)
-    {
-        _connection.Open();
-        var context = InstantiateDbContext();
-        
-        if (!ensureCreated) 
-            return context;
-        
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
-        return context;
-    }
-
     public async Task<ProductDbContext> CreateContextAsync(
         bool ensureCreated = true, 
         CancellationToken cancellationToken = default)
@@ -43,5 +30,8 @@ public class TestDbContextFactory : IDisposable, IAsyncDisposable
         => await _connection.DisposeAsync();
 
     private ProductDbContext InstantiateDbContext()
-        => new(new DbContextOptionsBuilder<ProductDbContext>().UseSqlite(_connection).Options);
+        => new(new DbContextOptionsBuilder<ProductDbContext>()
+            .UseSqlite(_connection)
+            .EnableSensitiveDataLogging()
+            .Options);
 }

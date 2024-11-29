@@ -77,6 +77,29 @@ public class UnitOfWorkTests : DatabaseAwareTestBase
     }
     
     /*
+     * Grants
+     */
+    
+    [Fact]
+    public async Task Grants_ReturnsRepository_WhenCalledForTheFirstTime()
+    {
+        await using var dbContext = await GetContextAsync();
+        var sut = CreateSut(dbContext);
+        var actual = sut.Grants;
+        actual.Should().NotBeNull();
+    }
+    
+    [Fact]
+    public async Task Grants_ReusesRepository_ForSubsequentCalls()
+    {
+        await using var dbContext = await GetContextAsync();
+        var sut = CreateSut(dbContext);
+        var initial = sut.Grants;
+        var subsequent = sut.Grants;
+        subsequent.Should().BeSameAs(initial);
+    }
+    
+    /*
      * SaveChangesAsync
      */
     

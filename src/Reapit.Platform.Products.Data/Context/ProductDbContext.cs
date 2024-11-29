@@ -14,8 +14,6 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
     
     public DbSet<Grant> Grants { get; init; }
     
-    public DbSet<Scope> Scopes { get; init; }
-    
     public DbSet<ResourceServer> ResourceServers { get; init; }
     
     /// <inheritdoc /> 
