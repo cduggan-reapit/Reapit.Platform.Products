@@ -23,12 +23,14 @@ public class GrantTests
         using var timeProvider = new DateTimeOffsetProviderContext(BaseDate);
         var cursor = (long)(BaseDate - DateTimeOffset.UnixEpoch).TotalMicroseconds;
         
-        const string clientId = "app-id", 
-            resourceServerId = "external-id";
+        const string externalId = "external-id", 
+            clientId = "client-id", 
+            resourceServerId = "resource-server-id";
         
-        var entity = new Grant(clientId, resourceServerId);
+        var entity = new Grant(externalId, clientId, resourceServerId);
         
         // Explicit
+        entity.ExternalId.Should().Be(externalId);
         entity.ClientId.Should().Be(clientId);
         entity.ResourceServerId.Should().Be(resourceServerId);
         
@@ -50,13 +52,15 @@ public class GrantTests
         using var timeProvider = new DateTimeOffsetProviderContext(BaseDate);
         var cursor = (long)(BaseDate - DateTimeOffset.UnixEpoch).TotalMicroseconds;
 
+        const string externalId = "external-id";
         var client = new Client("", "", ClientType.Machine, "", null, null, null, null);
         var resourceServer = new ResourceServer("", "", "", 3600);
         var scopes = new[] { new Scope(resourceServer.Id, "thing.action", null) };
         
-        var entity = new Grant(client, resourceServer, scopes);
+        var entity = new Grant(externalId, client, resourceServer, scopes);
         
         // Explicit
+        entity.ExternalId.Should().Be(externalId);
         entity.ClientId.Should().Be(client.Id);
         entity.Client.Should().Be(client);
         entity.ResourceServerId.Should().Be(resourceServer.Id);
@@ -118,6 +122,7 @@ public class GrantTests
     private static readonly DateTimeOffset BaseDate = new(2024, 11, 29, 13, 18, 17, TimeSpan.Zero);
 
     private static Grant GetEntity(
+        string externalId = "external-id",
         string clientId = "app-id",
         string resourceServerId = "external-id",
         params Scope[]? scopes)
@@ -125,7 +130,7 @@ public class GrantTests
         Grant entity;
         using (new DateTimeOffsetProviderContext(BaseDate))
         {
-            entity = new Grant(clientId, resourceServerId) { Scopes = scopes ?? [] };
+            entity = new Grant(externalId, clientId, resourceServerId) { Scopes = scopes ?? [] };
         }
         return entity;
     }

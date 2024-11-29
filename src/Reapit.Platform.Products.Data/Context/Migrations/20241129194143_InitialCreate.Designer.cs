@@ -12,7 +12,7 @@ using Reapit.Platform.Products.Data.Context;
 namespace Reapit.Platform.Products.Data.Context.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    [Migration("20241129130233_InitialCreate")]
+    [Migration("20241129194143_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -190,6 +190,10 @@ namespace Reapit.Platform.Products.Data.Context.Migrations
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_modified");
+
+                    b.Property<string>("ExternalId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ResourceServerId")
                         .IsRequired()

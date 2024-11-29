@@ -130,6 +130,8 @@ namespace Reapit.Platform.Products.Data.Context.Migrations
                 {
                     id = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    ExternalId = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     clientId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     resourceServerId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)

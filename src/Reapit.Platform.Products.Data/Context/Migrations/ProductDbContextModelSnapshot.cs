@@ -188,6 +188,10 @@ namespace Reapit.Platform.Products.Data.Context.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_modified");
 
+                    b.Property<string>("ExternalId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("ResourceServerId")
                         .IsRequired()
                         .HasMaxLength(36)
