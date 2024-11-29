@@ -25,4 +25,25 @@ public static class TestEntityFactory
         {
             DateModified = DateTimeOffsetProvider.Now.UtcDateTime.AddYears(1)
         };
+    
+    public static ResourceServer CreateResourceServer(
+        string externalId = "external-id", 
+        string audience = "audience", 
+        string name = "name", 
+        int tokenLifetime = 3600,
+        int scopes = 0)
+    {
+        var entity = new ResourceServer(externalId, audience, name, tokenLifetime)
+        {
+            DateModified = DateTimeOffsetProvider.Now.UtcDateTime.AddYears(1),
+        };
+        
+        for(var i = 0; i < scopes; i++)
+            entity.Scopes.Add(CreateScope(entity.Id, $"scope.{i:D3}"));
+
+        return entity;
+    }
+
+    public static Scope CreateScope(string resourceServerId, string value = "example.scope", string? description = null) =>
+        new(resourceServerId, value, description);
 }
