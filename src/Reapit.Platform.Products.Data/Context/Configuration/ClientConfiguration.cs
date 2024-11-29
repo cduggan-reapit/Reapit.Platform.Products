@@ -17,7 +17,7 @@ public class ProductClientConfiguration : IEntityTypeConfiguration<Client>
         builder.ConfigureEntityBase()
             .ToTable("clients");
         
-        // Make names unique - makes it a bit easier for us to manage in auth0
+        // Make client names unique - makes it a bit easier for us to manage in auth0
         builder.HasIndex(entity => new { entity.Name, entity.DateDeleted }).IsUnique();
         
         builder.Property(entity => entity.AppId)
@@ -54,7 +54,7 @@ public class ProductClientConfiguration : IEntityTypeConfiguration<Client>
 
         // Client 1-N App
         builder.HasOne(client => client.App)
-            .WithMany(app => app.Clients)
+            .WithMany()
             .HasForeignKey(client => client.AppId);
     }
 }

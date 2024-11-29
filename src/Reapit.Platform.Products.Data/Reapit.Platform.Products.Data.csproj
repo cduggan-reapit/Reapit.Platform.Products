@@ -28,6 +28,5 @@
   
   <ItemGroup>
     <Folder Include="Context\Migrations\" />
-    <Folder Include="Repositories\V0\" />
   </ItemGroup>
 </Project>

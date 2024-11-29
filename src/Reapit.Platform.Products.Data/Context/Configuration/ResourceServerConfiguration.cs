@@ -16,8 +16,7 @@ public class ResourceServerConfiguration : IEntityTypeConfiguration<ResourceServ
         builder.ConfigureEntityBase()
             .ToTable("resource_servers");
         
-        builder.HasIndex(entity => entity.Name)
-            .IsUnique();
+        builder.HasIndex(entity => new { entity.Name, entity.DateDeleted }).IsUnique();
         
         builder.Property(entity => entity.Name)
             .HasColumnName("name")
@@ -33,5 +32,9 @@ public class ResourceServerConfiguration : IEntityTypeConfiguration<ResourceServ
 
         builder.Property(entity => entity.TokenLifetime)
             .HasColumnName("tokenLifetime");
+
+        builder.HasMany(entity => entity.Scopes)
+            .WithOne()
+            .HasForeignKey(scope => scope.ResourceServerId);
     }
 }

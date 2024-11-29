@@ -4,20 +4,18 @@ namespace Reapit.Platform.Products.Domain.Entities;
 
 /// <summary>Represents an application.</summary>
 /// <remarks>An application is a container for clients.</remarks>
-public class App(string name) : EntityBase
+public class App(string name, string? description, bool skipConsent) : EntityBase
 {
     /// <summary>The name of the app.</summary>
     public string Name { get; private set; } = name;
-    
-    /// <summary>A description of the app.</summary>
-    public string? Description { get; private set; }
-    
-    /// <summary>Flag indicating whether an application requires authorisation or is automatically available to users.</summary>
-    public bool RequiresAuthorization { get; private set; }
-    
-    /// <summary>The user credentials (authorisation_code) clients associated with the app.</summary>
-    public ICollection<Client>? Clients { get; private set; }
 
+    /// <summary>A description of the app.</summary>
+    public string? Description { get; private set; } = description;
+
+    /// <summary>Flag indicating whether an application can skip consent.</summary>
+    /// <remarks>This cannot be changed after initialization.</remarks>
+    public bool SkipConsent { get; } = skipConsent;
+    
     /// <summary>Update an app.</summary>
     /// <param name="name">The name of the app.</param>
     /// <param name="description">A description of the app.</param>

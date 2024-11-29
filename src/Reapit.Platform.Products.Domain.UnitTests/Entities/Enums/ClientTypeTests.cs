@@ -53,4 +53,16 @@ public class ClientTypeTests
         ClientType? actual = -3;
         actual.Should().BeNull();
     }
+    
+    /*
+     * GrantTypes
+     */
+
+    [Fact]
+    public void ClientType_PopulatesGrantTypes_ForImplementations()
+    {
+        var expected = new[] { "authorization_code", "refresh_token" };
+        var actual = ClientType.AuthCode.GrantTypes;
+        actual.Should().BeEquivalentTo(expected);
+    }
 }

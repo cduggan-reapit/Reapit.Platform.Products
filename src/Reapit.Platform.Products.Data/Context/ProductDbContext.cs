@@ -12,11 +12,11 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
     
     public DbSet<Client> Clients { get; init; }
     
+    public DbSet<ResourceServer> ResourceServers { get; init; }
     
+    public DbSet<Grant> Grants { get; init; }
     
-    
-    /// <summary>The collection of products.</summary>
-    public DbSet<ResourceServer> Products { get; init; }
+    public DbSet<Scope> Scopes { get; init; }
     
     /// <inheritdoc /> 
     protected override void OnModelCreating(ModelBuilder builder)

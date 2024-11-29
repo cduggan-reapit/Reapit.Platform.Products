@@ -25,13 +25,13 @@ public class Client(
     : EntityBase
 {
     /// <summary>The unique identifier of the application with which this client is associated.</summary>
-    public string AppId { get; init; } = appId;
+    public string AppId { get; } = appId;
     
     /// <summary>The unique identifier of the client in the IdP service.</summary>
-    public string ExternalId { get; init; } = externalId;
+    public string ExternalId { get; } = externalId;
     
     /// <summary>The type of the client.</summary>
-    public ClientType Type { get; init; } = type;
+    public ClientType Type { get; } = type;
     
     /// <summary>The name of the client. Required, does not support <c>&lt;</c> or <c>&gt;</c>.</summary>
     public string Name { get; protected  set; } = name;
@@ -40,7 +40,7 @@ public class Client(
     public string? Description { get; protected set; } = description;
     
     /// <summary>The application with which this client is associated.</summary>
-    public App? App { get; init; }
+    public App? App { get; }
     
     /// <summary>The default login initiation endpoint.</summary>
     /// <remarks>Must be a https:// url when configured.</remarks>
@@ -52,7 +52,30 @@ public class Client(
     /// <summary>The URLs that can be redirected to after logout.</summary>
     public ICollection<string>? SignOutUrls { get; private set; } = signOutUrls;
     
+    /// <summary>The grants associated with this client.</summary>
+    public ICollection<Grant> Grants { get; } = new List<Grant>();
+
+    /// <summary>Update a client.</summary>
+    /// <param name="name">The name of the client.</param>
+    /// <param name="description">A description of the client.</param>
+    /// <param name="loginUrl">The default login initiation endpoint.</param>
+    /// <param name="callbackUrls">The URLs that are valid to call back when authenticating users.</param>
+    /// <param name="signOutUrls">The URLs that can be redirected to after logout.</param>
+    public void Update(
+        string? name = null, 
+        string? description = null, 
+        string? loginUrl = null, 
+        ICollection<string>? callbackUrls = null, 
+        ICollection<string>? signOutUrls = null)
+    {
+        Name = GetUpdateValue(Name, name);
+        Description = GetUpdateValue(Description, description);
+        LoginUrl = GetUpdateValue(LoginUrl, loginUrl);
+        CallbackUrls = GetUpdateValue(CallbackUrls, callbackUrls);
+        SignOutUrls = GetUpdateValue(SignOutUrls, signOutUrls);
+    }
+    
     /// <inheritdoc />
     public override object AsSerializable()
-        => new { Id, ClientId = ExternalId, Name, DateCreated, DateModified };
+        => new { Id, Name, DateCreated, DateModified };
 }
