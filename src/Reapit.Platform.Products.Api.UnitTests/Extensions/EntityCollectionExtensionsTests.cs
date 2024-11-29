@@ -26,7 +26,7 @@ public class EntityCollectionExtensionsTests
         // cursor should be X for unix epoch, +500 for the test
         const long expected = 500;
 
-        var collection = new[] { new App("name") };
+        var collection = new[] { new App("name", null, false) };
         var actual = collection.GetMaximumCursor();
         actual.Should().Be(expected);
     }
