@@ -2,7 +2,7 @@
 
 namespace Reapit.Platform.Products.Core.Configuration;
 
-public class Auth0ConfigurationOptions
+public class IdentityProviderOptions
 {
     /// <summary>The Auth0 domain.</summary>
     [JsonPropertyName("domain")] 
@@ -17,10 +17,6 @@ public class Auth0ConfigurationOptions
     public required string ClientSecret { get; init; }
     
     /// <summary>How long each management API client should remain alive, in seconds.</summary>
-    [JsonPropertyName("tokenTtl")]
-    public required int TokenTimeToLive { get; init; }
-    
-    /// <summary>The audience to declare for client credentials flow apps.</summary>
-    [JsonPropertyName("clientGrantAudience")]
-    public required string ClientGrantAudience { get; init; }
+    [JsonPropertyName("tokenCacheSeconds")]
+    public required int TokenCacheSeconds { get; init; }
 }

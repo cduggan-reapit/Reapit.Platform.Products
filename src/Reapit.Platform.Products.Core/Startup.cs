@@ -19,6 +19,8 @@ public static class Startup
         builder.Services.AddScoped<INotificationsService, NotificationsService>();
         builder.Services.Configure<NotificationTopicConfiguration>(builder.Configuration.GetSection("Service:NotificationTopic"));
         
+        builder.Services.Configure<IdentityProviderOptions>(builder.Configuration.GetSection("Service:Auth0"));
+        
         return builder;
     }
 }
