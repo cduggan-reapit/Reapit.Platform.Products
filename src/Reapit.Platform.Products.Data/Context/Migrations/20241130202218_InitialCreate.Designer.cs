@@ -12,7 +12,7 @@ using Reapit.Platform.Products.Data.Context;
 namespace Reapit.Platform.Products.Data.Context.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    [Migration("20241129194143_InitialCreate")]
+    [Migration("20241130202218_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
