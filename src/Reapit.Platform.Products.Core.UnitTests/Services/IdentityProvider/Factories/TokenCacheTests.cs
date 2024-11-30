@@ -33,7 +33,7 @@ public class TokenCacheTests
         // We instantiate the authentication client within the method so that we can set the BaseUri from config, but we
         // control the HttpMessageHandler that it uses to make its requests.  These checks confirm that:
         // - the request is sent where we expect it to go:
-        request.Uri.Should().BeEquivalentTo($"https://{_options!.Domain}/oauth/token");
+        request.Uri.Should().BeEquivalentTo($"https://{_options.Domain}/oauth/token");
         
         // - the request has form data
         request.FormData.Should().NotBeNull();
