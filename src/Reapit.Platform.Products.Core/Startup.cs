@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Reapit.Platform.Products.Core.Configuration;
+using Reapit.Platform.Products.Core.Services.IdentityProvider;
+using Reapit.Platform.Products.Core.Services.IdentityProvider.Factories;
 using Reapit.Platform.Products.Core.Services.Notifications;
 
 namespace Reapit.Platform.Products.Core;
@@ -18,6 +20,10 @@ public static class Startup
 
         builder.Services.AddScoped<INotificationsService, NotificationsService>();
         builder.Services.Configure<NotificationTopicConfiguration>(builder.Configuration.GetSection("Service:NotificationTopic"));
+
+        builder.Services.AddSingleton<ITokenCache, TokenCache>();
+        builder.Services.AddSingleton<IIdentityProviderClientFactory, IdentityProviderClientFactory>();
+        builder.Services.AddScoped<IIdentityProviderService, IdentityProviderService>();
         
         builder.Services.Configure<IdentityProviderOptions>(builder.Configuration.GetSection("Service:Auth0"));
         

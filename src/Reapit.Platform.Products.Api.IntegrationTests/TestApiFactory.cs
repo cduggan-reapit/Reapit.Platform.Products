@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Reapit.Platform.Products.Api.IntegrationTests.TestServices;
+using Reapit.Platform.Products.Core.Services.IdentityProvider;
+using Reapit.Platform.Products.Core.Services.IdentityProvider.Factories;
 using Reapit.Platform.Products.Core.Services.Notifications;
 using Reapit.Platform.Products.Data.Context;
 
@@ -32,6 +34,11 @@ public class TestApiFactory : WebApplicationFactory<Program>
             // Swap live notifications service for the test service
             RemoveServiceForType(services, typeof(INotificationsService));
             services.AddSingleton<INotificationsService, MockNotificationsService>();
+            
+            // Swap live IdP services for the test service
+            RemoveServiceForType(services, typeof(ITokenCache));
+            RemoveServiceForType(services, typeof(IIdentityProviderClientFactory));
+            RemoveServiceForType(services, typeof(IIdentityProviderService));
         });
 
         // Configuration isn't injected from SSM in development. We could mock that stuff if we wanted, but it's a bit
