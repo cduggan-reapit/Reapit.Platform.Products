@@ -1,4 +1,4 @@
 ﻿global using MediatR;
 global using FluentValidation;
 global using Reapit.Platform.Common.Exceptions;
-global using ValidationException = FluentValidation.ValidationException;
+global using Entities = Reapit.Platform.Products.Domain.Entities;
