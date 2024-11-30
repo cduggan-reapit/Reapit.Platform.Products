@@ -45,6 +45,7 @@ builder.AddCoreServices()
 builder.Services.AddAutoMapper(typeof(Reapit.Platform.Products.Api.Program).Assembly);
 
 // Finally configure the controller routing and json serialization options
+builder.Services.AddHttpClient();
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

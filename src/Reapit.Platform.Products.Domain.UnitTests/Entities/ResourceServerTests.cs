@@ -70,6 +70,110 @@ public class ResourceServerTests
     }
     
     /*
+     * SetScopes
+     */
+
+    [Fact]
+    public void SetScopes_DoesNotModifyEntity_WhenScopesUnchanged()
+    {
+        var initialScopes = new[]
+        {
+            new Scope("grants can", "scope.one", "a"),
+            new Scope("only reference", "scope.two", "b"),
+            new Scope("one api", "scope.three", "c")
+        };
+        
+        var updatedScopes = new[]
+        {
+            new Scope("so the only", "scope.ONE", "a"),
+            new Scope("thing we need to look at", "SCOPE.two", "b"),
+            new Scope("are the names", "SCOPE.THREE", "c")
+        };
+        
+        var entity = GetEntity(scopes: initialScopes);
+        entity.SetScopes(updatedScopes);
+
+        entity.IsDirty.Should().BeFalse();
+        entity.DateModified.Should().Be(DateTime.UnixEpoch);
+        entity.Scopes.Should().BeEquivalentTo(initialScopes);
+    }
+    
+    [Fact]
+    public void SetScopes_ModifiesEntity_WhenDescriptionsChanged()
+    {
+        var initialScopes = new[]
+        {
+            new Scope("grants can", "scope.one", "a"),
+            new Scope("only reference", "scope.two", "b"),
+            new Scope("one api", "scope.three", "c")
+        };
+        
+        var updatedScopes = new[]
+        {
+            new Scope("so the only", "scope.one", "A"),
+            new Scope("thing we need to look at", "scope.two", "BEE"),
+            new Scope("are the names", "scope.three", "SEE")
+        };
+        
+        var entity = GetEntity(scopes: initialScopes);
+        entity.SetScopes(updatedScopes);
+
+        entity.IsDirty.Should().BeTrue();
+        entity.DateModified.Should().NotBe(DateTime.UnixEpoch);
+        entity.Scopes.Should().BeEquivalentTo(updatedScopes);
+    }
+    
+    [Fact]
+    public void SetScopes_ModifiesEntity_WhenScopesAdded()
+    {
+        var initialScopes = new[]
+        {
+            new Scope("grants can", "scope.one", null)
+        };
+        
+        var updatedScopes = new[]
+        {
+            new Scope("so the only", "scope.ONE", null),
+            new Scope("thing we need to look at", "SCOPE.two", null),
+            new Scope("are the names", "SCOPE.THREE", null)
+        };
+
+        var expectedScopes = initialScopes.Concat(updatedScopes.Skip(1));
+        
+        var entity = GetEntity(scopes: initialScopes);
+        entity.SetScopes(updatedScopes);
+
+        entity.IsDirty.Should().BeTrue();
+        entity.DateModified.Should().NotBe(DateTime.UnixEpoch);
+        entity.Scopes.Should().BeEquivalentTo(expectedScopes);
+    }
+    
+    [Fact]
+    public void SetScopes_ModifiesEntity_WhenScopesRemoved()
+    {
+        var initialScopes = new[]
+        {
+            new Scope("grants can", "scope.one", null),
+            new Scope("only reference", "scope.two", null),
+            new Scope("one api", "scope.three", null)
+        };
+        
+        var updatedScopes = new[]
+        {
+            new Scope("so the only", "scope.ONE", null)
+        };
+
+        var expectedScopes = initialScopes.Take(1);
+        
+        var entity = GetEntity(scopes: initialScopes);
+        entity.SetScopes(updatedScopes);
+
+        entity.IsDirty.Should().BeTrue();
+        entity.DateModified.Should().NotBe(DateTime.UnixEpoch);
+        entity.Scopes.Should().BeEquivalentTo(expectedScopes);
+    }
+    
+    /*
      * SoftDelete
      */
 
@@ -117,12 +221,17 @@ public class ResourceServerTests
         string externalId = "external-id",
         string audience = "audience",
         string name = "name",
-        int tokenLifetime = 86400)
+        int tokenLifetime = 86400,
+        ICollection<Scope>? scopes = null)
     {
         ResourceServer entity;
         using (new DateTimeOffsetProviderContext(BaseDate))
         {
-            entity = new ResourceServer(externalId, audience, name, tokenLifetime);
+            entity = new ResourceServer(externalId, audience, name, tokenLifetime)
+            {
+                Scopes = (scopes ?? []).ToList(),
+                DateModified = DateTime.UnixEpoch
+            };
         }
         return entity;
     }

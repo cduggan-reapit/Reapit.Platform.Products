@@ -59,11 +59,11 @@ public class GrantTests
     }
     
     /*
-     * Update
+     * SetScopes
      */
 
     [Fact]
-    public void Update_DoesNotModifyEntity_WhenScopesUnchanged()
+    public void SetScopes_DoesNotModifyEntity_WhenScopesUnchanged()
     {
         var initialScopes = new[]
         {
@@ -80,7 +80,7 @@ public class GrantTests
         };
         
         var entity = GetEntity(scopes: initialScopes);
-        entity.Update(updatedScopes);
+        entity.SetScopes(updatedScopes);
 
         entity.IsDirty.Should().BeFalse();
         entity.DateModified.Should().Be(DateTime.UnixEpoch);
@@ -88,7 +88,7 @@ public class GrantTests
     }
     
     [Fact]
-    public void Update_ModifiesEntity_WhenScopesAdded()
+    public void SetScopes_ModifiesEntity_WhenScopesAdded()
     {
         var initialScopes = new[]
         {
@@ -105,7 +105,7 @@ public class GrantTests
         var expectedScopes = initialScopes.Concat(updatedScopes.Skip(1));
         
         var entity = GetEntity(scopes: initialScopes);
-        entity.Update(updatedScopes);
+        entity.SetScopes(updatedScopes);
 
         entity.IsDirty.Should().BeTrue();
         entity.DateModified.Should().NotBe(DateTime.UnixEpoch);
@@ -113,7 +113,7 @@ public class GrantTests
     }
     
     [Fact]
-    public void Update_ModifiesEntity_WhenScopesRemoved()
+    public void SetScopes_ModifiesEntity_WhenScopesRemoved()
     {
         var initialScopes = new[]
         {
@@ -130,7 +130,7 @@ public class GrantTests
         var expectedScopes = initialScopes.Take(1);
         
         var entity = GetEntity(scopes: initialScopes);
-        entity.Update(updatedScopes);
+        entity.SetScopes(updatedScopes);
 
         entity.IsDirty.Should().BeTrue();
         entity.DateModified.Should().NotBe(DateTime.UnixEpoch);

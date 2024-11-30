@@ -232,7 +232,7 @@ public class GrantRepositoryTests : DatabaseAwareTestBase
          using var timeFixture = new DateTimeOffsetProviderContext(new DateTimeOffset(grant.DateModified, TimeSpan.Zero));
          
          // Then we remove a scope (which will set it as dirty)
-         grant.Update(grant.Scopes.Take(1).ToList());
+         grant.SetScopes(grant.Scopes.Take(1).ToList());
          
          var sut = CreateSut(context);
          _ = await sut.UpdateAsync(grant, default);

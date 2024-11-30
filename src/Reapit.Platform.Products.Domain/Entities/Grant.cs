@@ -1,9 +1,11 @@
-﻿using Reapit.Platform.Products.Domain.Entities.Abstract;
+﻿using System.Diagnostics.CodeAnalysis;
+using Reapit.Platform.Products.Domain.Entities.Abstract;
+using Reapit.Platform.Products.Domain.Entities.Interfaces;
 
 namespace Reapit.Platform.Products.Domain.Entities;
 
 /// <summary>Represents a grant.</summary>
-public class Grant : EntityBase
+public class Grant : EntityBase, IHasScopes
 {
     /// <summary>Initializes a new instance of the <see cref="Grant"/> class.</summary>
     /// <param name="externalId">The unique identifier of the grant within the IdP service.</param>
@@ -15,10 +17,9 @@ public class Grant : EntityBase
         ClientId = clientId;
         ResourceServerId = resourceServerId;
     }
-
-    /// <summary>Update the scopes associated with this grant.</summary>
-    /// <param name="scopes">The desired scopes collection.</param>
-    public void Update(ICollection<Scope> scopes)
+    
+    /// <inheritdoc/>
+    public void SetScopes(ICollection<Scope> scopes)
     {
         // Get the collections as a collection of names - that's what matters to this service:
         var proposedScopeNames = scopes.Select(scope => scope.Value).ToList();
