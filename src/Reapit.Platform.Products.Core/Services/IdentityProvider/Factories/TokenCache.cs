@@ -23,13 +23,13 @@ public class TokenCache (IHttpClientFactory httpClientFactory, IOptions<Identity
         var now = DateTimeOffsetProvider.Now;
         if (now < _nextTokenRefresh && _token is not null)
         {
-            logger.LogDebug("Re-using cached access token. Next refresh at: {next:hh:mm:ss} UTC", _nextTokenRefresh.UtcDateTime);
+            logger.LogDebug("Re-using cached access token. Next refresh at: {next:HH:mm:ss} UTC", _nextTokenRefresh.UtcDateTime);
             return _token;
         }
 
         // Set the next refresh timestamp
         _nextTokenRefresh = now.AddSeconds(Configuration.TokenCacheSeconds);
-        logger.LogInformation("Refreshing access token. Next refresh at: {next:hh:mm:ss} UTC", _nextTokenRefresh.UtcDateTime);
+        logger.LogInformation("Refreshing access token. Next refresh at: {next:HH:mm:ss} UTC", _nextTokenRefresh.UtcDateTime);
         
         // Request a new token
         var tokenRequest = new ClientCredentialsTokenRequest
