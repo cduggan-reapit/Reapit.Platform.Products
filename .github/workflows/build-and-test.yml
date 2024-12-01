@@ -9,7 +9,6 @@ jobs:
   build-and-test:
     name: build and test project
     runs-on: ubuntu-latest
-    if: ${{ false }}
     steps:
       - name: 📩 checkout
         uses: actions/checkout@v4
