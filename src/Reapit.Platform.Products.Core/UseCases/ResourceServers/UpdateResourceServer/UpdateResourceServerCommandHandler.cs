@@ -36,6 +36,8 @@ public class UpdateResourceServerCommandHandler(IUnitOfWork unitOfWork,
         _ = await unitOfWork.ResourceServers.UpdateAsync(entity, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         
+        // TODO: product.modified
+        
         // Log that the change was applied and return the entity:
         logger.LogInformation("Resource server updated: {id} ({blob})", entity.Id, entity.AsSerializable());
         return entity;

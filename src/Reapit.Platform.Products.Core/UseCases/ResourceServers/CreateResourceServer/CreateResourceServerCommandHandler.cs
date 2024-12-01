@@ -33,7 +33,10 @@ public class CreateResourceServerCommandHandler(
         _ = await unitOfWork.ResourceServers.CreateAsync(entity, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        // Step 06: Log completion of the handler
+        // Step 06: send notification
+        // TODO: product.created
+        
+        // Step 07: Log completion of the handler
         logger.LogInformation("Resource server created: {id} ({blob})", entity.Id, entity.AsSerializable());
         
         // Return the entity

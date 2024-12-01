@@ -26,6 +26,8 @@ public class DeleteResourceServerCommandHandler(
         _ = await unitOfWork.ResourceServers.UpdateAsync(entity, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         
+        // TODO: product.deleted
+        
         // Log that it has been deleted
         logger.LogInformation("Resource server deleted: {id} ({blob})", entity.Id, entity.AsSerializable());
         
