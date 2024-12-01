@@ -32,15 +32,6 @@ public static class ResourceServerFilterHelper
             ? queryable
             : queryable.Where(entity => entity.Audience.Contains(value));
     
-    /// <summary>Filters a collection of resource servers by external identifier.</summary>
-    /// <param name="queryable">The collection to filter.</param>
-    /// <param name="value">The value to filter by.</param>
-    /// <returns>A reference to the queryable after the filter operation.</returns>
-    public static IQueryable<ResourceServer> ApplyExternalIdFilter(this IQueryable<ResourceServer> queryable, string? value)
-        => value == null
-            ? queryable
-            : queryable.Where(entity => entity.ExternalId == value);
-    
     /// <summary>Filters a collection of resource servers by minimum creation date (inclusive).</summary>
     /// <param name="queryable">The collection to filter.</param>
     /// <param name="value">The value to filter by.</param>

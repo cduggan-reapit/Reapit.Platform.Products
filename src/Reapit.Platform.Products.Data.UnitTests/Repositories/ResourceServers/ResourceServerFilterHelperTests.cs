@@ -63,7 +63,7 @@ public class ResourceServerFilterHelperTests
         var actual = data.ApplyAudienceFilter(null);
         actual.Should().BeSameAs(data);
     }
-    
+
     [Fact]
     public void ApplyAudienceFilter_AppliesFilter_WhenValueProvided()
     {
@@ -72,29 +72,7 @@ public class ResourceServerFilterHelperTests
         var actual = data.ApplyAudienceFilter(audience);
         actual.Should().HaveCount(1);
     }
-    
-    /*
-     * ApplyExternalIdFilter
-     */
-    
-    [Fact]
-    public void ApplyExternalIdFilter_DoesNotApplyFilter_WhenValueIsNull()
-    {
-        var data = SeedData;
-        var actual = data.ApplyExternalIdFilter(null);
-        actual.Should().BeSameAs(data);
-    }
-    
-    [Fact]
-    public void ApplyExternalIdFilter_AppliesFilter_WhenValueProvided()
-    {
-        const string externalId = "external-id-022";
-        var data = SeedData;
-        var actual = data.ApplyExternalIdFilter(externalId);
-        actual.Should().HaveCount(1)
-            .And.AllSatisfy(item => item.ExternalId.Should().Be(externalId));
-    }
-    
+
     /*
      * ApplyCreatedFromFilter
      */

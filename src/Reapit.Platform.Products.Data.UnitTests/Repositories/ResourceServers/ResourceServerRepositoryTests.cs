@@ -70,19 +70,6 @@ public class ResourceServerRepositoryTests : DatabaseAwareTestBase
     }
 
     [Fact]
-    public async Task GetAsync_ReturnsFilteredPage_WhenExternalIdProvided()
-    {
-        const string externalId = "external-id-008";
-        await using var context = await GetContextAsync();
-        await PlantSeedDataAsync(context);
-        
-        var sut = CreateSut(context);
-        var actual = await sut.GetAsync(externalId: externalId);
-        actual.Should().HaveCount(1)
-            .And.AllSatisfy(item => item.ExternalId.Should().Be(externalId));
-    }
-
-    [Fact]
     public async Task GetAsync_ReturnsFilteredPage_WhenCreatedFromProvided()
     {
         // There are 50 items (with created dates from BaseDate +0 to BaseDate +49 days).

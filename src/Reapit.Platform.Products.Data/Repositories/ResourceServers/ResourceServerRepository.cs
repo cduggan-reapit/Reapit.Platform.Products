@@ -16,7 +16,6 @@ public class ResourceServerRepository(ProductDbContext context)
 
     /// <inheritdoc />
     public async Task<IEnumerable<ResourceServer>> GetAsync(
-        string? externalId = null, 
         string? name = null,
         string? audience = null,
         PaginationFilter? pagination = null, 
@@ -24,7 +23,6 @@ public class ResourceServerRepository(ProductDbContext context)
         CancellationToken cancellationToken = default)
         => await context.ResourceServers
             .ApplyCursorFilter(pagination?.Cursor)
-            .ApplyExternalIdFilter(externalId)
             .ApplyNameFilter(name)
             .ApplyAudienceFilter(audience)
             .ApplyCreatedFromFilter(dateFilter?.CreatedFrom)
