@@ -14,6 +14,9 @@ public class ResourceServer(string externalId, string audience, string name, int
     {
         Name = GetUpdateValue(Name, name);
         TokenLifetime = GetUpdateValue(TokenLifetime, tokenLifetime) ?? TokenLifetime;
+        
+        if(scopes != null)
+            SetScopes(scopes);
     }
 
     /// <summary>The unique identifier of the resource server in the IdP system.</summary>
