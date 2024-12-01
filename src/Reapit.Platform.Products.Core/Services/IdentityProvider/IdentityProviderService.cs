@@ -1,4 +1,5 @@
 ﻿using Auth0.ManagementApi.Models;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Reapit.Platform.Products.Core.Exceptions;
 using Reapit.Platform.Products.Core.Extensions;
@@ -38,6 +39,40 @@ public class IdentityProviderService(IIdentityProviderClientFactory clientFactor
             throw IdentityProviderException.NullResponse;
 
         return response.Id;
+    }
+    
+    /// <inheritdoc/>
+    public async Task<bool> UpdateResourceServerAsync(
+        Entities.ResourceServer entity,
+        CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Updating resource server: {id} ({externalId})", entity.Id, entity.ExternalId);
+        using var client = await clientFactory.GetClientAsync(cancellationToken);
+
+        var requestModel = new ResourceServerUpdateRequest
+        {
+            Name = entity.Name,
+            Scopes = entity.Scopes.Select(model 
+                => new ResourceServerScope { Value = model.Value, Description = model.Description }).ToList(),
+            TokenLifetime = entity.TokenLifetime
+        };
+
+        var response = await client.ResourceServers.UpdateAsync(entity.ExternalId, requestModel, cancellationToken);
+        if (response == null)
+            throw IdentityProviderException.NullResponse;
+
+        return true;
+    }
+    
+    /// <inheritdoc/>
+    public async Task<bool> DeleteResourceServerAsync(
+        Entities.ResourceServer entity,
+        CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Deleting resource server: {id} ({externalId})", entity.Id, entity.ExternalId);
+        using var client = await clientFactory.GetClientAsync(cancellationToken);
+        await client.ResourceServers.DeleteAsync(entity.ExternalId, cancellationToken);
+        return true;
     }
     
     #endregion

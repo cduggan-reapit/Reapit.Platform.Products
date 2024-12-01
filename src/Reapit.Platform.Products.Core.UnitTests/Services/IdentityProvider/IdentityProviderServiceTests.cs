@@ -64,6 +64,60 @@ public class IdentityProviderServiceTests
         var actual = await sut.CreateResourceServerAsync(command, default);
         actual.Should().Be(externalId);
     }
+    
+    /*
+     * UpdateResourceServerAsync
+     */
+
+    [Fact]
+    public async Task UpdateResourceServerAsync_ThrowsIdpException_WhenResponseNull()
+    {
+        var entity = new Domain.Entities.ResourceServer("external-id", "audience", "name", 3600);
+        var sut = CreateSut();
+        var action = () => sut.UpdateResourceServerAsync(entity, default);
+        await action.Should().ThrowAsync<IdentityProviderException>();
+    }
+    
+    [Fact]
+    public async Task UpdateResourceServerAsync_ReturnsTrue_WhenSuccessful()
+    {
+        var entity = new Domain.Entities.ResourceServer("external-id", "audience", "name", 3600);
+
+        var expectedRequest = new ResourceServerUpdateRequest {
+            Name = entity.Name,
+            Scopes = entity.Scopes.Select(scope => new ResourceServerScope { Value = scope.Value, Description = scope.Description }).ToList(),
+            TokenLifetime = entity.TokenLifetime
+        };
+
+        _resourceServersClient.UpdateAsync(
+                Arg.Any<string>(),
+                Arg.Any<ResourceServerUpdateRequest>(), 
+                Arg.Any<CancellationToken>())
+            .Returns(callInfo =>
+            {
+                callInfo.Arg<ResourceServerUpdateRequest>().Should().BeEquivalentTo(expectedRequest);
+                return new ResourceServer { Id = entity.ExternalId };
+            });
+        
+        var sut = CreateSut();
+        var actual = await sut.UpdateResourceServerAsync(entity, default);
+        actual.Should().BeTrue();
+    }
+    
+    /*
+     * DeleteResourceServerAsync
+     */
+    
+    [Fact]
+    public async Task DeleteResourceServerAsync_ReturnsTrue_WhenSuccessful()
+    {
+        var entity = new Domain.Entities.ResourceServer("external-id", "audience", "name", 3600);
+        var sut = CreateSut();
+        var actual = await sut.DeleteResourceServerAsync(entity, default);
+        actual.Should().BeTrue();
+        
+        await _resourceServersClient.Received(1).DeleteAsync(entity.ExternalId, Arg.Any<CancellationToken>());
+    }
 
     /*
      * Private methods
@@ -76,6 +130,4 @@ public class IdentityProviderServiceTests
 
         return new IdentityProviderService(_clientFactory, _logger);
     }
-
-    /*IIdentityProviderClientFactory clientFactory, ILogger<IdentityProviderService> logger*/
 }
