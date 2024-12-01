@@ -14,9 +14,10 @@ public static class Startup
     public static WebApplicationBuilder AddCoreServices(this WebApplicationBuilder builder)
     {
         // // These can't reference static classes (like Startup) so just needs to point at any class in this assembly
-        // builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<UseCases.Products.CreateProduct.CreateProductCommandHandler>());
+        builder.Services.AddMediatR(cfg 
+            => cfg.RegisterServicesFromAssemblyContaining<UseCases.ResourceServers.CreateResourceServer.CreateResourceServerCommandHandler>());
         
-        // builder.Services.AddValidatorsFromAssemblyContaining(typeof(UseCases.Products.CreateProduct.CreateProductCommandValidator));
+        builder.Services.AddValidatorsFromAssemblyContaining(typeof(UseCases.ResourceServers.CreateResourceServer.CreateResourceServerCommandValidator));
 
         builder.Services.AddScoped<INotificationsService, NotificationsService>();
         builder.Services.Configure<NotificationTopicConfiguration>(builder.Configuration.GetSection("Service:NotificationTopic"));
