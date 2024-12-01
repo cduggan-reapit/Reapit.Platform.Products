@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using Reapit.Platform.Products.Core.UseCases.ResourceServers.Shared;
+using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
 using Reapit.Platform.Products.Data.Repositories;
 using Reapit.Platform.Products.Data.Services;
 
@@ -47,7 +47,7 @@ public class UpdateResourceServerCommandValidator : AbstractValidator<UpdateReso
         
         // Use the scope model validator to validate scopes.
         RuleForEach(command => command.Scopes)
-            .SetValidator(new ResourceServerRequestScopeModelValidator())
+            .SetValidator(new RequestScopeModelValidator())
             .When(command => command.Scopes != null);
     }
 

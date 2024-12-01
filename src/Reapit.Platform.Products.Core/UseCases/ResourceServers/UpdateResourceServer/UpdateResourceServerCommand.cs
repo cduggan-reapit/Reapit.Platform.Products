@@ -1,4 +1,4 @@
-﻿using Reapit.Platform.Products.Core.UseCases.ResourceServers.Shared;
+﻿using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
 
 namespace Reapit.Platform.Products.Core.UseCases.ResourceServers.UpdateResourceServer;
 
@@ -10,4 +10,4 @@ namespace Reapit.Platform.Products.Core.UseCases.ResourceServers.UpdateResourceS
 public record UpdateResourceServerCommand(string Id, 
     string? Name, 
     int? TokenLifetime, 
-    ICollection<ResourceServerRequestScopeModel>? Scopes) : IRequest<Entities.ResourceServer>;
+    ICollection<RequestScopeModel>? Scopes) : IRequest<Entities.ResourceServer>;

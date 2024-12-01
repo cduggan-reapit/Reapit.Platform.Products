@@ -4,8 +4,8 @@ using Auth0.ManagementApi.Models;
 using Reapit.Platform.Products.Core.Exceptions;
 using Reapit.Platform.Products.Core.Services.IdentityProvider;
 using Reapit.Platform.Products.Core.Services.IdentityProvider.Factories;
+using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.CreateResourceServer;
-using Reapit.Platform.Products.Core.UseCases.ResourceServers.Shared;
 
 namespace Reapit.Platform.Products.Core.UnitTests.Services.IdentityProvider;
 
@@ -35,9 +35,9 @@ public class IdentityProviderServiceTests
     {
         const string externalId = "created-id";
         var command = new CreateResourceServerCommand("name", "audience", 3600, [ 
-            new ResourceServerRequestScopeModel("scope.one", "scope one"),
-            new ResourceServerRequestScopeModel("scope.two", "scope two"),
-            new ResourceServerRequestScopeModel("scope.three", "scope three")
+            new RequestScopeModel("scope.one", "scope one"),
+            new RequestScopeModel("scope.two", "scope two"),
+            new RequestScopeModel("scope.three", "scope three")
         ]);
 
         var expectedRequest = new ResourceServerCreateRequest {

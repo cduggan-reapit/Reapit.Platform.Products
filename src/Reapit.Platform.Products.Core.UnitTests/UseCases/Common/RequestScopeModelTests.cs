@@ -1,10 +1,10 @@
 ﻿using Auth0.ManagementApi.Models;
-using Reapit.Platform.Products.Core.UseCases.ResourceServers.Shared;
+using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
 using Reapit.Platform.Products.Domain.Entities;
 
-namespace Reapit.Platform.Products.Core.UnitTests.UseCases.ResourceServers.Shared;
+namespace Reapit.Platform.Products.Core.UnitTests.UseCases.Common;
 
-public class ResourceServerRequestScopeModelTests
+public class RequestScopeModelTests
 {
     /*
      * ToEntity
@@ -49,6 +49,6 @@ public class ResourceServerRequestScopeModelTests
      * Private methods
      */
     
-    private static ResourceServerRequestScopeModel GetRequest(string value = "value", string? description = "description")
+    private static RequestScopeModel GetRequest(string value = "value", string? description = "description")
         => new(value, description);
 }

@@ -1,7 +1,7 @@
 ﻿using FluentValidation.Results;
 using Reapit.Platform.Products.Core.Services.IdentityProvider;
+using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.CreateResourceServer;
-using Reapit.Platform.Products.Core.UseCases.ResourceServers.Shared;
 using Reapit.Platform.Products.Data.Repositories.ResourceServers;
 using Reapit.Platform.Products.Data.Services;
 using Reapit.Platform.Products.Domain.Entities;
@@ -38,9 +38,9 @@ public class CreateResourceServerCommandHandlerTests
     {
         const string externalId = "auth0-identifier";
         var command = GetRequest(scopes: [
-            new ResourceServerRequestScopeModel("scope.one", "scope.one description"),
-            new ResourceServerRequestScopeModel("scope.two", "scope.two description"),
-            new ResourceServerRequestScopeModel("scope.three", "scope.three description")
+            new RequestScopeModel("scope.one", "scope.one description"),
+            new RequestScopeModel("scope.two", "scope.two description"),
+            new RequestScopeModel("scope.three", "scope.three description")
         ]);
         
         SetupValidator(true);
@@ -85,6 +85,6 @@ public class CreateResourceServerCommandHandlerTests
         string name = "name",
         string audience = "audience",
         int tokenLifetime = 3600,
-        ICollection<ResourceServerRequestScopeModel>? scopes = null)
+        ICollection<RequestScopeModel>? scopes = null)
         => new(name, audience, tokenLifetime, scopes ?? []);
 }

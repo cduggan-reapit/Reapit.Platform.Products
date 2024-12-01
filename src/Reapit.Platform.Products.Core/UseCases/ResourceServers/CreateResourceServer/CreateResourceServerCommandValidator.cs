@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using Reapit.Platform.Products.Core.UseCases.ResourceServers.Shared;
+using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
 using Reapit.Platform.Products.Data.Repositories;
 using Reapit.Platform.Products.Data.Services;
 
@@ -60,7 +60,7 @@ public class CreateResourceServerCommandValidator : AbstractValidator<CreateReso
             .WithMessage(ResourceServerValidationMessages.TokenLifetimeOutOfRange);
         
         // Use the scope model validator to validate scopes.
-        RuleForEach(command => command.Scopes).SetValidator(new ResourceServerRequestScopeModelValidator());
+        RuleForEach(command => command.Scopes).SetValidator(new RequestScopeModelValidator());
     }
 
     private async Task<bool> IsNameUnique(string name, CancellationToken cancellationToken)

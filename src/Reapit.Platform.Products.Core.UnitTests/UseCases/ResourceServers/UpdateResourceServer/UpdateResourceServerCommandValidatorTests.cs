@@ -1,6 +1,6 @@
 ﻿using Reapit.Platform.Products.Core.UseCases;
+using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers;
-using Reapit.Platform.Products.Core.UseCases.ResourceServers.Shared;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.UpdateResourceServer;
 using Reapit.Platform.Products.Data.Repositories;
 using Reapit.Platform.Products.Data.Repositories.ResourceServers;
@@ -27,7 +27,7 @@ public class UpdateResourceServerCommandValidatorTests
     [Fact]
     public async Task Validate_ReturnsSuccess_WhenPropertiesValid()
     {
-        var request = GetRequest(name: "new value", tokenLifetime: 7200, scopes: [new ResourceServerRequestScopeModel("scope.one", null)]);
+        var request = GetRequest(name: "new value", tokenLifetime: 7200, scopes: [new RequestScopeModel("scope.one", null)]);
         var entity = new ResourceServer("not-validated", "not-validated", "name", 3600);
 
         _repository.GetByIdAsync(request.Id, Arg.Any<CancellationToken>())
@@ -161,13 +161,13 @@ public class UpdateResourceServerCommandValidatorTests
     [Fact]
     public async Task Validate_ReturnsFailure_WhenScopeValidatorFails()
     {
-        var scope = new ResourceServerRequestScopeModel(new string('a', 281), null);
+        var scope = new RequestScopeModel(new string('a', 281), null);
         var request = GetRequest(scopes: [scope]);
         var sut = CreateSut();
         var result = await sut.ValidateAsync(request);
         
         // Since it's a sub-validator, checking the name can be a pain. We know what it'll be, we can live with the magic string.
-        result.Should().Fail("Scopes[0].Value", ResourceServerRequestScopeValidationMessages.ValueTooLong);
+        result.Should().Fail("Scopes[0].Value", RequestScopeModelValidationMessages.ValueTooLong);
     }
     
     /*
@@ -184,6 +184,6 @@ public class UpdateResourceServerCommandValidatorTests
         string id = "id",
         string? name = null,
         int? tokenLifetime = null,
-        ICollection<ResourceServerRequestScopeModel>? scopes = null)
+        ICollection<RequestScopeModel>? scopes = null)
         => new(id, name, tokenLifetime, scopes ?? []);
 }

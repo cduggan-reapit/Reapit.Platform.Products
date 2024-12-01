@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Results;
 using Reapit.Platform.Products.Core.Services.IdentityProvider;
-using Reapit.Platform.Products.Core.UseCases.ResourceServers.Shared;
+using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.UpdateResourceServer;
 using Reapit.Platform.Products.Data.Repositories.ResourceServers;
 using Reapit.Platform.Products.Data.Services;
@@ -50,7 +50,7 @@ public class UpdateResourceServerCommandHandlerTests
     {
         SetupValidator(true);
         
-        var scopeModels = new List<ResourceServerRequestScopeModel>
+        var scopeModels = new List<RequestScopeModel>
         {
             new("value.one", "description.one"),
             new("value.two", "description.two"),
@@ -82,7 +82,7 @@ public class UpdateResourceServerCommandHandlerTests
     {
         SetupValidator(true);
         
-        var scopeModels = new List<ResourceServerRequestScopeModel>
+        var scopeModels = new List<RequestScopeModel>
         {
             new("value.one", "description.one"),
             new("value.two", "description.two"),
@@ -131,6 +131,6 @@ public class UpdateResourceServerCommandHandlerTests
         string id = "id", 
         string name = "name", 
         int tokenLifetime = 3600, 
-        ICollection<ResourceServerRequestScopeModel>? scopes = null)
+        ICollection<RequestScopeModel>? scopes = null)
         => new(id, name, tokenLifetime, scopes);
 }

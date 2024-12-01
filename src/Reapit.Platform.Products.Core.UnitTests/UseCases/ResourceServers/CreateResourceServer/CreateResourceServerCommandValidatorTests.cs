@@ -1,7 +1,7 @@
 ﻿using Reapit.Platform.Products.Core.UseCases;
+using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.CreateResourceServer;
-using Reapit.Platform.Products.Core.UseCases.ResourceServers.Shared;
 using Reapit.Platform.Products.Data.Repositories;
 using Reapit.Platform.Products.Data.Repositories.ResourceServers;
 using Reapit.Platform.Products.Data.Services;
@@ -134,13 +134,13 @@ public class CreateResourceServerCommandValidatorTests
     [Fact]
     public async Task Validate_ReturnsFailure_WhenScopeValidatorFails()
     {
-        var scope = new ResourceServerRequestScopeModel(new string('a', 281), null);
+        var scope = new RequestScopeModel(new string('a', 281), null);
         var request = GetRequest(scopes: [scope]);
         var sut = CreateSut();
         var result = await sut.ValidateAsync(request);
         
         // Since it's a sub-validator, checking the name can be a pain. We know what it'll be, we can live with the magic string.
-        result.Should().Fail("Scopes[0].Value", ResourceServerRequestScopeValidationMessages.ValueTooLong);
+        result.Should().Fail("Scopes[0].Value", RequestScopeModelValidationMessages.ValueTooLong);
     }
         
     /*
@@ -157,6 +157,6 @@ public class CreateResourceServerCommandValidatorTests
         string name = "name",
         string audience = "audience",
         int tokenLifetime = 3600,
-        ICollection<ResourceServerRequestScopeModel>? scopes = null)
+        ICollection<RequestScopeModel>? scopes = null)
         => new(name, audience, tokenLifetime, scopes ?? []);
 }

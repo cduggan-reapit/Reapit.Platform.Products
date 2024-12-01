@@ -1,4 +1,4 @@
-﻿using Reapit.Platform.Products.Core.UseCases.ResourceServers.Shared;
+﻿using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
 
 namespace Reapit.Platform.Products.Core.UseCases.ResourceServers.CreateResourceServer;
 
@@ -11,5 +11,5 @@ public record CreateResourceServerCommand(
     string Name,
     string Audience,
     int TokenLifetime,
-    ICollection<ResourceServerRequestScopeModel> Scopes) 
+    ICollection<RequestScopeModel> Scopes) 
     : IRequest<Entities.ResourceServer>;
