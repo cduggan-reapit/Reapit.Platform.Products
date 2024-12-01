@@ -39,6 +39,7 @@ public class TestApiFactory : WebApplicationFactory<Program>
             RemoveServiceForType(services, typeof(ITokenCache));
             RemoveServiceForType(services, typeof(IIdentityProviderClientFactory));
             RemoveServiceForType(services, typeof(IIdentityProviderService));
+            services.AddSingleton<IIdentityProviderService, MockIdentityProviderService>();
         });
 
         // Configuration isn't injected from SSM in development. We could mock that stuff if we wanted, but it's a bit
