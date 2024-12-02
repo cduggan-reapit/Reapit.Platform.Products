@@ -1,5 +1,4 @@
 ﻿using Auth0.ManagementApi.Models;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Reapit.Platform.Products.Core.Exceptions;
 using Reapit.Platform.Products.Core.Extensions;

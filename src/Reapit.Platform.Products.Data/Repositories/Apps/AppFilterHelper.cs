@@ -32,11 +32,11 @@ public static class AppFilterHelper
             ? queryable
             : queryable.Where(entity => entity.Description != null && entity.Description.Contains(value));
     
-    /// <summary>Filters a collection of apps by skip consent flag.</summary>
+    /// <summary>Filters a collection of apps by first party flag.</summary>
     /// <param name="queryable">The collection to filter.</param>
     /// <param name="value">The value to filter by.</param>
     /// <returns>A reference to the queryable after the filter operation.</returns>
-    public static IQueryable<App> ApplySkipConsentFilter(this IQueryable<App> queryable, bool? value)
+    public static IQueryable<App> ApplyIsFirstPartyFilter(this IQueryable<App> queryable, bool? value)
         => value == null
             ? queryable
             : queryable.Where(entity => entity.IsFirstParty == value);

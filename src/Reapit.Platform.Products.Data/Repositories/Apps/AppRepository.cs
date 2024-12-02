@@ -17,7 +17,7 @@ public class AppRepository(ProductDbContext context) : BaseRepository<App>(conte
     public async Task<IEnumerable<App>> GetAsync(
         string? name = null,
         string? description = null,
-        bool? skipConsent = null,
+        bool? isFirstParty = null,
         PaginationFilter? pagination = null,
         TimestampFilter? dateFilter = null,
         CancellationToken cancellationToken = default)
@@ -25,7 +25,7 @@ public class AppRepository(ProductDbContext context) : BaseRepository<App>(conte
             .ApplyCursorFilter(pagination?.Cursor)
             .ApplyNameFilter(name)
             .ApplyDescriptionFilter(description)
-            .ApplySkipConsentFilter(skipConsent)
+            .ApplyIsFirstPartyFilter(isFirstParty)
             .ApplyCreatedFromFilter(dateFilter?.CreatedFrom)
             .ApplyCreatedToFilter(dateFilter?.CreatedTo)
             .ApplyModifiedFromFilter(dateFilter?.ModifiedFrom)

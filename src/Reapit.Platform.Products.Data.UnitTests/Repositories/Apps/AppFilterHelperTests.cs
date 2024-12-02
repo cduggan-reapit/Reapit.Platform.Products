@@ -81,7 +81,7 @@ public class AppFilterHelperTests
     public void ApplySkipConsentFilter_DoesNotApplyFilter_WhenDescriptionIsNull()
     {
         var data = SeedData;
-        var actual = data.ApplySkipConsentFilter(null);
+        var actual = data.ApplyIsFirstPartyFilter(null);
         actual.Should().BeSameAs(data);
     }
     
@@ -89,7 +89,7 @@ public class AppFilterHelperTests
     public void ApplySkipConsentFilter_AppliesFilter_WhenDescriptionProvided()
     {
         var data = SeedData;
-        var actual = data.ApplySkipConsentFilter(true);
+        var actual = data.ApplyIsFirstPartyFilter(true);
         actual.Should().HaveCount(5, "one in ten apps are marked skipConsent");
     }
     

@@ -50,7 +50,7 @@ public class AppRepositoryTests : DatabaseAwareTestBase
         await PlantSeedDataAsync(context);
         
         var sut = CreateSut(context);
-        var actual = await sut.GetAsync(skipConsent: true);
+        var actual = await sut.GetAsync(isFirstParty: true);
         actual.Should().HaveCount(5)
             .And.AllSatisfy(item => item.IsFirstParty.Should().BeTrue());
     }
