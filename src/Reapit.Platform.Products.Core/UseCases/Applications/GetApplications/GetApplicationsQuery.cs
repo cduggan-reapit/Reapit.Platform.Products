@@ -15,7 +15,7 @@ public record GetApplicationsQuery(
     int PageSize = 25,
     string? Name = null,
     string? Description = null,
-    bool? IsFirstParty = false,
+    bool? IsFirstParty = null,
     DateTime? CreatedFrom = null,
     DateTime? CreatedTo = null,
     DateTime? ModifiedFrom = null,

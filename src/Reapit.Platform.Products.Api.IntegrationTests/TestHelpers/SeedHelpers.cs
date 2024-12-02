@@ -1,8 +1,4 @@
-﻿using Reapit.Platform.Common.Providers.Identifiers;
-using Reapit.Platform.Common.Providers.Temporal;
-using Reapit.Platform.Products.Domain.Entities;
-
-namespace Reapit.Platform.Products.Api.IntegrationTests.TestHelpers;
+﻿namespace Reapit.Platform.Products.Api.IntegrationTests.TestHelpers;
 
 /// <summary>Helper methods for creating seed data objects.</summary>
 public static class SeedHelpers

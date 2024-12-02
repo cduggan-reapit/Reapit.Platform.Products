@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Reapit.Platform.Products.Domain.Entities.Abstract;
+﻿using Reapit.Platform.Products.Domain.Entities.Abstract;
 using Reapit.Platform.Products.Domain.Entities.Interfaces;
 
 namespace Reapit.Platform.Products.Domain.Entities;

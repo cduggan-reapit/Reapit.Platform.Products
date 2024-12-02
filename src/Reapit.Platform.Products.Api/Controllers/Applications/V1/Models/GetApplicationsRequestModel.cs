@@ -17,7 +17,7 @@ public record GetApplicationsRequestModel(
     [property: JsonPropertyName("pageSize")] int PageSize = 25,
     [property: JsonPropertyName("name")] string? Name = null,
     [property: JsonPropertyName("description")] string? Description = null,
-    [property: JsonPropertyName("firstParty")] bool? IsFirstParty = false,
+    [property: JsonPropertyName("firstParty")] bool? IsFirstParty = null,
     [property: JsonPropertyName("createdFrom")] DateTime? CreatedFrom = null,
     [property: JsonPropertyName("createdTo")] DateTime? CreatedTo = null,
     [property: JsonPropertyName("modifiedFrom")] DateTime? ModifiedFrom = null,

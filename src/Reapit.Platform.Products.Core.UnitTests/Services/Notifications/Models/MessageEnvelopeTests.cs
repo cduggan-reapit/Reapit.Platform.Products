@@ -1,6 +1,5 @@
 ﻿using Reapit.Platform.Common.Providers.Temporal;
 using Reapit.Platform.Products.Core.Services.Notifications.Models;
-using Reapit.Platform.Products.Domain.Entities;
 
 namespace Reapit.Platform.Products.Core.UnitTests.Services.Notifications.Models;
 
