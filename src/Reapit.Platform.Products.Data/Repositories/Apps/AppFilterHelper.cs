@@ -39,7 +39,7 @@ public static class AppFilterHelper
     public static IQueryable<App> ApplySkipConsentFilter(this IQueryable<App> queryable, bool? value)
         => value == null
             ? queryable
-            : queryable.Where(entity => entity.SkipConsent == value);
+            : queryable.Where(entity => entity.IsFirstParty == value);
     
     /// <summary>Filters a collection of apps by minimum creation date (inclusive).</summary>
     /// <param name="queryable">The collection to filter.</param>

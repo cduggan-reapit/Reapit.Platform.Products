@@ -30,7 +30,7 @@ public class AppTests
         // Explicit
         entity.Name.Should().Be(name);
         entity.Description.Should().Be(description);
-        entity.SkipConsent.Should().Be(isFirstParty);
+        entity.IsFirstParty.Should().Be(isFirstParty);
         
         // Implicit
         entity.Id.Should().Be($"{guid:N}");

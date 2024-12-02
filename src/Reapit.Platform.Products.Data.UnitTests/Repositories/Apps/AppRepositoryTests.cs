@@ -52,7 +52,7 @@ public class AppRepositoryTests : DatabaseAwareTestBase
         var sut = CreateSut(context);
         var actual = await sut.GetAsync(skipConsent: true);
         actual.Should().HaveCount(5)
-            .And.AllSatisfy(item => item.SkipConsent.Should().BeTrue());
+            .And.AllSatisfy(item => item.IsFirstParty.Should().BeTrue());
     }
 
     [Fact]

@@ -23,7 +23,7 @@ public class AppConfiguration : IEntityTypeConfiguration<App>
             .HasColumnName("description")
             .HasMaxLength(1000);
 
-        builder.Property(entity => entity.SkipConsent)
+        builder.Property(entity => entity.IsFirstParty)
             .HasColumnName("is_first_party");
         
     }

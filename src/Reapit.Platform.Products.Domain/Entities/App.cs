@@ -4,7 +4,7 @@ namespace Reapit.Platform.Products.Domain.Entities;
 
 /// <summary>Represents an application.</summary>
 /// <remarks>An application is a container for clients.</remarks>
-public class App(string name, string? description, bool skipConsent) : EntityBase
+public class App(string name, string? description, bool isFirstParty) : EntityBase
 {
     /// <summary>The name of the app.</summary>
     public string Name { get; private set; } = name;
@@ -14,7 +14,7 @@ public class App(string name, string? description, bool skipConsent) : EntityBas
 
     /// <summary>Flag indicating whether an application can skip consent.</summary>
     /// <remarks>This cannot be changed after initialization.</remarks>
-    public bool SkipConsent { get; } = skipConsent;
+    public bool IsFirstParty { get; } = isFirstParty;
     
     /// <summary>Update an app.</summary>
     /// <param name="name">The name of the app.</param>
