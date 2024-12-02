@@ -3,16 +3,16 @@ using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
 using Reapit.Platform.Products.Data.Repositories;
 using Reapit.Platform.Products.Data.Services;
 
-namespace Reapit.Platform.Products.Core.UseCases.ResourceServers.UpdateResourceServer;
+namespace Reapit.Platform.Products.Core.UseCases.ResourceServers.PatchResourceServer;
 
-/// <summary>Validator for the <see cref="UpdateResourceServerCommand"/> request.</summary>
-public class UpdateResourceServerCommandValidator : AbstractValidator<UpdateResourceServerCommand>
+/// <summary>Validator for the <see cref="PatchResourceServerCommand"/> request.</summary>
+public class PatchResourceServerCommandValidator : AbstractValidator<PatchResourceServerCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    /// <summary>Initializes a new instance of the <see cref="UpdateResourceServerCommandValidator"/> class.</summary>
+    /// <summary>Initializes a new instance of the <see cref="PatchResourceServerCommandValidator"/> class.</summary>
     /// <param name="unitOfWork">The unit of work service.</param>
-    public UpdateResourceServerCommandValidator(IUnitOfWork unitOfWork)
+    public PatchResourceServerCommandValidator(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
         
@@ -32,7 +32,7 @@ public class UpdateResourceServerCommandValidator : AbstractValidator<UpdateReso
                 // Only run this if the other "name" rules pass.
                 RuleFor(command => command)
                     .MustAsync(IsNameUnique)
-                    .WithName(nameof(UpdateResourceServerCommand.Name))
+                    .WithName(nameof(PatchResourceServerCommand.Name))
                     .WithMessage(CommonValidationMessages.Unique);
             })
             .When(command => command.Name != null);
@@ -51,7 +51,7 @@ public class UpdateResourceServerCommandValidator : AbstractValidator<UpdateReso
             .When(command => command.Scopes != null);
     }
 
-    private async Task<bool> IsNameUnique(UpdateResourceServerCommand command, CancellationToken cancellationToken)
+    private async Task<bool> IsNameUnique(PatchResourceServerCommand command, CancellationToken cancellationToken)
     {
         // Okay, we're back in the complicated world of uniqueness. If the id doesn't exist, return true.  That's a
         // problem which will be dealt with by the handler.

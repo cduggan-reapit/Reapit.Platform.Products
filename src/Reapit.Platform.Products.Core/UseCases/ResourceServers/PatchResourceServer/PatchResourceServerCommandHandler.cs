@@ -2,17 +2,17 @@
 using Reapit.Platform.Products.Core.Services.IdentityProvider;
 using Reapit.Platform.Products.Data.Services;
 
-namespace Reapit.Platform.Products.Core.UseCases.ResourceServers.UpdateResourceServer;
+namespace Reapit.Platform.Products.Core.UseCases.ResourceServers.PatchResourceServer;
 
-/// <summary>Handler for the <see cref="UpdateResourceServerCommand"/> request.</summary>
-public class UpdateResourceServerCommandHandler(IUnitOfWork unitOfWork, 
+/// <summary>Handler for the <see cref="PatchResourceServerCommand"/> request.</summary>
+public class PatchResourceServerCommandHandler(IUnitOfWork unitOfWork, 
     IIdentityProviderService idpService, 
-    IValidator<UpdateResourceServerCommand> validator,
-    ILogger<UpdateResourceServerCommandHandler> logger) 
-    : IRequestHandler<UpdateResourceServerCommand, Entities.ResourceServer>
+    IValidator<PatchResourceServerCommand> validator,
+    ILogger<PatchResourceServerCommandHandler> logger) 
+    : IRequestHandler<PatchResourceServerCommand, Entities.ResourceServer>
 {
     /// <inheritdoc />
-    public async Task<Entities.ResourceServer> Handle(UpdateResourceServerCommand request, CancellationToken cancellationToken)
+    public async Task<Entities.ResourceServer> Handle(PatchResourceServerCommand request, CancellationToken cancellationToken)
     {
         var validation = await validator.ValidateAsync(request, cancellationToken);
         if (!validation.IsValid)

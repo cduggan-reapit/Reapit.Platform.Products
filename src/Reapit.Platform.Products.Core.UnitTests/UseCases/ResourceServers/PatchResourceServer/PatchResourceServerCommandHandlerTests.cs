@@ -1,21 +1,20 @@
 ﻿using FluentValidation.Results;
 using Reapit.Platform.Products.Core.Services.IdentityProvider;
 using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
-using Reapit.Platform.Products.Core.UseCases.ResourceServers.UpdateResourceServer;
+using Reapit.Platform.Products.Core.UseCases.ResourceServers.PatchResourceServer;
 using Reapit.Platform.Products.Data.Repositories.ResourceServers;
 using Reapit.Platform.Products.Data.Services;
 using Reapit.Platform.Products.Domain.Entities;
-using Command = Reapit.Platform.Products.Core.UseCases.ResourceServers.UpdateResourceServer.UpdateResourceServerCommand;
 
-namespace Reapit.Platform.Products.Core.UnitTests.UseCases.ResourceServers.UpdateResourceServer;
+namespace Reapit.Platform.Products.Core.UnitTests.UseCases.ResourceServers.PatchResourceServer;
 
-public class UpdateResourceServerCommandHandlerTests
+public class PatchResourceServerCommandHandlerTests
 {
     private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
     private readonly IResourceServerRepository _repository = Substitute.For<IResourceServerRepository>();
     private readonly IIdentityProviderService _idpService = Substitute.For<IIdentityProviderService>();
-    private readonly IValidator<Command> _validator = Substitute.For<IValidator<UpdateResourceServerCommand>>();
-    private readonly FakeLogger<UpdateResourceServerCommandHandler> _logger = new();
+    private readonly IValidator<PatchResourceServerCommand> _validator = Substitute.For<IValidator<PatchResourceServerCommand>>();
+    private readonly FakeLogger<PatchResourceServerCommandHandler> _logger = new();
     
     /*
      * Handle
@@ -115,19 +114,19 @@ public class UpdateResourceServerCommandHandlerTests
      * Private methods
      */
     
-    private UpdateResourceServerCommandHandler CreateSut()
+    private PatchResourceServerCommandHandler CreateSut()
     {
         _unitOfWork.ResourceServers.Returns(_repository);
-        return new UpdateResourceServerCommandHandler(_unitOfWork, _idpService, _validator, _logger);
+        return new PatchResourceServerCommandHandler(_unitOfWork, _idpService, _validator, _logger);
     }
     
     private void SetupValidator(bool isSuccess) 
-        => _validator.ValidateAsync(Arg.Any<Command>(), Arg.Any<CancellationToken>())
+        => _validator.ValidateAsync(Arg.Any<PatchResourceServerCommand>(), Arg.Any<CancellationToken>())
             .Returns(new ValidationResult(isSuccess 
                 ? []
                 : new[] { new ValidationFailure("propertyName", "errorMessage") }));
 
-    private static Command GetRequest(
+    private static PatchResourceServerCommand GetRequest(
         string id = "id", 
         string name = "name", 
         int tokenLifetime = 3600, 

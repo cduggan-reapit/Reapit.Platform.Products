@@ -1,16 +1,15 @@
 ﻿using Reapit.Platform.Products.Core.UseCases;
 using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers;
-using Reapit.Platform.Products.Core.UseCases.ResourceServers.UpdateResourceServer;
+using Reapit.Platform.Products.Core.UseCases.ResourceServers.PatchResourceServer;
 using Reapit.Platform.Products.Data.Repositories;
 using Reapit.Platform.Products.Data.Repositories.ResourceServers;
 using Reapit.Platform.Products.Data.Services;
 using Reapit.Platform.Products.Domain.Entities;
-using Command = Reapit.Platform.Products.Core.UseCases.ResourceServers.UpdateResourceServer.UpdateResourceServerCommand;
 
-namespace Reapit.Platform.Products.Core.UnitTests.UseCases.ResourceServers.UpdateResourceServer;
+namespace Reapit.Platform.Products.Core.UnitTests.UseCases.ResourceServers.PatchResourceServer;
 
-public class UpdateResourceServerCommandValidatorTests
+public class PatchResourceServerCommandValidatorTests
 {
     private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
     private readonly IResourceServerRepository _repository = Substitute.For<IResourceServerRepository>();
@@ -51,7 +50,7 @@ public class UpdateResourceServerCommandValidatorTests
         var request = GetRequest(name: string.Empty);
         var sut = CreateSut();
         var result = await sut.ValidateAsync(request);
-        result.Should().Fail(nameof(Command.Name), CommonValidationMessages.Required);
+        result.Should().Fail(nameof(PatchResourceServerCommand.Name), CommonValidationMessages.Required);
         
         await _repository.DidNotReceive().GetByIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>());
     }
@@ -62,7 +61,7 @@ public class UpdateResourceServerCommandValidatorTests
         var request = GetRequest(name: new string('a', 201));
         var sut = CreateSut();
         var result = await sut.ValidateAsync(request);
-        result.Should().Fail(nameof(Command.Name), ResourceServerValidationMessages.NameTooLong);
+        result.Should().Fail(nameof(PatchResourceServerCommand.Name), ResourceServerValidationMessages.NameTooLong);
         
         await _repository.DidNotReceive().GetByIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>());
     }
@@ -73,7 +72,7 @@ public class UpdateResourceServerCommandValidatorTests
         var request = GetRequest(name: "<name>");
         var sut = CreateSut();
         var result = await sut.ValidateAsync(request);
-        result.Should().Fail(nameof(Command.Name), ResourceServerValidationMessages.NameInvalid);
+        result.Should().Fail(nameof(PatchResourceServerCommand.Name), ResourceServerValidationMessages.NameInvalid);
         
         await _repository.DidNotReceive().GetByIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>());
     }
@@ -129,7 +128,7 @@ public class UpdateResourceServerCommandValidatorTests
         
         var sut = CreateSut();
         var result = await sut.ValidateAsync(request);
-        result.Should().Fail(nameof(Command.Name), CommonValidationMessages.Unique);
+        result.Should().Fail(nameof(PatchResourceServerCommand.Name), CommonValidationMessages.Unique);
     }
     
     /*
@@ -142,7 +141,7 @@ public class UpdateResourceServerCommandValidatorTests
         var request = GetRequest(tokenLifetime: 59);
         var sut = CreateSut();
         var result = await sut.ValidateAsync(request);
-        result.Should().Fail(nameof(Command.TokenLifetime), ResourceServerValidationMessages.TokenLifetimeOutOfRange);
+        result.Should().Fail(nameof(PatchResourceServerCommand.TokenLifetime), ResourceServerValidationMessages.TokenLifetimeOutOfRange);
     }
     
     [Fact]
@@ -151,7 +150,7 @@ public class UpdateResourceServerCommandValidatorTests
         var request = GetRequest(tokenLifetime: 86401);
         var sut = CreateSut();
         var result = await sut.ValidateAsync(request);
-        result.Should().Fail(nameof(Command.TokenLifetime), ResourceServerValidationMessages.TokenLifetimeOutOfRange);
+        result.Should().Fail(nameof(PatchResourceServerCommand.TokenLifetime), ResourceServerValidationMessages.TokenLifetimeOutOfRange);
     }
 
     /*
@@ -174,13 +173,13 @@ public class UpdateResourceServerCommandValidatorTests
      * Private methods
      */
 
-    private UpdateResourceServerCommandValidator CreateSut()
+    private PatchResourceServerCommandValidator CreateSut()
     {
         _unitOfWork.ResourceServers.Returns(_repository);
-        return new UpdateResourceServerCommandValidator(_unitOfWork);
+        return new PatchResourceServerCommandValidator(_unitOfWork);
     }
     
-    private static Command GetRequest(
+    private static PatchResourceServerCommand GetRequest(
         string id = "id",
         string? name = null,
         int? tokenLifetime = null,

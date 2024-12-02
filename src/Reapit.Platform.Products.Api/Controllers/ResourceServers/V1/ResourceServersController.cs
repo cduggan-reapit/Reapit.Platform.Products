@@ -12,7 +12,7 @@ using Reapit.Platform.Products.Core.UseCases.ResourceServers.CreateResourceServe
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.DeleteResourceServer;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.GetResourceServerById;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.GetResourceServers;
-using Reapit.Platform.Products.Core.UseCases.ResourceServers.UpdateResourceServer;
+using Reapit.Platform.Products.Core.UseCases.ResourceServers.PatchResourceServer;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace Reapit.Platform.Products.Api.Controllers.ResourceServers.V1;
@@ -81,7 +81,7 @@ public class ResourceServersController(ISender mediator, IMapper mapper) : Reapi
     [SwaggerResponseExample(422, typeof(ValidationProblemDetailsExample))]
     public async Task<IActionResult> PatchResourceServer([FromRoute] string id, [FromBody] UpdateResourceServerRequestModel model)
     {
-        var command = new UpdateResourceServerCommand(
+        var command = new PatchResourceServerCommand(
             id,
             model.Name,
             model.TokenLifetime,

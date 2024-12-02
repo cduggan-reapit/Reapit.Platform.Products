@@ -7,7 +7,7 @@ using Reapit.Platform.Products.Core.UseCases.ResourceServers.CreateResourceServe
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.DeleteResourceServer;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.GetResourceServerById;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.GetResourceServers;
-using Reapit.Platform.Products.Core.UseCases.ResourceServers.UpdateResourceServer;
+using Reapit.Platform.Products.Core.UseCases.ResourceServers.PatchResourceServer;
 using Reapit.Platform.Products.Domain.Entities;
 
 namespace Reapit.Platform.Products.Api.UnitTests.Controllers.ResourceServers.V1;
@@ -130,7 +130,7 @@ public class ResourceServersControllerTests
             TokenLifetime: 3600,
             Scopes: [new ResourceServerScopeModel("scope.value", "scope.description")]);
         
-        var command = new UpdateResourceServerCommand(
+        var command = new PatchResourceServerCommand(
             Id: id, 
             Name: model.Name, 
             TokenLifetime: model.TokenLifetime, 
@@ -141,7 +141,7 @@ public class ResourceServersControllerTests
         response.Should().NotBeNull().And.Match<NoContentResult>(result => result.StatusCode == 204);
         
         // List the properties out so we can use SequenceEqual to compare scopes
-        await _mediator.Received(1).Send(Arg.Is<UpdateResourceServerCommand>(
+        await _mediator.Received(1).Send(Arg.Is<PatchResourceServerCommand>(
             actual => actual.Id == command.Id
             && actual.Name == command.Name
             && actual.TokenLifetime == command.TokenLifetime
