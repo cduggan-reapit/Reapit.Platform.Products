@@ -250,7 +250,7 @@ public class ResourceServersControllerTests(TestApiFactory apiFactory) : ApiInte
         ICollection<ResourceServerScopeModel>? scopes = null)
         => new(name, audience, tokenLifetime, scopes ?? []);
 
-    private static UpdateResourceServerRequestModel GetUpdateModel(
+    private static PatchResourceServerRequestModel GetUpdateModel(
         string? name = null,
         int? tokenLifetime = null,
         ICollection<ResourceServerScopeModel>? scopes = null)

@@ -76,10 +76,10 @@ public class ResourceServersController(ISender mediator, IMapper mapper) : Reapi
     [ProducesResponseType(204)]
     [ProducesResponseType<ProblemDetails>(404)]
     [ProducesResponseType<ProblemDetails>(422)]
-    [SwaggerRequestExample(typeof(UpdateResourceServerRequestModel), typeof(UpdateResourceServerRequestModelExample))]
+    [SwaggerRequestExample(typeof(PatchResourceServerRequestModel), typeof(PatchResourceServerRequestModelExample))]
     [SwaggerResponseExample(404, typeof(NotFoundProblemDetailsExample))]
     [SwaggerResponseExample(422, typeof(ValidationProblemDetailsExample))]
-    public async Task<IActionResult> PatchResourceServer([FromRoute] string id, [FromBody] UpdateResourceServerRequestModel model)
+    public async Task<IActionResult> PatchResourceServer([FromRoute] string id, [FromBody] PatchResourceServerRequestModel model)
     {
         var command = new PatchResourceServerCommand(
             id,

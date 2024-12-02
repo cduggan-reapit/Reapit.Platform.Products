@@ -4,11 +4,11 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace Reapit.Platform.Products.Api.Controllers.ResourceServers.V1.Examples;
 
-/// <summary>Example provider for the <see cref="UpdateResourceServerRequestModel"/> type.</summary>
+/// <summary>Example provider for the <see cref="PatchResourceServerRequestModel"/> type.</summary>
 [ExcludeFromCodeCoverage]
-public class UpdateResourceServerRequestModelExample : IExamplesProvider<UpdateResourceServerRequestModel>
+public class PatchResourceServerRequestModelExample : IExamplesProvider<PatchResourceServerRequestModel>
 {
     /// <inheritdoc />
-    public UpdateResourceServerRequestModel GetExamples()
+    public PatchResourceServerRequestModel GetExamples()
         => new("Updated API", 43_200, [new ResourceServerScopeModelExample().GetExamples()]);
 }

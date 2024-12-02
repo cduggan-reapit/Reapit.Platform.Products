@@ -125,7 +125,7 @@ public class ResourceServersControllerTests
     public async Task PatchResourceServer_ReturnsNoContent()
     {
         const string id = "id";
-        var model = new UpdateResourceServerRequestModel(
+        var model = new PatchResourceServerRequestModel(
             Name: "name", 
             TokenLifetime: 3600,
             Scopes: [new ResourceServerScopeModel("scope.value", "scope.description")]);
