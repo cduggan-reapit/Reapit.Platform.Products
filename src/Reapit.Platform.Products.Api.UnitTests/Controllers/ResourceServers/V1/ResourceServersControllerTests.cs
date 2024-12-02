@@ -107,8 +107,7 @@ public class ResourceServersControllerTests
             .Returns(entity);
         
         var sut = CreateSut();
-        var raw = await sut.CreateResourceServer(model);
-        var response = raw as CreatedAtActionResult;
+        var response = await sut.CreateResourceServer(model) as CreatedAtActionResult;
         response.Should().NotBeNull().And.Match<CreatedAtActionResult>(result 
             => result.StatusCode == 201 
                 && result.ActionName == nameof(ResourceServersController.GetResourceServerById)
