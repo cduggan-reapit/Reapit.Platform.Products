@@ -42,15 +42,6 @@ public static class ClientFilterHelper
             ? queryable
             : queryable.Where(entity => entity.Description != null && entity.Description.Contains(value));
     
-    /// <summary>Filters a collection of clients by external identifier.</summary>
-    /// <param name="queryable">The collection to filter.</param>
-    /// <param name="value">The value to filter by.</param>
-    /// <returns>A reference to the queryable after the filter operation.</returns>
-    public static IQueryable<Client> ApplyExternalIdFilter(this IQueryable<Client> queryable, string? value)
-        => value == null
-            ? queryable
-            : queryable.Where(entity => entity.ExternalId == value);
-    
     /// <summary>Filters a collection of clients by type.</summary>
     /// <param name="queryable">The collection to filter.</param>
     /// <param name="value">The value to filter by.</param>

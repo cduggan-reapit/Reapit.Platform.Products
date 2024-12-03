@@ -18,7 +18,6 @@ public class ClientRepository(ProductDbContext context) : BaseRepository<Client>
     /// <inheritdoc />
     public async Task<IEnumerable<Client>> GetAsync(
         string? appId = null,
-        string? externalId = null,
         ClientType? type = null,
         string? name = null,
         string? description = null,
@@ -28,7 +27,6 @@ public class ClientRepository(ProductDbContext context) : BaseRepository<Client>
         => await context.Clients
             .ApplyCursorFilter(pagination?.Cursor)
             .ApplyAppIdFilter(appId)
-            .ApplyExternalIdFilter(externalId)
             .ApplyTypeFilter(type)
             .ApplyNameFilter(name)
             .ApplyDescriptionFilter(description)

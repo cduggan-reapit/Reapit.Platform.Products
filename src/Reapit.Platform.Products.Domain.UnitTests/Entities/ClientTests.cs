@@ -133,7 +133,7 @@ public class ClientTests
     public void ToString_ReturnsSerializedObject_FromAsSerializable()
     {
         var entity = GetEntity();
-        var expected = JsonSerializer.Serialize(new { entity.Id, entity.Name, entity.DateCreated, entity.DateModified });
+        var expected = JsonSerializer.Serialize(new { entity.Id, entity.Name, Type = entity.Type.Name, entity.DateCreated, entity.DateModified });
         var actual = entity.ToString();
         actual.Should().BeEquivalentTo(expected);
     }

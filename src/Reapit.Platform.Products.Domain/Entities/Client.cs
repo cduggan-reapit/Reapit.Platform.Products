@@ -77,5 +77,5 @@ public class Client(
     
     /// <inheritdoc />
     public override object AsSerializable()
-        => new { Id, Name, DateCreated, DateModified };
+        => new { Id, Name, Type = Type.Name, DateCreated, DateModified };
 }

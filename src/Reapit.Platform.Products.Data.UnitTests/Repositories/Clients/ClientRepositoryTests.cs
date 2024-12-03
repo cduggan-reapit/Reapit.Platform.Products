@@ -74,20 +74,6 @@ public class ClientRepositoryTests : DatabaseAwareTestBase
         actual.Should().HaveCount(25)
             .And.AllSatisfy(item => item.Type.Should().Be(type));
     }
-    
-    [Fact]
-    public async Task GetAsync_ReturnsFilteredPage_WhenExternalIdProvided()
-    {
-        const string externalId = "external-id-049";
-        
-        await using var context = await GetContextAsync();
-        await PlantSeedDataAsync(context);
-        
-        var sut = CreateSut(context);
-        var actual = await sut.GetAsync(externalId: externalId);
-        actual.Should().HaveCount(1)
-            .And.AllSatisfy(item => item.ExternalId.Should().Be(externalId));
-    }
 
     [Fact]
     public async Task GetAsync_ReturnsFilteredPage_WhenNameProvided()

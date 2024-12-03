@@ -2,15 +2,12 @@
 
 namespace Reapit.Platform.Products.Domain.Entities.Enums;
 
-public class ClientType(string name, int value, IEnumerable<string> grantTypes)
+public class ClientType(string name, int value)
     : SmartEnum<ClientType, int>(name, value)
 {
-    public IEnumerable<string> GrantTypes { get; } = grantTypes;
+    public static readonly ClientType Machine = new("machine", 1);
     
-    
-    public static readonly ClientType Machine = new("machine", 1, ["client_credentials"]);
-    
-    public static readonly ClientType AuthCode = new("authCode", 2, ["authorization_code", "refresh_token"]);
+    public static readonly ClientType AuthCode = new("authCode", 2);
     
     public static implicit operator ClientType?(string name) => GetByName(name);
     
