@@ -11,7 +11,7 @@ public class GetApplicationsQueryValidator : AbstractValidator<GetApplicationsQu
             .WithMessage(CommonValidationMessages.CursorOutOfRange);
 
         RuleFor(query => query.PageSize)
-            .InclusiveBetween(1, 100)
+            .InclusiveBetween(1, QueryConstants.MaximumPageSize)
             .WithMessage(CommonValidationMessages.PageSizeOutOfRange);
     }
 }
