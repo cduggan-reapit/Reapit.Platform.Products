@@ -1,6 +1,4 @@
-﻿using Reapit.Platform.Products.Domain.Entities.Enums;
-
-namespace Reapit.Platform.Products.Core.UseCases.Clients.GetClients;
+﻿namespace Reapit.Platform.Products.Core.UseCases.Clients.GetClients;
 
 /// <summary>Request for a page of clients with optional filters.</summary>
 /// <param name="Cursor">The offset cursor; default 0.</param>
