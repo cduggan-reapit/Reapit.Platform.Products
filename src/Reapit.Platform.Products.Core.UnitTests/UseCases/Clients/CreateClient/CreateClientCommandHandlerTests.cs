@@ -85,7 +85,7 @@ public class CreateClientCommandHandlerTests
     }
     
     [Fact]
-    public async Task Handle_CreatesMachineClient_WhenCommandTypeIsAuthCode()
+    public async Task Handle_CreatesAuthCodeClient_WhenCommandTypeIsAuthCode()
     {
         const bool isFirstParty = true;
         const string clientId = "client-id";

@@ -56,6 +56,29 @@ public abstract class EntityBase : IHasCursor
         SetDateModified();
         return updated;
     }
+
+    /// <summary>
+    /// Method to determine the value of a collection property in an update operation, setting the last modified date
+    /// and dirty flag if the value should be changed. 
+    /// </summary>
+    /// <param name="current">The current value of the field.</param>
+    /// <param name="proposed">The proposed value of the field.</param>
+    /// <typeparam name="T">The type of object in the collection.</typeparam>
+    internal ICollection<T>? GetCollectionUpdateValue<T>(ICollection<T>? current, ICollection<T>? proposed)
+    {
+        var nullSafeCurrent = current ?? [];
+        var nullSafeProposed = proposed ?? [];
+        
+        // If both collections are the same (including both empty) don't change anything
+        if (nullSafeCurrent.SequenceEqual(nullSafeProposed))
+            return current;
+
+        // Otherwise it's dirty
+        SetDateModified();
+        IsDirty = true;
+
+        return proposed;
+    }
     
     /// <summary>Set the creation date to the current timestamp.</summary>
     private void SetDateCreated()

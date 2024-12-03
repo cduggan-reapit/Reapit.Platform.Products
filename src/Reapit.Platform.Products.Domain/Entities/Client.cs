@@ -71,8 +71,8 @@ public class Client(
         Name = GetUpdateValue(Name, name);
         Description = GetUpdateValue(Description, description);
         LoginUrl = GetUpdateValue(LoginUrl, loginUrl);
-        CallbackUrls = GetUpdateValue(CallbackUrls, callbackUrls);
-        SignOutUrls = GetUpdateValue(SignOutUrls, signOutUrls);
+        CallbackUrls = GetCollectionUpdateValue(CallbackUrls, callbackUrls);
+        SignOutUrls = GetCollectionUpdateValue(SignOutUrls, signOutUrls);
     }
     
     /// <inheritdoc />
