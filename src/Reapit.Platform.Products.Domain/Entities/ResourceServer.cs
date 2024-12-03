@@ -13,7 +13,7 @@ public class ResourceServer(string externalId, string audience, string name, int
     public void Update(string? name = null, int? tokenLifetime = null, ICollection<Scope>? scopes = null)
     {
         Name = GetUpdateValue(Name, name);
-        TokenLifetime = GetUpdateValue(TokenLifetime, tokenLifetime) ?? TokenLifetime;
+        TokenLifetime = GetUpdateValue(TokenLifetime, tokenLifetime ?? TokenLifetime);
         
         if(scopes != null)
             SetScopes(scopes);

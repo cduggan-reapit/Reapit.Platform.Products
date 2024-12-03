@@ -9,6 +9,7 @@ using Reapit.Platform.Products.Core.UseCases.ResourceServers.GetResourceServerBy
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.GetResourceServers;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.PatchResourceServer;
 using Reapit.Platform.Products.Domain.Entities;
+using ResourceServer = Reapit.Platform.Products.Domain.Entities.ResourceServer;
 
 namespace Reapit.Platform.Products.Api.UnitTests.Controllers.ResourceServers.V1;
 
@@ -122,7 +123,7 @@ public class ResourceServersControllerTests
      */
     
     [Fact]
-    public async Task PatchResourceServer_ReturnsNoContent()
+    public async Task PatchResourceServer_ReturnsNoContent_WhenScopesProvided()
     {
         const string id = "id";
         var model = new PatchResourceServerRequestModel(
@@ -147,6 +148,33 @@ public class ResourceServersControllerTests
             && actual.TokenLifetime == command.TokenLifetime
             && actual.Scopes!.SequenceEqual(command.Scopes!)
             ), Arg.Any<CancellationToken>());
+    }
+    
+    [Fact]
+    public async Task PatchResourceServer_ReturnsNoContent_WhenScopesNotProvided()
+    {
+        const string id = "id";
+        var model = new PatchResourceServerRequestModel(
+            Name: "name", 
+            TokenLifetime: 3600,
+            Scopes: null);
+        
+        var command = new PatchResourceServerCommand(
+            Id: id, 
+            Name: model.Name, 
+            TokenLifetime: model.TokenLifetime, 
+            Scopes: null);
+        
+        var sut = CreateSut();
+        var response = await sut.PatchResourceServer(id, model) as NoContentResult;
+        response.Should().NotBeNull().And.Match<NoContentResult>(result => result.StatusCode == 204);
+        
+        // List the properties out so we can use SequenceEqual to compare scopes
+        await _mediator.Received(1).Send(Arg.Is<PatchResourceServerCommand>(
+            actual => actual.Id == command.Id
+                      && actual.Name == command.Name
+                      && actual.TokenLifetime == command.TokenLifetime
+                      && actual.Scopes == null), Arg.Any<CancellationToken>());
     }
     
     /*
