@@ -1,4 +1,5 @@
 ﻿using Reapit.Platform.Products.Core.Services.IdentityProvider;
+using Reapit.Platform.Products.Core.UseCases.Clients.CreateClient;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.CreateResourceServer;
 using Reapit.Platform.Products.Domain.Entities;
 
@@ -13,5 +14,22 @@ public class MockIdentityProviderService : IIdentityProviderService
         => Task.FromResult(true);
 
     public Task<bool> DeleteResourceServerAsync(ResourceServer entity, CancellationToken cancellationToken)
+        => Task.FromResult(true);
+
+    public Task<string> CreateAuthCodeClientAsync(CreateClientCommand command, bool isFirstParty, CancellationToken cancellationToken)
+        => Task.FromResult("external-id-for" + command.Name);
+
+    public Task<string> CreateMachineClientAsync(CreateClientCommand command, bool isFirstParty, CancellationToken cancellationToken)
+        => Task.FromResult("external-id-for" + command.Name);
+
+    public Task<bool> UpdateAuthCodeClientAsync(Client entity, CancellationToken cancellationToken)
+        => Task.FromResult(true);
+
+    public Task<bool> UpdateMachineClientAsync(Client entity, CancellationToken cancellationToken)
+        => Task.FromResult(true);
+    public Task<string> CreateClientAsync(CreateClientCommand command, bool isFirstParty, CancellationToken cancellationToken)
+        => Task.FromResult("external-id-for" + command.Name);
+
+    public Task<bool> DeleteClientAsync(Client entity, CancellationToken cancellationToken)
         => Task.FromResult(true);
 }
