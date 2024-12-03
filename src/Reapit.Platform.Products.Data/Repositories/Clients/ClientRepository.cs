@@ -11,8 +11,9 @@ public class ClientRepository(ProductDbContext context) : BaseRepository<Client>
     /// <inheritdoc />
     public override async Task<Client?> GetByIdAsync(string id, CancellationToken cancellationToken)
         => await context.Clients
-            .Include(c => c.App)
-            .Include(c => c.Grants)
+            .Include(client => client.App)
+            .Include(client => client.Grants)
+            .ThenInclude(grant => grant.ResourceServer)
             .SingleOrDefaultAsync(entity => entity.Id == id, cancellationToken);
 
     /// <inheritdoc />
