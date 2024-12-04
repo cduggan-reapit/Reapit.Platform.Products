@@ -102,7 +102,11 @@ public class PatchGrantCommandValidatorTests
     }
 
     private static Entities.Grant GetGrant()
-        => new("", "", "resource-server-id");
+        => new("", "", "resource-server-id")
+        {
+            Client = default!,
+            ResourceServer = default!
+        };
     
     private static Entities.ResourceServer GetResourceServer(params string[]? scopes)
         => new("", "", "", 1)

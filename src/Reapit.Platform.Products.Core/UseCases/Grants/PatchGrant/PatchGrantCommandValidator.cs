@@ -15,9 +15,10 @@ public class PatchGrantCommandValidator : AbstractValidator<PatchGrantCommand>
         _unitOfWork = unitOfWork;
 
         // I'm cheating a bit.  When() MUST run before Must(), so I use the When() method to set the _scopes collection
-        // which we then compare the requested scopes against.  It's cheeky, but it works.
+        // which we then compare the requested scopes against.  It's cheeky, but it works.  _scopes has to be initialised
+        // at this point, otherwise GetResourceServerScopes would have failed and  the test wouldn't be run.
         RuleForEach(request => request.Scopes)
-            .Must(scope => _scopes?.Contains(scope, StringComparer.OrdinalIgnoreCase) ?? false)
+            .Must(scope => _scopes!.Contains(scope, StringComparer.OrdinalIgnoreCase))
             .WithMessage(GrantValidationMessages.UnsupportedScope)
             .WhenAsync(GetResourceServerScopes);
     }

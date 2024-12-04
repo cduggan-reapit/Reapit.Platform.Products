@@ -13,6 +13,7 @@ namespace Reapit.Platform.Products.Api.Controllers.Clients.V1.Models;
 /// <param name="SignOutUrls">Collection of URLs which are valid for redirect after logout (not supported by machine to machine clients).</param>
 /// <param name="DateCreated">The timestamp of the creation of the client.</param>
 /// <param name="DateModified">The timestamp of the last modification to the client.</param>
+/// <param name="Grants">Lightweight representation of the grants associated with this client.</param>
 public record ClientDetailsModel(
     [property: JsonPropertyName("id")] string Id,
     [property: JsonPropertyName("applicationId")] string AppId,

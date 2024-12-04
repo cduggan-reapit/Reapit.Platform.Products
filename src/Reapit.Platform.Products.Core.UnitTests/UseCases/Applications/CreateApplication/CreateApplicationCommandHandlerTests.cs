@@ -34,7 +34,6 @@ public class CreateApplicationCommandHandlerTests
     [Fact]
     public async Task Handle_CreatesResourceServer_WhenRequestHandledSuccessfully()
     {
-        const string externalId = "auth0-identifier";
         var command = GetRequest();
         
         SetupValidator(true);

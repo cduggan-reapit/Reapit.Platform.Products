@@ -98,6 +98,7 @@ public class PatchGrantCommandHandlerTests
         => new("", "", "")
         {
             ResourceServer = resourceServer,
+            Client = default!,
             Scopes = (scopes ?? []).Select(scope => new Entities.Scope("", scope, null)).ToList()
         };
     

@@ -67,10 +67,10 @@ public class Grant : EntityBase, IHasScopes
     public string ResourceServerId { get; set; }
     
     /// <summary>The client with which this grant is associated.</summary>
-    public Client Client { get; init; }
+    public required Client Client { get; init; }
     
     /// <summary>The resource server to which this grant gives access.</summary>
-    public ResourceServer ResourceServer { get; init; }
+    public required ResourceServer ResourceServer { get; init; }
     
     /// <summary>The scopes associated with this grants access.</summary>
     public ICollection<Scope> Scopes { get; init; } = new List<Scope>();

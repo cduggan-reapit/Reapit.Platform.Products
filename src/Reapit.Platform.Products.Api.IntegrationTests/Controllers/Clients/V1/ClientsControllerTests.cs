@@ -313,7 +313,7 @@ public class ClientsControllerTests(TestApiFactory apiFactory) : ApiIntegrationT
                 
                 // The rest all have one grant (we'll spam resource servers here, it doesn't matter)
                 var resourceServer = new Entities.ResourceServer($"resource-server-{seed:D2}", "", $"Resource Server {seed:D2}", seed);
-                client.Grants.Add(new Entities.Grant($"external-grant-id-{seed:D2}", client.Id, resourceServer.Id){ ResourceServer = resourceServer });
+                client.Grants.Add(new Entities.Grant($"external-grant-id-{seed:D2}", client.Id, resourceServer.Id){ ResourceServer = resourceServer, Client = client });
 
                 return client;
             })

@@ -54,7 +54,7 @@ public class GrantsControllerTests
         const string id = "id";
         var query = new GetGrantByIdQuery(id);
 
-        var entity = GetEntity(null);
+        var entity = GetEntity("");
         var expected = _mapper.Map<GrantModel>(entity);
 
         _mediator.Send(query, Arg.Any<CancellationToken>())

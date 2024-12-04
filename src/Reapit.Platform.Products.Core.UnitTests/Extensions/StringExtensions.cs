@@ -5,7 +5,7 @@ using Xunit.Abstractions;
 
 namespace Reapit.Platform.Products.Core.UnitTests.Extensions;
 
-public class StringExtensions(ITestOutputHelper output)
+public class StringExtensions
 {
     [Fact]
     public void DeserializeTo_DeserializesString_UsingDefaultSettings()
