@@ -120,21 +120,6 @@ public class GrantRepositoryTests : DatabaseAwareTestBase
     }
     
     [Fact]
-    public async Task GetAsync_ReturnsFilteredPage_WhenExternalIdProvided()
-    {
-        // We re-use client ids for grants since the setup here is 1:1, and prefix them with 'external-'
-        var externalId = "external-" + GetGrantId(3, 29, ClientType.Machine);
-
-        await using var context = await GetContextAsync();
-        await PlantSeedDataAsync(context);
-
-        var sut = CreateSut(context);
-        var actual = await sut.GetAsync(externalId: externalId);
-        actual.Should().HaveCount(1)
-            .And.AllSatisfy(item => item.ExternalId.Should().Be(externalId));
-    }
-    
-    [Fact]
     public async Task GetAsync_ReturnsFilteredPage_WhenResourceServerIdProvided()
     {
         // We made 90 grants across 5 resource servers, so there's 18 in each

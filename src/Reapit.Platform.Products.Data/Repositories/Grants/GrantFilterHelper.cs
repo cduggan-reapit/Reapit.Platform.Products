@@ -49,15 +49,6 @@ public static class GrantFilterHelper
             ? queryable
             : queryable.Where(entity => entity.DateModified < value.Value);
     
-    /// <summary>Filters a collection of grants matching a given external identifier.</summary>
-    /// <param name="queryable">The collection to filter.</param>
-    /// <param name="value">The value to filter by.</param>
-    /// <returns>A reference to the queryable after the filter operation.</returns>
-    public static IQueryable<Grant> ApplyExternalIdFilter(this IQueryable<Grant> queryable, string? value)
-        => value == null
-            ? queryable
-            : queryable.Where(entity => entity.ExternalId == value);
-    
     /// <summary>Filters a collection of grants associated with a client.</summary>
     /// <param name="queryable">The collection to filter.</param>
     /// <param name="value">The value to filter by.</param>

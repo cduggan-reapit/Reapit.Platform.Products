@@ -121,28 +121,6 @@ public class GrantFilterHelperTests
     }
     
     /*
-     * ApplyExternalIdFilter
-     */
-
-    [Fact]
-    public void ApplyExternalIdFilter_DoesNotApplyFilter_WhenValueNull()
-    {
-        var data = SeedData;
-        var actual = data.ApplyExternalIdFilter(null);
-        actual.Should().BeSameAs(data);
-    }
-    
-    [Fact]
-    public void ApplyExternalIdFilter_AppliesFilter_WhenValueProvided()
-    {
-        const string externalId = "external-id-022";
-        var data = SeedData;
-        var actual = data.ApplyExternalIdFilter(externalId);
-        actual.Should().HaveCount(1)
-            .And.AllSatisfy(item => item.ExternalId.Should().Be(externalId));
-    }
-    
-    /*
      * ApplyClientIdFilter
      */
 

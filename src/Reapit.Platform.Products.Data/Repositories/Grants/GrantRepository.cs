@@ -17,7 +17,6 @@ public class GrantRepository(ProductDbContext context)
 
     /// <inheritdoc/>
     public async Task<IEnumerable<Grant>> GetAsync(
-        string? externalId = null, 
         string? clientId = null,
         string? resourceServerId = null,
         PaginationFilter? pagination = null, 
@@ -25,7 +24,6 @@ public class GrantRepository(ProductDbContext context)
         CancellationToken cancellationToken = default)
         => await context.Grants
             .ApplyCursorFilter(pagination?.Cursor)
-            .ApplyExternalIdFilter(externalId)
             .ApplyClientIdFilter(clientId)
             .ApplyResourceServerIdFilter(resourceServerId)
             .ApplyCreatedFromFilter(dateFilter?.CreatedFrom)
