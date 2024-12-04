@@ -70,7 +70,7 @@ public class Grant : EntityBase, IHasScopes
     public Client Client { get; init; }
     
     /// <summary>The resource server to which this grant gives access.</summary>
-    public required ResourceServer ResourceServer { get; set; }
+    public ResourceServer ResourceServer { get; init; }
     
     /// <summary>The scopes associated with this grants access.</summary>
     public ICollection<Scope> Scopes { get; init; } = new List<Scope>();

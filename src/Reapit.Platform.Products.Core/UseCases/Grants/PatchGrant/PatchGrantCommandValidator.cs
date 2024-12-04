@@ -30,7 +30,13 @@ public class PatchGrantCommandValidator : AbstractValidator<PatchGrantCommand>
         if (grant == null)
             return false;
         
-        _scopes = grant.ResourceServer.Scopes.Select(scope => scope.Value).ToList();
+        // grants.getById doesn't include resourceServer scopes, and this is the only place that would use it - lets just
+        // make a second request rather than adding an include.  If it's null (it should never be null in reality), return false.
+        var api = await _unitOfWork.ResourceServers.GetByIdAsync(grant.ResourceServerId, cancellationToken);
+        if (api == null)
+            return false;
+        
+        _scopes = api.Scopes.Select(scope => scope.Value).ToList();
         return true;
     }
 }

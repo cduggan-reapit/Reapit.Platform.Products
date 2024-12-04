@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using AutoMapper;
-using Microsoft.IdentityModel.Logging;
 using Reapit.Platform.Common.Providers.Identifiers;
 using Reapit.Platform.Common.Providers.Temporal;
 using Reapit.Platform.Products.Api.Controllers.Grants.V1;
@@ -165,7 +164,11 @@ public class GrantsControllerTests(TestApiFactory apiFactory) : ApiIntegrationTe
     [Fact]
     public async Task PatchGrant_ReturnsUnprocessable_WhenValidationFailed()
     {
-        throw new NotImplementedException();
+        await InitializeDatabaseAsync();
+        var grant = SeedData.ElementAt(17);
+        var response = await SendRequestAsync(HttpMethod.Patch, $"{BaseUrl}/{grant.Id}", content: GetUpdateModel(["017.read", "017.write", "017.FAKE"]));
+        await response.Should().HaveStatusCode(HttpStatusCode.UnprocessableContent)
+            .And.BeProblemDescriptionAsync(ProblemDetailsTypes.ValidationFailed);
     }
     
     [Fact]
@@ -180,7 +183,12 @@ public class GrantsControllerTests(TestApiFactory apiFactory) : ApiIntegrationTe
     [Fact]
     public async Task PatchGrant_ReturnsNoContent_WhenRequestSuccessful()
     {
-        throw new NotImplementedException();
+        await InitializeDatabaseAsync();
+        var grant = SeedData.ElementAt(17);
+        grant.Scopes.Should().HaveCount(2);
+        
+        var response = await SendRequestAsync(HttpMethod.Patch, $"{BaseUrl}/{grant.Id}", content: GetUpdateModel(["017.read", "017.write", "017.admin"]));
+        response.Should().HaveStatusCode(HttpStatusCode.NoContent);
     }
     
     /*
