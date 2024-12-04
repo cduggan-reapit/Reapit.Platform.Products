@@ -6,6 +6,7 @@ using Reapit.Platform.Common.Providers.Identifiers;
 using Reapit.Platform.Common.Providers.Temporal;
 using Reapit.Platform.Products.Api.Controllers.Grants.V1;
 using Reapit.Platform.Products.Api.Controllers.Grants.V1.Models;
+using Reapit.Platform.Products.Api.Controllers.Shared;
 using Reapit.Platform.Products.Data.Context;
 using Reapit.Platform.Products.Domain.Entities.Enums;
 
@@ -47,7 +48,10 @@ public class GrantsControllerTests(TestApiFactory apiFactory) : ApiIntegrationTe
     [Fact]
     public async Task GetGrants_ReturnsOk_WhenRequestSuccessful()
     {
-        throw new NotImplementedException();
+        await InitializeDatabaseAsync();
+        var expected = _mapper.Map<ResultPage<GrantModel>>(SeedData.Take(3));
+        var response = await SendRequestAsync(HttpMethod.Get, $"{BaseUrl}?pageSize=3");
+        await response.Should().HaveStatusCode(HttpStatusCode.OK).And.HavePayloadAsync(expected);
     }
     
     /*
