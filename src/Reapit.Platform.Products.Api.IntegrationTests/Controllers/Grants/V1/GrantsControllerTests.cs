@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Net;
+﻿using System.Net;
 using AutoMapper;
-using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.IdentityModel.Logging;
 using Reapit.Platform.Common.Providers.Identifiers;
 using Reapit.Platform.Common.Providers.Temporal;
 using Reapit.Platform.Products.Api.Controllers.Grants.V1;
@@ -113,13 +112,36 @@ public class GrantsControllerTests(TestApiFactory apiFactory) : ApiIntegrationTe
     [Fact]
     public async Task CreateGrant_ReturnsUnprocessable_WhenValidationFailed()
     {
-        throw new NotImplementedException();
+        var response = await SendRequestAsync(HttpMethod.Post, BaseUrl, content: GetCreateModel("", ""));
+        await response.Should().HaveStatusCode(HttpStatusCode.UnprocessableContent)
+            .And.BeProblemDescriptionAsync(ProblemDetailsTypes.ValidationFailed);
+    }
+    
+    [Fact]
+    public async Task CreateGrant_ReturnsConflict_WhenClientAlreadyGrantedAccessToResourceServer()
+    {
+        await InitializeDatabaseAsync();
+        
+        const int clientNumber = 5;
+        const int resourceServerNumber = 5;
+        var model = new CreateGrantRequestModel($"{clientNumber:D32}", $"{resourceServerNumber:D32}", [$"{resourceServerNumber:D3}.read"]);
+        var response = await SendRequestAsync(HttpMethod.Post, BaseUrl, content: model);
+        response.Should().HaveStatusCode(HttpStatusCode.Conflict);
     }
     
     [Fact]
     public async Task CreateGrant_ReturnsCreated_WhenEntityCreated()
     {
-        throw new NotImplementedException();
+        await InitializeDatabaseAsync();
+        
+        const int clientNumber = 3;
+        const int resourceServerNumber = 5;
+        var model = new CreateGrantRequestModel($"{clientNumber:D32}", $"{resourceServerNumber:D32}", [$"{resourceServerNumber:D3}.read", $"{resourceServerNumber:D3}.admin"]);
+        var response = await SendRequestAsync(HttpMethod.Post, BaseUrl, content: model);
+        await response.Should().HaveStatusCode(HttpStatusCode.Created)
+            .And.MatchPayloadAsync<GrantModel>(actual => actual.Client.Id == model.ClientId
+                                                         && actual.ResourceServer.Id == model.ResourceServerId
+                                                         && actual.Scopes.SequenceEqual(model.Scopes));
     }
     
     /*
