@@ -40,7 +40,7 @@ public class Client(
     public string? Description { get; protected set; } = description;
     
     /// <summary>The application with which this client is associated.</summary>
-    public App? App { get; }
+    public App? App { get; init; }
     
     /// <summary>The default login initiation endpoint.</summary>
     /// <remarks>Must be a https:// url when configured.</remarks>

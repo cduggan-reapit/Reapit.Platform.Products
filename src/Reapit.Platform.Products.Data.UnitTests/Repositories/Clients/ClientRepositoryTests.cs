@@ -44,8 +44,6 @@ public class ClientRepositoryTests : DatabaseAwareTestBase
             .And.AllSatisfy(item => ids.Should().Contain(item.Id));
     }
     
-    // TODO: ExternalId
-    
     [Fact]
     public async Task GetAsync_ReturnsFilteredPage_WhenAppIdProvided()
     {

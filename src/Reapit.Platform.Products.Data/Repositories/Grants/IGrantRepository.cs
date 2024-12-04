@@ -3,7 +3,7 @@
 namespace Reapit.Platform.Products.Data.Repositories.Grants;
 
 /// <summary>Repository service for the <see cref="Grant"/> type.</summary>
-public interface IGrantRepository
+public interface IGrantRepository : IBaseRepository<Grant>
 {
     /// <summary>Get a collection of grants with optional filters applied.</summary>
     /// <param name="externalId">Limit results to records matching this external identifier.</param>
