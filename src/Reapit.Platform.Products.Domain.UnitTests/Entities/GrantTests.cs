@@ -30,6 +30,8 @@ public class GrantTests
         
         var entity = new Grant(externalId, client.Id, resourceServer.Id)
         {
+            Client = default!,
+            ResourceServer = default!,
             Scopes = scopes
         };
         
@@ -179,12 +181,17 @@ public class GrantTests
         params Scope[]? scopes)
     {
         Grant entity;
+        var client = GetClient(clientNumber);
+        var resourceServer = GetResourceServer(resourceServerNumber);
+        
         using (new DateTimeOffsetProviderContext(BaseDate))
         {
-            entity = new Grant(externalId, GetClient(clientNumber).Id, GetResourceServer(resourceServerNumber).Id)
+            entity = new Grant(externalId, client.Id, resourceServer.Id)
             {
                 Scopes = (scopes ?? []).ToList(),
-                DateModified = DateTime.UnixEpoch
+                DateModified = DateTime.UnixEpoch,
+                Client = client,
+                ResourceServer = resourceServer
             };
         }
         return entity;

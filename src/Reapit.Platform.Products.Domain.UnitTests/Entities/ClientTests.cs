@@ -108,10 +108,11 @@ public class ClientTests
     public void SoftDelete_SetsDateDeleted_WhenCalled()
     {
         var entity = GetEntity();
-        entity.Grants.Add(new Grant("test", entity.Id, "resourceServerId"));
+        entity.Grants.Add(new Grant("test", entity.Id, "resourceServerId"){ ResourceServer = default!, Client = default! });
         
         entity.SoftDelete();
         entity.DateDeleted.Should().NotBeNull();
+        
         entity.Grants.Should().AllSatisfy(grant => grant.DateDeleted.Should().NotBeNull());
     }
     

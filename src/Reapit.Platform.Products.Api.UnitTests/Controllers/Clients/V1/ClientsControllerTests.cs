@@ -193,9 +193,11 @@ public class ClientsControllerTests
         
         var guid = Guid.NewGuid();
         using var _ = new GuidProviderContext(guid);
-        var grant = new Grant("external-id-1", clientId, resourceServer.Id);
-        if (includeMapping)
-            grant.ResourceServer = resourceServer;
+        var grant = new Grant("external-id-1", clientId, resourceServer.Id)
+        {
+            Client = default!,
+            ResourceServer = resourceServer
+        };
 
         return grant;
     }

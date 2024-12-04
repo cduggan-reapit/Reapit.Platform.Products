@@ -199,15 +199,17 @@ public class GrantFilterHelperTests
 
     private static Grant GetEntity(int seed)
     {
-        var clientId = seed % 10;
-        var resourceServerId = seed % 5;
+        var client = GetClient(seed % 10);
+        var resourceServer = GetResourceServer(seed % 5);
 
         var time = new DateTimeOffset(BaseDateTime, TimeSpan.Zero).AddDays(seed);
         using var guidFixture = new GuidProviderContext(new Guid($"{seed:D32}"));
         using var timeFixture = new DateTimeOffsetProviderContext(time);
-        return new Grant($"external-id-{seed:D3}", GetClient(clientId).Id, GetResourceServer(resourceServerId).Id)
+        return new Grant($"external-id-{seed:D3}", client.Id, resourceServer.Id)
         {
-            DateModified = time.UtcDateTime.AddYears(1)
+            DateModified = time.UtcDateTime.AddYears(1),
+            Client = client,
+            ResourceServer = resourceServer
         };
     }
     

@@ -196,7 +196,9 @@ public class GrantRepositoryTests : DatabaseAwareTestBase
         // and create a new grant for them
         var grant = new Grant("new-grant-external-id", client.Id, api.Id)
         {
-            Scopes = api.Scopes.Take(2).ToList()
+            Scopes = api.Scopes.Take(2).ToList(),
+            Client = client,
+            ResourceServer = api
         };
 
         var sut = CreateSut(context);
@@ -339,7 +341,9 @@ public class GrantRepositoryTests : DatabaseAwareTestBase
                 return new Grant($"external-{client.Id}", client.Id, api.Id)
                 {
                     Scopes =  api.Scopes.Take(2).ToList(),
-                    DateModified = client.DateModified
+                    DateModified = client.DateModified,
+                    Client = client,
+                    ResourceServer = api
                 };
             })
             .ToList();
