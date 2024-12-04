@@ -52,8 +52,6 @@ public class MessageEnvelope
         Version = version;
     }
     
-    #region Products
-    
     /// <summary>Gets a <see cref="MessageEnvelope"/> object representing a product creation event.</summary>
     /// <param name="resourceServer">The created product.</param>
     public static MessageEnvelope ProductCreated(ResourceServer resourceServer)
@@ -74,6 +72,4 @@ public class MessageEnvelope
     /// <param name="eventType">The type of event.</param>
     private static MessageEnvelope ProductMessageEnvelope(string eventType, ResourceServer resourceServer)
         => new("product", eventType, content: resourceServer.AsSerializable());
-    
-    #endregion
 }

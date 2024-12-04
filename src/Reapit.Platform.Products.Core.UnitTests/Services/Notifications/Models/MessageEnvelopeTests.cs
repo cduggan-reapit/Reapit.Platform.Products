@@ -41,4 +41,37 @@ public class MessageEnvelopeTests
         var sut = new MessageEnvelope("entityType", "action", 2, new { Type = "Example" });
         sut.Payload.Should().Be(payloadObject);
     }
+
+    [Fact]
+    public void ProductCreated_ShouldCreateMessageEnvelope_WithExpectedContent()
+    {
+        var resourceServer = new Entities.ResourceServer("not represented", "not represented", "product name one", 3600);
+
+        using var _ = new DateTimeOffsetProviderContext(DateTime.UnixEpoch.AddDays(3));
+        var expected = new MessageEnvelope("product", "created", 1, resourceServer.AsSerializable());
+        var actual = MessageEnvelope.ProductCreated(resourceServer);
+        actual.Should().BeEquivalentTo(expected);
+    }
+    
+    [Fact]
+    public void ProductModified_ShouldCreateMessageEnvelope_WithExpectedContent()
+    {
+        var resourceServer = new Entities.ResourceServer("not represented", "not represented", "product name two", 3600);
+
+        using var _ = new DateTimeOffsetProviderContext(DateTime.UnixEpoch.AddDays(3));
+        var expected = new MessageEnvelope("product", "modified", 1, resourceServer.AsSerializable());
+        var actual = MessageEnvelope.ProductModified(resourceServer);
+        actual.Should().BeEquivalentTo(expected);
+    }
+    
+    [Fact]
+    public void ProductDeleted_ShouldCreateMessageEnvelope_WithExpectedContent()
+    {
+        var resourceServer = new Entities.ResourceServer("not represented", "not represented", "product name three", 3600);
+
+        using var _ = new DateTimeOffsetProviderContext(DateTime.UnixEpoch.AddDays(3));
+        var expected = new MessageEnvelope("product", "deleted", 1, resourceServer.AsSerializable());
+        var actual = MessageEnvelope.ProductDeleted(resourceServer);
+        actual.Should().BeEquivalentTo(expected);
+    }
 }

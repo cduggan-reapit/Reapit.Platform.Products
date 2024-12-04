@@ -27,7 +27,7 @@ public class GrantConfiguration : IEntityTypeConfiguration<Grant>
             .HasForeignKey(grant => grant.ClientId);
         
         builder.HasOne(grant => grant.ResourceServer)
-            .WithMany(resourceServer => resourceServer.Grants)
+            .WithMany()
             .HasForeignKey(grant => grant.ResourceServerId);
         
         builder.HasMany(grant => grant.Scopes)

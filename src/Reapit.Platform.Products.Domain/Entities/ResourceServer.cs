@@ -33,10 +33,7 @@ public class ResourceServer(string externalId, string audience, string name, int
     
     /// <summary>The scopes available for this resource server.</summary>
     public ICollection<Scope> Scopes { get; init; } = new List<Scope>();
-    
-    /// <summary>The grants associated with this resource server.</summary>
-    public ICollection<Grant> Grants { get; init; } = new List<Grant>();
-    
+
     /// <inheritdoc/>
     public override object AsSerializable()
         => new { Id, Name, DateCreated, DateModified };
