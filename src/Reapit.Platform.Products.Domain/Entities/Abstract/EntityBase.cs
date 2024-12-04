@@ -98,7 +98,7 @@ public abstract class EntityBase : IHasCursor
         => DateModified = DateTimeOffsetProvider.Now.UtcDateTime;
 
     /// <summary>Marks the entity as deleted.</summary>
-    public void SoftDelete()
+    public virtual void SoftDelete()
         => DateDeleted = DateTimeOffsetProvider.Now.UtcDateTime;
     
     /// <summary>Gets an anonymous, serializable object representing this entity.</summary>

@@ -74,6 +74,14 @@ public class Client(
         CallbackUrls = GetCollectionUpdateValue(CallbackUrls, callbackUrls);
         SignOutUrls = GetCollectionUpdateValue(SignOutUrls, signOutUrls);
     }
+
+    /// <inheritdoc/>
+    public override void SoftDelete()
+    {
+        base.SoftDelete();
+        foreach(var grant in Grants)
+            grant.SoftDelete();
+    }
     
     /// <inheritdoc />
     public override object AsSerializable()
