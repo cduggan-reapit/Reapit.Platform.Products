@@ -6,6 +6,7 @@ using Reapit.Platform.Products.Core.Exceptions;
 using Reapit.Platform.Products.Core.Extensions;
 using Reapit.Platform.Products.Core.Services.IdentityProvider.Factories;
 using Reapit.Platform.Products.Core.UseCases.Clients.CreateClient;
+using Reapit.Platform.Products.Core.UseCases.Grants.CreateGrant;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.CreateResourceServer;
 
 namespace Reapit.Platform.Products.Core.Services.IdentityProvider;
@@ -204,5 +205,50 @@ public class IdentityProviderService(
         return true;
     }
 
+    #endregion
+    
+    #region ClientGrants
+    
+    /// <inheritdoc/>
+    public async Task<string> CreateGrantAsync(CreateGrantCommand command, Entities.Client client, Entities.ResourceServer resourceServer, CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Creating new client grant: {command}", command.ToJson());
+
+        var requestModel = new ClientGrantCreateRequest
+        {
+            ClientId = client.ExternalId,
+            Audience = resourceServer.Audience,
+            Scope = command.Scopes.ToList()
+        };
+        
+        using var api = await clientFactory.GetClientAsync(cancellationToken);
+        var response = await api.ClientGrants.CreateAsync(requestModel, cancellationToken)
+            ?? throw IdentityProviderException.NullResponse;
+
+        return response.Id;
+    }
+
+    public async Task<bool> UpdateGrantAsync(Entities.Grant grant, CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Updating client grant: {command}", grant.ToString());
+
+        var scopes = grant.Scopes.Select(scope => scope.Value).ToList();
+        var requestModel = new ClientGrantUpdateRequest { Scope = scopes };
+
+        using var client = await clientFactory.GetClientAsync(cancellationToken);
+        _ = await client.ClientGrants.UpdateAsync(grant.ExternalId, requestModel, cancellationToken)
+            ?? throw IdentityProviderException.NullResponse;
+
+        return true;
+    }
+
+    public async Task<bool> DeleteGrantAsync(Entities.Grant grant, CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Deleting client grant: {command}", grant.ToString());
+        using var client = await clientFactory.GetClientAsync(cancellationToken);
+        await client.ClientGrants.DeleteAsync(grant.ExternalId, cancellationToken);
+        return true;
+    }
+    
     #endregion
 }

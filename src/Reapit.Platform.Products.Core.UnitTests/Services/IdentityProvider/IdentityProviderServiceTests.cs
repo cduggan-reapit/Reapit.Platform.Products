@@ -8,6 +8,7 @@ using Reapit.Platform.Products.Core.Services.IdentityProvider;
 using Reapit.Platform.Products.Core.Services.IdentityProvider.Factories;
 using Reapit.Platform.Products.Core.UseCases.Clients.CreateClient;
 using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
+using Reapit.Platform.Products.Core.UseCases.Grants.CreateGrant;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.CreateResourceServer;
 using Reapit.Platform.Products.Domain.Entities.Enums;
 
@@ -23,6 +24,7 @@ public class IdentityProviderServiceTests
     private readonly IManagementApiClient _client = Substitute.For<IManagementApiClient>();
     private readonly IResourceServersClient _resourceServersClient = Substitute.For<IResourceServersClient>();
     private readonly IClientsClient _clientsClient = Substitute.For<IClientsClient>();
+    private readonly IClientGrantsClient _clientGrantsClient = Substitute.For<IClientGrantsClient>();
 
     #region Resource Servers
     
@@ -564,6 +566,129 @@ public class IdentityProviderServiceTests
     }
     
     #endregion
+    
+    #region Grants
+    
+    /*
+     * CreateGrantAsync
+     */
+
+    [Fact]
+    public async Task CreateGrantAsync_ThrowsIdpException_WhenResponseNull()
+    {
+        var command = new CreateGrantCommand("clientId", "resourceServerId", ["scope.one", "scope.two", "scope.three"]);
+        var client = new Entities.Client(string.Empty, "client-id", ClientType.Machine, string.Empty, null, null, null, null);
+        var resourceServer = new Entities.ResourceServer(string.Empty, "audience", string.Empty, 3600);
+        
+        var sut = CreateSut();
+        var action = () => sut.CreateGrantAsync(command, client, resourceServer, default);
+        await action.Should().ThrowAsync<IdentityProviderException>();
+    }
+    
+    [Fact]
+    public async Task CreateGrantAsync_ReturnsExternalId_WhenSuccessful()
+    {
+        const string externalId = "created-id";
+        var command = new CreateGrantCommand("clientId", "resourceServerId", ["scope.one", "scope.two", "scope.three"]);
+        var client = new Entities.Client(string.Empty, "client-id", ClientType.Machine, string.Empty, null, null, null, null);
+        var resourceServer = new Entities.ResourceServer(string.Empty, "audience", string.Empty, 3600);
+
+        var expectedRequest = new ClientGrantCreateRequest {
+            ClientId = client.ExternalId,
+            Audience = resourceServer.Audience,
+            Scope = command.Scopes.ToList()
+        };
+
+        _clientGrantsClient.CreateAsync(Arg.Any<ClientGrantCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(callInfo =>
+            {
+                callInfo.Arg<ClientGrantCreateRequest>().Should().BeEquivalentTo(expectedRequest);
+                return new ClientGrant { Id = externalId };
+            });
+        
+        var sut = CreateSut();
+        var actual = await sut.CreateGrantAsync(command,  client, resourceServer, default);
+        actual.Should().Be(externalId);
+    }
+    
+    /*
+     * UpdateGrantAsync
+     */
+    
+    [Fact]
+    public async Task UpdateGrantAsync_ThrowsIdpException_WhenResponseNull()
+    {
+        var client = new Entities.Client(string.Empty, "client-id", ClientType.Machine, string.Empty, null, null, null, null);
+        var resourceServer = new Entities.ResourceServer(string.Empty, "audience", string.Empty, 3600);
+        
+        var entity = new Entities.Grant("grant-id", client.Id, resourceServer.Id)
+        {
+            Client = client,
+            ResourceServer = resourceServer,
+            Scopes = [
+                new Entities.Scope(resourceServer.Id, "scope.one", null),
+                new Entities.Scope(resourceServer.Id, "scope.two", null),
+                new Entities.Scope(resourceServer.Id, "scope.three", null)
+            ]
+        };
+        
+        var sut = CreateSut();
+        var action = () => sut.UpdateGrantAsync(entity, default);
+        await action.Should().ThrowAsync<IdentityProviderException>();
+    }
+    
+    [Fact]
+    public async Task UpdateGrantAsync_ReturnsTrue_WhenRequestSuccessful()
+    {
+        var client = new Entities.Client(string.Empty, "client-id", ClientType.Machine, string.Empty, null, null, null, null);
+        var resourceServer = new Entities.ResourceServer(string.Empty, "audience", string.Empty, 3600);
+        var entity = new Entities.Grant("grant-id", client.Id, resourceServer.Id)
+        {
+            Client = client,
+            ResourceServer = resourceServer,
+            Scopes = [
+                new Entities.Scope(resourceServer.Id, "scope.one", null),
+                new Entities.Scope(resourceServer.Id, "scope.two", null),
+                new Entities.Scope(resourceServer.Id, "scope.three", null)
+            ]
+        };
+
+        var expected = new ClientGrantUpdateRequest { Scope = ["scope.one", "scope.two", "scope.three"] };
+
+        _clientGrantsClient.UpdateAsync(entity.ExternalId, Arg.Any<ClientGrantUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(callInfo =>
+            {
+                callInfo.Arg<ClientGrantUpdateRequest>().Should().BeEquivalentTo(expected);
+                return new ClientGrant { Id = entity.ExternalId };
+            });
+        
+        var sut = CreateSut();
+        var actual = await sut.UpdateGrantAsync(entity, default);
+        actual.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task DeleteGrantAsync_ReturnsTrue_WhenRequestSuccessful()
+    {
+        var client = new Entities.Client(string.Empty, "client-id", ClientType.Machine, string.Empty, null, null, null, null);
+        var resourceServer = new Entities.ResourceServer(string.Empty, "audience", string.Empty, 3600);
+        var entity = new Entities.Grant("grant-id", client.Id, resourceServer.Id)
+        {
+            Client = client,
+            ResourceServer = resourceServer,
+            Scopes = [
+                new Entities.Scope(resourceServer.Id, "scope.one", null),
+                new Entities.Scope(resourceServer.Id, "scope.two", null),
+                new Entities.Scope(resourceServer.Id, "scope.three", null)
+            ]
+        };
+        
+        var sut = CreateSut();
+        var actual = await sut.DeleteGrantAsync(entity, default);
+        actual.Should().BeTrue();
+    }
+    
+    #endregion
 
     /*
      * Private methods
@@ -573,6 +698,7 @@ public class IdentityProviderServiceTests
     {
         _client.ResourceServers.Returns(_resourceServersClient);
         _client.Clients.Returns(_clientsClient);
+        _client.ClientGrants.Returns(_clientGrantsClient);
         _clientFactory.GetClientAsync(Arg.Any<CancellationToken>()).Returns(_client);
 
         _optionsProvider.Value.Returns(_options);

@@ -1,4 +1,5 @@
 ﻿using Reapit.Platform.Products.Core.UseCases.Clients.CreateClient;
+using Reapit.Platform.Products.Core.UseCases.Grants.CreateGrant;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.CreateResourceServer;
 
 namespace Reapit.Platform.Products.Core.Services.IdentityProvider;
@@ -58,5 +59,15 @@ public interface IIdentityProviderService
     /// <returns>True if the deletion was successful.</returns>
     Task<bool> DeleteClientAsync(Entities.Client entity, CancellationToken cancellationToken);
     
+    #endregion
+    
+    #region Grants
+
+    Task<string> CreateGrantAsync(CreateGrantCommand command, Entities.Client client, Entities.ResourceServer resourceServer, CancellationToken cancellationToken);
+
+    Task<bool> UpdateGrantAsync(Entities.Grant grant, CancellationToken cancellationToken);
+    
+    Task<bool> DeleteGrantAsync(Entities.Grant grant, CancellationToken cancellationToken);
+
     #endregion
 }
