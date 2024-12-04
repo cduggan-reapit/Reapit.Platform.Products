@@ -1,5 +1,8 @@
 ﻿using FluentValidation.Results;
+using Reapit.Platform.Common.Providers.Temporal;
 using Reapit.Platform.Products.Core.Services.IdentityProvider;
+using Reapit.Platform.Products.Core.Services.Notifications.Models;
+using Reapit.Platform.Products.Core.UnitTests.TestServices;
 using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.PatchResourceServer;
 using Reapit.Platform.Products.Data.Repositories.ResourceServers;
@@ -13,6 +16,7 @@ public class PatchResourceServerCommandHandlerTests
     private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
     private readonly IResourceServerRepository _repository = Substitute.For<IResourceServerRepository>();
     private readonly IIdentityProviderService _idpService = Substitute.For<IIdentityProviderService>();
+    private readonly MockNotificationsService _notifications = new();
     private readonly IValidator<PatchResourceServerCommand> _validator = Substitute.For<IValidator<PatchResourceServerCommand>>();
     private readonly FakeLogger<PatchResourceServerCommandHandler> _logger = new();
     
@@ -28,6 +32,7 @@ public class PatchResourceServerCommandHandlerTests
         var sut = CreateSut();
         var action = () => sut.Handle(command, default);
         await action.Should().ThrowAsync<ValidationException>();
+        _notifications.LastMessage.Should().BeNull();
     }
     
     [Fact]
@@ -42,6 +47,7 @@ public class PatchResourceServerCommandHandlerTests
         var sut = CreateSut();
         var action = () => sut.Handle(command, default);
         await action.Should().ThrowAsync<NotFoundException>();
+        _notifications.LastMessage.Should().BeNull();
     }
 
     [Fact]
@@ -71,6 +77,7 @@ public class PatchResourceServerCommandHandlerTests
         var actual = await sut.Handle(command, default);
         actual.Should().Be(entity);
 
+        _notifications.LastMessage.Should().BeNull();
         await _idpService.DidNotReceiveWithAnyArgs().UpdateResourceServerAsync(Arg.Any<ResourceServer>(), Arg.Any<CancellationToken>());
         await _repository.DidNotReceiveWithAnyArgs().UpdateAsync(Arg.Any<ResourceServer>(), Arg.Any<CancellationToken>());
         await _unitOfWork.DidNotReceiveWithAnyArgs().SaveChangesAsync(Arg.Any<CancellationToken>());
@@ -101,10 +108,14 @@ public class PatchResourceServerCommandHandlerTests
         _repository.GetByIdAsync(command.Id, Arg.Any<CancellationToken>())
             .Returns(entity);
 
+        using var _ = new DateTimeOffsetProviderContext(DateTimeOffset.UtcNow);
         var sut = CreateSut();
         var actual = await sut.Handle(command, default);
         actual.Scopes.Should().HaveCount(3);
 
+        _notifications.LastMessage.Should().NotBeNull()
+            .And.BeEquivalentTo(MessageEnvelope.ProductModified(actual));
+        
         await _idpService.Received(1).UpdateResourceServerAsync(entity, Arg.Any<CancellationToken>());
         await _repository.Received(1).UpdateAsync(actual, Arg.Any<CancellationToken>());
         await _unitOfWork.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
@@ -117,7 +128,7 @@ public class PatchResourceServerCommandHandlerTests
     private PatchResourceServerCommandHandler CreateSut()
     {
         _unitOfWork.ResourceServers.Returns(_repository);
-        return new PatchResourceServerCommandHandler(_unitOfWork, _idpService, _validator, _logger);
+        return new PatchResourceServerCommandHandler(_unitOfWork, _idpService, _notifications, _validator, _logger);
     }
     
     private void SetupValidator(bool isSuccess) 

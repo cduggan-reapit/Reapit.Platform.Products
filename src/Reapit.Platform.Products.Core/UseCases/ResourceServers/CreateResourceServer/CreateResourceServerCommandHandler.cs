@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Reapit.Platform.Products.Core.Services.IdentityProvider;
+using Reapit.Platform.Products.Core.Services.Notifications;
+using Reapit.Platform.Products.Core.Services.Notifications.Models;
 using Reapit.Platform.Products.Data.Services;
 
 namespace Reapit.Platform.Products.Core.UseCases.ResourceServers.CreateResourceServer;
@@ -8,6 +10,7 @@ namespace Reapit.Platform.Products.Core.UseCases.ResourceServers.CreateResourceS
 public class CreateResourceServerCommandHandler(
     IUnitOfWork unitOfWork, 
     IIdentityProviderService idpService,
+    INotificationsService notifications,
     IValidator<CreateResourceServerCommand> validator,
     ILogger<CreateResourceServerCommandHandler> logger) 
     : IRequestHandler<CreateResourceServerCommand, Entities.ResourceServer>
@@ -32,12 +35,10 @@ public class CreateResourceServerCommandHandler(
         // Step 05: Commit the changes
         _ = await unitOfWork.ResourceServers.CreateAsync(entity, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-
-        // Step 06: send notification
-        // TODO: product.created
         
         // Step 07: Log completion of the handler
         logger.LogInformation("Resource server created: {id} ({blob})", entity.Id, entity.AsSerializable());
+        _ = await notifications.PublishNotificationAsync(MessageEnvelope.ProductCreated(entity), cancellationToken);
         
         // Return the entity
         return entity;

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Reapit.Platform.Products.Core.Services.IdentityProvider;
+using Reapit.Platform.Products.Core.Services.Notifications;
+using Reapit.Platform.Products.Core.Services.Notifications.Models;
 using Reapit.Platform.Products.Data.Services;
 
 namespace Reapit.Platform.Products.Core.UseCases.ResourceServers.DeleteResourceServer;
@@ -8,6 +10,7 @@ namespace Reapit.Platform.Products.Core.UseCases.ResourceServers.DeleteResourceS
 public class DeleteResourceServerCommandHandler(
     IUnitOfWork unitOfWork, 
     IIdentityProviderService idpService, 
+    INotificationsService notifications,
     ILogger<DeleteResourceServerCommandHandler> logger) 
     : IRequestHandler<DeleteResourceServerCommand, Entities.ResourceServer>
 {
@@ -26,10 +29,9 @@ public class DeleteResourceServerCommandHandler(
         _ = await unitOfWork.ResourceServers.UpdateAsync(entity, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         
-        // TODO: product.deleted
-        
         // Log that it has been deleted
         logger.LogInformation("Resource server deleted: {id} ({blob})", entity.Id, entity.AsSerializable());
+        _ = await notifications.PublishNotificationAsync(MessageEnvelope.ProductDeleted(entity), cancellationToken);
         
         // Return the deleted entity
         return entity;

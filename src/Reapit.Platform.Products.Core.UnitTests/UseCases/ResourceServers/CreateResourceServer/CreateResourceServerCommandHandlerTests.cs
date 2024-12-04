@@ -1,5 +1,9 @@
 ﻿using FluentValidation.Results;
+using Reapit.Platform.Common.Providers.Temporal;
 using Reapit.Platform.Products.Core.Services.IdentityProvider;
+using Reapit.Platform.Products.Core.Services.Notifications;
+using Reapit.Platform.Products.Core.Services.Notifications.Models;
+using Reapit.Platform.Products.Core.UnitTests.TestServices;
 using Reapit.Platform.Products.Core.UseCases.Common.Scopes;
 using Reapit.Platform.Products.Core.UseCases.ResourceServers.CreateResourceServer;
 using Reapit.Platform.Products.Data.Repositories.ResourceServers;
@@ -13,6 +17,7 @@ public class CreateResourceServerCommandHandlerTests
     private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
     private readonly IResourceServerRepository _repository = Substitute.For<IResourceServerRepository>();
     private readonly IIdentityProviderService _idpService = Substitute.For<IIdentityProviderService>();
+    private readonly MockNotificationsService _notifications = new();
     private readonly IValidator<CreateResourceServerCommand> _validator = Substitute.For<IValidator<CreateResourceServerCommand>>();
     private readonly FakeLogger<CreateResourceServerCommandHandler> _logger = new();
     
@@ -27,8 +32,9 @@ public class CreateResourceServerCommandHandlerTests
         var command = GetRequest();
         var sut = CreateSut();
         var action = () => sut.Handle(command, default);
-
         await action.Should().ThrowAsync<ValidationException>();
+        
+        _notifications.LastMessage.Should().BeNull();
         await _repository.DidNotReceive().CreateAsync(Arg.Any<ResourceServer>(), Arg.Any<CancellationToken>());
         await _unitOfWork.DidNotReceive().SaveChangesAsync(Arg.Any<CancellationToken>());
     }
@@ -48,6 +54,7 @@ public class CreateResourceServerCommandHandlerTests
         _idpService.CreateResourceServerAsync(command, Arg.Any<CancellationToken>())
             .Returns(externalId);
 
+        using var _ = new DateTimeOffsetProviderContext(DateTimeOffset.UtcNow);
         var sut = CreateSut();
         var actual = await sut.Handle(command, default);
         
@@ -59,6 +66,10 @@ public class CreateResourceServerCommandHandlerTests
         actual.Scopes.Should().AllSatisfy(scope 
             => command.Scopes.Should().Contain(c => 
                 c.Value == scope.Value && c.Description == scope.Description));
+        
+        // Check the notification was published
+        _notifications.LastMessage.Should().NotBeNull()
+            .And.BeEquivalentTo(MessageEnvelope.ProductCreated(actual));
         
         // And the database calls
         await _repository.Received(1).CreateAsync(actual, Arg.Any<CancellationToken>());
@@ -72,7 +83,7 @@ public class CreateResourceServerCommandHandlerTests
     private CreateResourceServerCommandHandler CreateSut()
     {
         _unitOfWork.ResourceServers.Returns(_repository);
-        return new CreateResourceServerCommandHandler(_unitOfWork, _idpService, _validator, _logger);
+        return new CreateResourceServerCommandHandler(_unitOfWork, _idpService, _notifications, _validator, _logger);
     }
 
     private void SetupValidator(bool isSuccess) 

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Reapit.Platform.Products.Core.Services.IdentityProvider;
+using Reapit.Platform.Products.Core.Services.Notifications;
+using Reapit.Platform.Products.Core.Services.Notifications.Models;
 using Reapit.Platform.Products.Data.Services;
 
 namespace Reapit.Platform.Products.Core.UseCases.ResourceServers.PatchResourceServer;
@@ -7,6 +9,7 @@ namespace Reapit.Platform.Products.Core.UseCases.ResourceServers.PatchResourceSe
 /// <summary>Handler for the <see cref="PatchResourceServerCommand"/> request.</summary>
 public class PatchResourceServerCommandHandler(IUnitOfWork unitOfWork, 
     IIdentityProviderService idpService, 
+    INotificationsService notifications,
     IValidator<PatchResourceServerCommand> validator,
     ILogger<PatchResourceServerCommandHandler> logger) 
     : IRequestHandler<PatchResourceServerCommand, Entities.ResourceServer>
@@ -36,10 +39,10 @@ public class PatchResourceServerCommandHandler(IUnitOfWork unitOfWork,
         _ = await unitOfWork.ResourceServers.UpdateAsync(entity, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         
-        // TODO: product.modified
         
         // Log that the change was applied and return the entity:
         logger.LogInformation("Resource server updated: {id} ({blob})", entity.Id, entity.AsSerializable());
+        _ = await notifications.PublishNotificationAsync(MessageEnvelope.ProductModified(entity), cancellationToken);
         return entity;
     }
 }
