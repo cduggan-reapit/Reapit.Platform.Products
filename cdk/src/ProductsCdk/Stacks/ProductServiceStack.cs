@@ -40,6 +40,7 @@ public class ProductServiceStack : Stack
             description: "Allow ECS to access the database");
         
         // Output details to SSM parameter
+        var idpParam = Fn.ImportValue("Platform-Auth0-ClientParameter");
         var outputParameterObject = new
         {
             EnvironmentName = props.Context.Environment.FullName,
@@ -52,7 +53,8 @@ public class ProductServiceStack : Stack
             {
                 Name = props.Context.Database.Name,
                 User = props.Context.Database.Secret
-            }
+            },
+            IdentityProviderClientDetails = idpParam
         };
         
         _ = new SSM.StringParameter(this, $"{id}-configuration", new SSM.StringParameterProps

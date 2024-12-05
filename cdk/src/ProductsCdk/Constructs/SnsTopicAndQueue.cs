@@ -31,7 +31,7 @@ public class SnsTopicAndQueue : Construct
 
         _ = new CfnOutput(this, "topic-arn-output", new CfnOutputProps
         {
-            ExportName = "Organisations-NotificationTopicArn",
+            ExportName = "Products-NotificationTopicArn",
             Value = Topic.TopicArn,
             Description = "The ARN of the organisations service notifications SNS topic."
         });

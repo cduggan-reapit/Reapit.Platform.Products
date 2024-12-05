@@ -58,6 +58,44 @@ public class ConfigurationExtensionsTests
         action.Should().Throw<Exception>()
             .WithMessage($"Failed to retrieve parameter: \"{ParameterName}\"");
     }
+    
+    [Fact]
+    public void InjectRemoteConfiguration_ThrowsException_WhenRemoteConfigurationDoesNotIncludeIdpParameterName()
+    {
+        _configuration.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
+        {
+            new ("RemoteConfigurationParameter", ParameterName),
+        });
+        
+        _parameterStoreService.GetParameterAsync(ParameterName, null, Arg.Any<CancellationToken>())
+            .Returns(Serialize(new { Database = new { User = "user", Name = "" } }));
+        
+        var sut = CreateSut();
+        var action = () => sut.InjectRemoteConfiguration();
+        action.Should().Throw<Exception>()
+            .WithMessage("Identity provider client credentials parameter name not configured.");
+    }
+    
+    [Fact]
+    public void InjectRemoteConfiguration_ThrowsException_WhenRemoteConfigurationDoesNotIncludeIdpParameterNotFound()
+    {
+        _configuration.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
+        {
+            new ("RemoteConfigurationParameter", ParameterName),
+        });
+
+        const string idpParameterName = "/Test/IdPCredentials";
+        _parameterStoreService.GetParameterAsync(ParameterName, null, Arg.Any<CancellationToken>())
+            .Returns(Serialize(new { IdentityProviderClientDetails = idpParameterName, Database = new { User = "user", Name = "" } }));
+
+        _parameterStoreService.GetParameterAsync(idpParameterName, null, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<string?>(null));
+        
+        var sut = CreateSut();
+        var action = () => sut.InjectRemoteConfiguration();
+        action.Should().Throw<Exception>()
+            .WithMessage("Identity provider client credentials parameter not configured.");
+    }
 
     [Fact]
     public void InjectRemoteConfiguration_ThrowsException_WhenDatabaseConfigurationNotInjected()
@@ -67,8 +105,12 @@ public class ConfigurationExtensionsTests
             new ("RemoteConfigurationParameter", ParameterName),
         });
         
+        const string idpParameterName = "/Test/IdPCredentials";
         _parameterStoreService.GetParameterAsync(ParameterName, null, Arg.Any<CancellationToken>())
-            .Returns(Serialize(new { database = new { user = "user", name = "" } }));
+            .Returns(Serialize(new { IdentityProviderClientDetails = idpParameterName, Database = new { User = "user", Name = "" } }));
+        
+        _parameterStoreService.GetParameterAsync(idpParameterName, null, Arg.Any<CancellationToken>())
+            .Returns(Serialize(IdpCredentials));
         
         var sut = CreateSut();
         var action = () => sut.InjectRemoteConfiguration();
@@ -84,10 +126,13 @@ public class ConfigurationExtensionsTests
             new ("RemoteConfigurationParameter", ParameterName),
         });
         
+        const string idpParameterName = "/Test/IdPCredentials";
         _parameterStoreService.GetParameterAsync(ParameterName, null, Arg.Any<CancellationToken>())
-            .Returns(Serialize(new { database = new { user = DatabaseSecretName, name = "database" } }));
+            .Returns(Serialize(new { IdentityProviderClientDetails = idpParameterName, Database = new { User = DatabaseSecretName, Name = "database" } }));
+        
+        _parameterStoreService.GetParameterAsync(idpParameterName, null, Arg.Any<CancellationToken>())
+            .Returns(Serialize(IdpCredentials));
 
-        var userSecret = new DatabaseUserSecretModel("uid", "pwd", "engine", "host", 3306, "cluster");
         _secretsService.GetAsync(DatabaseSecretName, null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<string?>(null));
 
@@ -98,16 +143,20 @@ public class ConfigurationExtensionsTests
     }
 
     [Fact]
-    public void InjectRemoteConfiguration_InjectsConfiguration_FromRemoteParameter_AndUserSecret()
+    public void InjectRemoteConfiguration_InjectsConfiguration_FromRemoteParameters_AndUserSecret()
     {
         _configuration.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
          {
              new ("RemoteConfigurationParameter", ParameterName),
          });
         
+        const string idpParameterName = "/Test/IdPCredentials";
         _parameterStoreService.GetParameterAsync(ParameterName, null, Arg.Any<CancellationToken>())
-            .Returns(Serialize(new { database = new { user = DatabaseSecretName, name = "database" } }));
+            .Returns(Serialize(new { IdentityProviderClientDetails = idpParameterName, Database = new { User = DatabaseSecretName, Name = "database" } }));
 
+        _parameterStoreService.GetParameterAsync(idpParameterName, null, Arg.Any<CancellationToken>())
+            .Returns(Serialize(IdpCredentials));
+        
         var userSecret = new DatabaseUserSecretModel("uid", "pwd", "engine", "host", 3306, "cluster");
         _secretsService.GetAsync(DatabaseSecretName, null, Arg.Any<CancellationToken>())
             .Returns(Serialize(userSecret));
@@ -115,13 +164,14 @@ public class ConfigurationExtensionsTests
         var sut = CreateSut();
         _ = sut.InjectRemoteConfiguration();
         sut.Configuration.GetConnectionString("Writer").Should().Be(userSecret.GetConnectionString("database"));
+        sut.Configuration.GetValue<string>("IdP:ClientSecret").Should().Be("secret-string");
     }
     
     /*
      * Private methods
      */
     
-    private string Serialize(object o)
+    private static string Serialize(object o)
         => JsonSerializer.Serialize(o);
 
     private IHostApplicationBuilder CreateSut(string environmentName = "Production")
@@ -143,4 +193,15 @@ public class ConfigurationExtensionsTests
         
         return sut;
     }
+
+    private static object IdpCredentials => new
+    {
+        Domain = "domain.net",
+        ClientId = "client-id",
+        ClientSecret = "secret-string",
+        DefaultConnection = "users",
+        MyAccountClientId = "my-account-client-id",
+        ResetPasswordTimeToLive = 86400,
+        TokenCacheSeconds = 3600
+    };
 }

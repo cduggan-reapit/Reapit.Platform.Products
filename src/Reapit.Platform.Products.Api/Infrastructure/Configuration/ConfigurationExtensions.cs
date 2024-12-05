@@ -19,36 +19,69 @@ public static class ConfigurationExtensions
         using var serviceProvider = builder.Services.BuildServiceProvider();
         using var scope = serviceProvider.CreateScope();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-
+        
         if (builder.Environment.IsDevelopment())
         {
-            logger.LogWarning("Application running in {environment} environment - using local configuration.", 
-                builder.Environment.EnvironmentName);
+            logger.LogWarning("Application running in {environment} environment - using local configuration.", builder.Environment.EnvironmentName);
             return builder;
         }
-        
+
+        try
+        {
+            return builder
+                .InjectServiceConfiguration(scope)
+                .InjectIdentityProviderCredentials(scope)
+                .InjectDatabaseConnectionString(scope);
+        }
+        catch (Exception ex)
+        {
+            logger.LogCritical("Failed to inject configuration: {message}", ex.Message);
+            throw;
+        }
+    }
+
+    private static IHostApplicationBuilder InjectServiceConfiguration(this IHostApplicationBuilder builder,
+        IServiceScope scope)
+    {
         // Inject the SSM parameter
         var parameterName = builder.Configuration.GetValue<string>("RemoteConfigurationParameter")
                             ?? throw new Exception("RemoteConfigurationParameter value not found in local configuration.");
-
+        
         var ssmClient = scope.ServiceProvider.GetRequiredService<IParameterStoreService>();
         var parameterValue = ssmClient.GetParameterAsync(parameterName).Result
                              ?? throw new Exception($"Failed to retrieve parameter: \"{parameterName}\"");
 
         using var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes($"{{ \"Service\": {parameterValue} }}"));
         builder.Configuration.AddJsonStream(jsonStream);
+
+        return builder;
+    }
+
+    private static IHostApplicationBuilder InjectIdentityProviderCredentials(this IHostApplicationBuilder builder, IServiceScope scope)
+    {
+        var ssmClient = scope.ServiceProvider.GetRequiredService<IParameterStoreService>();
+        var idpCredentialParameterName = builder.Configuration.GetValue<string?>("Service:IdentityProviderClientDetails")
+                                         ?? throw new Exception("Identity provider client credentials parameter name not configured.");
+        var idpCredentialParameter = ssmClient.GetParameterAsync(idpCredentialParameterName).Result
+                                     ?? throw new Exception("Identity provider client credentials parameter not configured.");
         
+        using var idpStream = new MemoryStream(Encoding.UTF8.GetBytes($"{{ \"IdP\": {idpCredentialParameter} }}"));
+        builder.Configuration.AddJsonStream(idpStream);
+        return builder;
+    }
+
+    private static IHostApplicationBuilder InjectDatabaseConnectionString(this IHostApplicationBuilder builder, IServiceScope scope)
+    {
         // Inject the database user credentials
         var databaseConfiguration = builder.Configuration.ReadDatabaseConfiguration();
         var secretClient = scope.ServiceProvider.GetRequiredService<ISecretsService>();
         
         var userSecretString = secretClient.GetAsync(databaseConfiguration.UserSecretPath).Result
-            ?? throw new Exception("Failed to retrieve database user credentials.");
+                               ?? throw new Exception("Failed to retrieve database user credentials.");
         var userSecret = userSecretString.DeserializeTo<DatabaseUserSecretModel>();
-        using var secretStream = new MemoryStream(Encoding.UTF8.GetBytes(
-                $"{{ \"ConnectionStrings\": {{ \"Writer\": \"{userSecret.GetConnectionString(databaseConfiguration.Name)}\" }} }}"));
-        builder.Configuration.AddJsonStream(secretStream);
         
+        using var secretStream = new MemoryStream(Encoding.UTF8.GetBytes($"{{ \"ConnectionStrings\": {{ \"Writer\": \"{userSecret.GetConnectionString(databaseConfiguration.Name)}\" }} }}"));
+        builder.Configuration.AddJsonStream(secretStream);
         return builder;
     }
 

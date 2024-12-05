@@ -26,7 +26,7 @@ public static class Startup
         builder.Services.AddSingleton<IIdentityProviderClientFactory, IdentityProviderClientFactory>();
         builder.Services.AddScoped<IIdentityProviderService, IdentityProviderService>();
         
-        builder.Services.Configure<IdentityProviderOptions>(builder.Configuration.GetSection("Service:Auth0"));
+        builder.Services.Configure<IdentityProviderOptions>(builder.Configuration.GetSection("IdP"));
         
         return builder;
     }
