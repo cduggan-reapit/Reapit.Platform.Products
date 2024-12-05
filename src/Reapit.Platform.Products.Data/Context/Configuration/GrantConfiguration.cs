@@ -18,6 +18,10 @@ public class GrantConfiguration : IEntityTypeConfiguration<Grant>
             .HasColumnName("clientId")
             .HasMaxLength(36);
         
+        builder.Property(entity => entity.ExternalId)
+            .HasColumnName("externalId")
+            .HasMaxLength(36);
+        
         builder.Property(entity => entity.ResourceServerId)
             .HasColumnName("resourceServerId")
             .HasMaxLength(36);

@@ -25,7 +25,7 @@ public class ProductClientConfiguration : IEntityTypeConfiguration<Client>
             .HasMaxLength(36);
         
         builder.Property(entity => entity.ExternalId)
-            .HasColumnName("clientId")
+            .HasColumnName("externalId")
             .HasMaxLength(100);
         
         builder.Property(entity => entity.Type)

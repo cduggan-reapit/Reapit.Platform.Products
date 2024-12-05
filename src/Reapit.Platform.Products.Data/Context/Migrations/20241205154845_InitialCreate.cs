@@ -69,7 +69,7 @@ namespace Reapit.Platform.Products.Data.Context.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     appId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    clientId = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                    externalId = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     type = table.Column<int>(type: "int", nullable: false),
                     name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
@@ -130,7 +130,7 @@ namespace Reapit.Platform.Products.Data.Context.Migrations
                 {
                     id = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ExternalId = table.Column<string>(type: "longtext", nullable: false)
+                    externalId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     clientId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),

@@ -17,7 +17,7 @@ namespace Reapit.Platform.Products.Data.Context.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -50,15 +50,15 @@ namespace Reapit.Platform.Products.Data.Context.Migrations
                         .HasColumnType("varchar(1000)")
                         .HasColumnName("description");
 
+                    b.Property<bool>("IsFirstParty")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_first_party");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)")
                         .HasColumnName("name");
-
-                    b.Property<bool>("SkipConsent")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("is_first_party");
 
                     b.HasKey("Id");
 
@@ -119,7 +119,7 @@ namespace Reapit.Platform.Products.Data.Context.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)")
-                        .HasColumnName("clientId");
+                        .HasColumnName("externalId");
 
                     b.Property<string>("LoginUrl")
                         .HasMaxLength(1000)
@@ -190,7 +190,9 @@ namespace Reapit.Platform.Products.Data.Context.Migrations
 
                     b.Property<string>("ExternalId")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)")
+                        .HasColumnName("externalId");
 
                     b.Property<string>("ResourceServerId")
                         .IsRequired()
@@ -349,7 +351,7 @@ namespace Reapit.Platform.Products.Data.Context.Migrations
                         .IsRequired();
 
                     b.HasOne("Reapit.Platform.Products.Domain.Entities.ResourceServer", "ResourceServer")
-                        .WithMany("Grants")
+                        .WithMany()
                         .HasForeignKey("ResourceServerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -395,8 +397,6 @@ namespace Reapit.Platform.Products.Data.Context.Migrations
 
             modelBuilder.Entity("Reapit.Platform.Products.Domain.Entities.ResourceServer", b =>
                 {
-                    b.Navigation("Grants");
-
                     b.Navigation("Scopes");
                 });
 #pragma warning restore 612, 618
