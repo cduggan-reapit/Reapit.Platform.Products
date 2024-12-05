@@ -1,0 +1,8 @@
+# Ignore development files
+**/appsettings.Development.json
+
+# Ignore solution files - only projects matter
+**/*.sln
+
+# Ignore tests
+**/*Tests

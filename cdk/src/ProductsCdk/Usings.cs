@@ -1,0 +1,10 @@
+﻿global using IAM = Amazon.CDK.AWS.IAM;
+global using ECR = Amazon.CDK.AWS.ECR;
+global using EC2 = Amazon.CDK.AWS.EC2;
+global using ECS = Amazon.CDK.AWS.ECS;
+global using RDS = Amazon.CDK.AWS.RDS;
+global using SSM = Amazon.CDK.AWS.SSM;
+global using SNS = Amazon.CDK.AWS.SNS;
+global using SQS = Amazon.CDK.AWS.SQS;
+global using SES = Amazon.CDK.AWS.SES;
+global using Amazon.CDK;
